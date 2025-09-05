@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Google Apps Script Connection</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-button {
+            background: #ff6b35;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #e55a2b;
+        }
+        .result {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border-left: 4px solid #007bff;
+        }
+        .success {
+            border-left-color: #28a745;
+            background: #d4edda;
+        }
+        .error {
+            border-left-color: #dc3545;
+            background: #f8d7da;
+        }
+        .info {
+            border-left-color: #17a2b8;
+            background: #d1ecf1;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test Google Apps Script Connection</h1>
+    
+    <div class="test-section">
+        <h2>🔗 Connection Test</h2>
+        <p>Test the connection to your deployed Google Apps Script automation.</p>
+        <button class="test-button" onclick="testBasicConnection()">Test Basic Connection</button>
+        <div id="basicConnectionResult"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>⚙️ Automation Status</h2>
+        <p>Check if your automation triggers are running.</p>
+        <button class="test-button" onclick="checkAutomationStatus()">Check Automation Status</button>
+        <div id="automationStatusResult"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>🔍 Asset Mappings</h2>
+        <p>Test the auto-discovery system for asset mappings.</p>
+        <button class="test-button" onclick="testAssetMappings()">Test Asset Mappings</button>
+        <div id="assetMappingsResult"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>💰 Price Refresh Test</h2>
+        <p>Test the price refresh functionality.</p>
+        <button class="test-button" onclick="testPriceRefresh()">Test Price Refresh</button>
+        <div id="priceRefreshResult"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>📊 Portfolio History</h2>
+        <p>Test the portfolio history functionality.</p>
+        <button class="test-button" onclick="testPortfolioHistory()">Test Portfolio History</button>
+        <div id="portfolioHistoryResult"></div>
+    </div>
+
+    <script>
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwMv3IVGLPN_NYa00EfAHoIHqERMHbODqaDtpYT1_AUxk20Ihtkovgz7gZP8QbERx_Q/exec';
+        
+        function showResult(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<div class="result ${type}">${message}</div>`;
+        }
+        
+        async function testBasicConnection() {
+            try {
+                showResult('basicConnectionResult', '🔄 Testing connection...', 'info');
+                
+                const response = await fetch(SCRIPT_URL);
+                const data = await response.json();
+                
+                if (data.success) {
+                    showResult('basicConnectionResult', 
+                        `✅ Connection successful!<br>
+                         Message: ${data.message}<br>
+                         Timestamp: ${data.timestamp}`, 'success');
+                } else {
+                    showResult('basicConnectionResult', 
+                        `❌ Connection failed: ${data.error || 'Unknown error'}`, 'error');
+                }
+            } catch (error) {
+                showResult('basicConnectionResult', 
+                    `❌ Connection error: ${error.message}`, 'error');
+            }
+        }
+        
+        async function checkAutomationStatus() {
+            try {
+                showResult('automationStatusResult', '🔄 Checking automation status...', 'info');
+                
+                const response = await fetch(`${SCRIPT_URL}?action=checkTriggers`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    if (data.triggers && data.triggers.length > 0) {
+                        const triggerInfo = data.triggers.map(t => 
+                            `ID: ${t.id}, Function: ${t.function}, Type: ${t.type}`
+                        ).join('<br>');
+                        
+                        showResult('automationStatusResult', 
+                            `✅ Automation is active!<br>
+                             Found ${data.triggers.length} trigger(s):<br>${triggerInfo}`, 'success');
+                    } else {
+                        showResult('automationStatusResult', 
+                            `⚠️ No automation triggers found. Run 'setupAutomation' first.`, 'info');
+                    }
+                } else {
+                    showResult('automationStatusResult', 
+                        `❌ Failed to check automation: ${data.error || 'Unknown error'}`, 'error');
+                }
+            } catch (error) {
+                showResult('automationStatusResult', 
+                    `❌ Error checking automation: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testAssetMappings() {
+            try {
+                showResult('assetMappingsResult', '🔄 Testing asset mappings...', 'info');
+                
+                const response = await fetch(`${SCRIPT_URL}?action=autoDiscoverMappings`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    showResult('assetMappingsResult', 
+                        `✅ Asset mappings test successful!<br>
+                         Result: ${data.message}`, 'success');
+                } else {
+                    showResult('assetMappingsResult', 
+                        `❌ Asset mappings test failed: ${data.error || 'Unknown error'}`, 'error');
+                }
+            } catch (error) {
+                showResult('assetMappingsResult', 
+                    `❌ Error testing asset mappings: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testPriceRefresh() {
+            try {
+                showResult('priceRefreshResult', '🔄 Testing price refresh...', 'info');
+                
+                const response = await fetch(`${SCRIPT_URL}?action=testPriceRefresh`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    showResult('priceRefreshResult', 
+                        `✅ Price refresh test successful!<br>
+                         Result: ${data.message}`, 'success');
+                } else {
+                    showResult('priceRefreshResult', 
+                        `❌ Price refresh test failed: ${data.error || 'Unknown error'}`, 'error');
+                }
+            } catch (error) {
+                showResult('priceRefreshResult', 
+                    `❌ Error testing price refresh: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testPortfolioHistory() {
+            try {
+                showResult('portfolioHistoryResult', '🔄 Testing portfolio history...', 'info');
+                
+                const response = await fetch(`${SCRIPT_URL}?action=history&totalValue=25000&reason=Test entry`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    showResult('portfolioHistoryResult', 
+                        `✅ Portfolio history test successful!<br>
+                         Result: ${data.message}<br>
+                         Data: ${JSON.stringify(data.data)}`, 'success');
+                } else {
+                    showResult('portfolioHistoryResult', 
+                        `❌ Portfolio history test failed: ${data.error || 'Unknown error'}`, 'error');
+                }
+            } catch (error) {
+                showResult('portfolioHistoryResult', 
+                    `❌ Error testing portfolio history: ${error.message}`, 'error');
+            }
+        }
+        
+        // Auto-test basic connection when page loads
+        window.addEventListener('load', () => {
+            setTimeout(testBasicConnection, 1000);
+        });
+    </script>
+</body>
+</html>

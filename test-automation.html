@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WAGMI Automation Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-size: 14px;
+        }
+        .btn:hover {
+            background: #2980b9;
+        }
+        .btn.danger {
+            background: #e74c3c;
+        }
+        .btn.danger:hover {
+            background: #c0392b;
+        }
+        .btn.success {
+            background: #27ae60;
+        }
+        .btn.success:hover {
+            background: #229954;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 WAGMI Automation Test & Deployment</h1>
+    
+    <div class="test-section">
+        <h2>🔧 Setup & Testing</h2>
+        <p>Use these buttons to test and deploy your automated price refresh system:</p>
+        
+        <button class="btn success" onclick="testPriceRefresh()">🧪 Test Price Refresh</button>
+        <button class="btn" onclick="setupAutomation()">⚙️ Setup Automation</button>
+        <button class="btn danger" onclick="removeAutomation()">🗑️ Remove Automation</button>
+        <button class="btn" onclick="checkTriggers()">📋 Check Triggers</button>
+    </div>
+    
+    <div class="test-section">
+        <h2>📊 Test Results</h2>
+        <div id="status"></div>
+        <div id="log" class="log"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>📚 Instructions</h2>
+        <ol>
+            <li><strong>Test First:</strong> Click "Test Price Refresh" to verify the function works</li>
+            <li><strong>Setup Automation:</strong> Click "Setup Automation" to create 5-minute triggers</li>
+            <li><strong>Verify:</strong> Click "Check Triggers" to confirm automation is active</li>
+            <li><strong>Monitor:</strong> Check your Google Sheets - prices should update every 5 minutes</li>
+        </ol>
+        
+        <h3>🔍 What to Look For:</h3>
+        <ul>
+            <li>✅ Console logs in Google Apps Script showing successful execution</li>
+            <li>✅ Portfolio prices updating in your Google Sheets</li>
+            <li>✅ New "Portfolio History" sheet being created</li>
+            <li>✅ Execution logs showing 5-minute intervals</li>
+        </ul>
+    </div>
+
+    <script>
+        // Replace this with your actual Google Apps Script web app URL
+        const SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE';
+        
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${message}\n`;
+            logDiv.textContent += logEntry;
+            logDiv.scrollTop = logDiv.scrollHeight;
+            
+            // Also show in status
+            showStatus(message, type);
+        }
+        
+        function showStatus(message, type = 'info') {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = `<div class="status ${type}">${message}</div>`;
+        }
+        
+        async function testPriceRefresh() {
+            log('🧪 Testing price refresh function...');
+            
+            try {
+                const response = await fetch(`${SCRIPT_URL}?action=testPriceRefresh`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    log('✅ Price refresh test successful!', 'success');
+                    showStatus('Price refresh test completed successfully!', 'success');
+                } else {
+                    log('❌ Price refresh test failed: ' + result.error, 'error');
+                    showStatus('Test failed: ' + result.error, 'error');
+                }
+            } catch (error) {
+                log('❌ Error testing price refresh: ' + error.message, 'error');
+                showStatus('Error: ' + error.message, 'error');
+            }
+        }
+        
+        async function setupAutomation() {
+            log('⚙️ Setting up automated triggers...');
+            
+            try {
+                const response = await fetch(`${SCRIPT_URL}?action=setupAutomation`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    log('✅ Automation setup successful!', 'success');
+                    showStatus('Automation setup completed!', 'success');
+                } else {
+                    log('❌ Automation setup failed: ' + result.error, 'error');
+                    showStatus('Setup failed: ' + result.error, 'error');
+                }
+            } catch (error) {
+                log('❌ Error setting up automation: ' + error.message, 'error');
+                showStatus('Error: ' + error.message, 'error');
+            }
+        }
+        
+        async function removeAutomation() {
+            log('🗑️ Removing automated triggers...');
+            
+            try {
+                const response = await fetch(`${SCRIPT_URL}?action=removeAutomation`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    log('✅ Automation removal successful!', 'success');
+                    showStatus('Automation removed successfully!', 'success');
+                } else {
+                    log('❌ Automation removal failed: ' + result.error, 'error');
+                    showStatus('Removal failed: ' + result.error, 'error');
+                }
+            } catch (error) {
+                log('❌ Error removing automation: ' + error.message, 'error');
+                showStatus('Error: ' + error.message, 'error');
+            }
+        }
+        
+        async function checkTriggers() {
+            log('📋 Checking current triggers...');
+            
+            try {
+                const response = await fetch(`${SCRIPT_URL}?action=checkTriggers`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    log('✅ Triggers check successful!', 'success');
+                    log('📋 Current triggers: ' + JSON.stringify(result.triggers, null, 2));
+                    showStatus('Triggers check completed!', 'success');
+                } else {
+                    log('❌ Triggers check failed: ' + result.error, 'error');
+                    showStatus('Check failed: ' + result.error, 'error');
+                }
+            } catch (error) {
+                log('❌ Error checking triggers: ' + error.message, 'error');
+                showStatus('Error: ' + error.message, 'error');
+            }
+        }
+        
+        // Initialize
+        log('🚀 WAGMI Automation Test Page Loaded');
+        log('⚠️ IMPORTANT: Update SCRIPT_URL with your actual Google Apps Script web app URL');
+        showStatus('Ready to test automation! Update SCRIPT_URL first.', 'info');
+    </script>
+</body>
+</html>

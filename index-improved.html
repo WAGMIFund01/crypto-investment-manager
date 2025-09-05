@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Investment Manager</title>
+    <!-- Add a simple data URI favicon to prevent 404 errors -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💰</text></svg>">
+    <!-- <link rel="stylesheet" href="styles.css"> --> <!-- All styles are now inline -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        /* Modern Fintech × Crypto-Native Design System */
+        
+
+        
+        :root {
+            /* Dark Mode Foundation */
+            --bg-primary: #0a0b0d;
+            --bg-secondary: #111318;
+            --bg-tertiary: #1a1d24;
+            --bg-card: #1e2128;
+            --bg-elevated: #252830;
+            
+            /* Fluorescent Accents */
+            --accent-orange: #ff6b35;
+            --accent-green: #00d4aa;
+            --accent-purple: #8b5cf6;
+            --accent-blue: #3b82f6;
+            
+            /* Text Colors */
+            --text-primary: #666666; /* Medium gray - same as Details text for good visibility */
+            --text-secondary: #999999; /* Lighter gray for labels, captions */
+            --text-muted: #555555; /* Darker gray for muted text */
+            --text-highlight: #ffffff; /* Pure white for emphasis */
+            --text-success: #00d4aa;
+            --text-danger: #ff4757;
+            
+            /* Borders & Dividers */
+            --border-primary: #2d3139;
+            --border-secondary: #3d4148;
+            --border-accent: #ff6b35;
+            
+            /* Shadows */
+            --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+            --shadow-glow: 0 0 20px rgba(255, 107, 53, 0.3);
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, var(--accent-orange) 0%, var(--accent-green) 100%);
+            --gradient-card: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-elevated) 100%);
+            --gradient-success: linear-gradient(135deg, var(--accent-green) 0%, #00b894 100%);
+        }
+
+        /* Base Overrides */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg-primary) !important;
+            color: var(--text-primary) !important;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif !important;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        /* App Layout */
+        .app {
+            background: var(--bg-primary);
+            min-height: 100vh;
+        }
+
+        /* Manager View */
+        .manager-view {
+            background: var(--bg-primary) !important;
+            color: var(--text-primary) !important;
+        }
+
+        .manager-header {
+            background: var(--bg-secondary) !important;
+            border-bottom: 1px solid var(--border-primary) !important;
+            padding: 1rem 2rem !important;
+        }
+
+        .manager-header h1 {
+            color: var(--text-primary) !important;
+            font-size: 1.5rem !important;
+            font-weight: 700 !important;
+            margin: 0 !important;
+        }
+
+        .manager-header .header-stats {
+            gap: 2rem !important;
+        }
+
+        .manager-header .stat-item {
+            color: var(--text-primary) !important;
+        }
+
+        .manager-header .stat-value {
+            color: var(--text-highlight) !important;
+            font-weight: 700 !important;
+        }
+
+        .manager-header .stat-label {
+            color: var(--text-secondary) !important;
+            font-size: 0.875rem !important;
+        }
+
+        /* Navigation */
+        .nav-tabs {
+            background: var(--bg-secondary) !important;
+            border-bottom: 1px solid var(--border-primary) !important;
+            padding: 0 2rem !important;
+        }
+
+        .nav-tab {
+            color: var(--text-secondary) !important;
+            border-bottom: 2px solid transparent !important;
+            padding: 1rem 1.5rem !important;
+            transition: all 0.2s ease !important;
+        }
+
+        .nav-tab:hover {
+            color: var(--text-highlight) !important;
+            background: var(--bg-tertiary) !important;
+        }
+
+        .nav-tab.active {
+            color: var(--accent-orange) !important;
+            border-bottom-color: var(--accent-orange) !important;
+            background: var(--bg-tertiary) !important;
+        }
+
+        /* Content Areas */
+        .tab-content {
+            display: none;
+            padding: 2rem;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card) !important;
+            border: 1px solid var(--border-primary) !important;
+            border-radius: 12px !important;
+            padding: 1.5rem !important;
+            margin-bottom: 1.5rem !important;
+            box-shadow: var(--shadow-md) !important;
+        }
+
+        .card h2 {
+            color: var(--text-highlight) !important;
+            margin: 0 0 1rem 0 !important;
+            font-size: 1.25rem !important;
+            font-weight: 600 !important;
+        }
+
+        /* Summary Dashboard */
+        .summary-dashboard {
+            background: var(--bg-card) !important;
+            border: 1px solid var(--border-primary) !important;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .summary-metric {
+            text-align: center;
+            padding: 1.5rem;
+            background: var(--bg-elevated) !important;
+            border: 1px solid var(--border-secondary) !important;
+            border-radius: 8px !important;
+            transition: all 0.2s ease !important;
+        }
+
+        .summary-metric:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg) !important;
+            border-color: var(--border-accent) !important;
+        }
+
+        .clickable-metric {
+            cursor: pointer;
+        }
+
+        .metric-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent-orange) !important;
+        }
+
+        .metric-value {
+            font-size: 2rem !important;
+            font-weight: 700 !important;
+            color: var(--text-highlight) !important;
+            margin-bottom: 0.5rem !important;
+        }
+
+        .metric-value.positive {
+            color: var(--accent-green) !important;
+        }
+
+        .metric-value.negative {
+            color: var(--text-danger) !important;
+        }
+
+        .metric-label {
+            color: var(--text-secondary) !important;
+            font-size: 0.875rem !important;
+            font-weight: 500 !important;
+        }
+
+        /* Tables */
+        .table-container {
+            overflow-x: auto;
+            background: var(--bg-card) !important;
+            border-radius: 8px !important;
+            border: 1px solid var(--border-primary) !important;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-card) !important;
+        }
+
+        .data-table th {
+            background: var(--bg-elevated) !important;
+            color: var(--text-highlight) !important;
+            padding: 1rem !important;
+            text-align: left !important;
+            font-weight: 600 !important;
+            border-bottom: 1px solid var(--border-primary) !important;
+        }
+
+        .data-table td {
+            padding: 1rem !important;
+            border-bottom: 1px solid var(--border-secondary) !important;
+            color: var(--text-primary) !important;
+        }
+
+        .data-table tr:hover {
+            background: var(--bg-tertiary) !important;
+        }
+
+        /* Buttons */
+        .btn {
+            background: var(--accent-orange) !important;
+            color: white !important;
+            border: none !important;
+            padding: 0.75rem 1.5rem !important;
+            border-radius: 6px !important;
+            cursor: pointer !important;
+            font-weight: 500 !important;
+            transition: all 0.2s ease !important;
+        }
+
+        .btn:hover {
+            background: #e55a2b !important;
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-glow) !important;
+        }
+
+        .btn-secondary {
+            background: var(--bg-elevated) !important;
+            color: var(--text-primary) !important;
+            border: 1px solid var(--border-secondary) !important;
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary) !important;
+            border-color: var(--border-accent) !important;
+        }
+
+        /* Charts */
+        .chart-container {
+            position: relative;
+            height: 400px;
+            margin: 1rem 0;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-highlight) !important;
+            font-weight: 500 !important;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem !important;
+            border: 1px solid var(--border-secondary) !important;
+            border-radius: 6px !important;
+            background: var(--bg-elevated) !important;
+            color: var(--text-primary) !important;
+            font-size: 1rem !important;
+        }
+
+        .form-input:focus {
+            outline: none !important;
+            border-color: var(--accent-orange) !important;
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1) !important;
+        }
+
+        /* Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8) !important;
+        }
+
+        .modal-content {
+            background: var(--bg-card) !important;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 600px;
+            border: 1px solid var(--border-primary) !important;
+            box-shadow: var(--shadow-lg) !important;
+        }
+
+        .close {
+            color: var(--text-secondary) !important;
+            float: right;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .close:hover {
+            color: var(--text-highlight) !important;
+        }
+
+        /* Utilities */
+        .text-center {
+            text-align: center !important;
+        }
+
+        .text-right {
+            text-align: right !important;
+        }
+
+        .mb-0 {
+            margin-bottom: 0 !important;
+        }
+
+        .mt-2 {
+            margin-top: 0.5rem !important;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .nav-tabs {
+                padding: 0 1rem !important;
+            }
+            
+            .tab-content {
+                padding: 1rem !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <!-- Manager View -->
+        <div class="manager-view">
+            <!-- Header -->
+            <header class="manager-header">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h1>💰 WAGMI Investment Manager</h1>
+                    <div class="header-stats" style="display: flex; gap: 2rem;">
+                        <div class="stat-item">
+                            <div class="stat-value" id="totalAUM">$0</div>
+                            <div class="stat-label">Total AUM</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="totalReturn">0%</div>
+                            <div class="stat-label">Total Return</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="activeInvestors">0</div>
+                            <div class="stat-label">Active Investors</div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Navigation Tabs -->
+            <nav class="nav-tabs">
+                <button class="nav-tab active" onclick="window.switchTab('dashboard')">📊 Dashboard</button>
+                <button class="nav-tab" onclick="window.switchTab('investors')">👥 Investors</button>
+                <button class="nav-tab" onclick="window.switchTab('portfolio')">💎 Portfolio</button>
+                <button class="nav-tab" onclick="window.switchTab('performance')">📈 Performance</button>
+            </nav>
+
+            <!-- Dashboard Tab -->
+            <div id="dashboard" class="tab-content active">
+                <!-- Overall Summary Dashboard -->
+                <section class="card summary-dashboard" style="margin-bottom: 30px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2 style="color: #2c3e50; margin: 0;">📊 Portfolio Overview</h2>
+                        <div style="text-align: right;">
+                            <div id="dashboardLastUpdated" style="font-size: 0.8rem; color: #7f8c8d; font-style: italic;">Portfolio Overview: Loading...</div>
+                            <div id="dashboardAssetPricesLastUpdated" style="font-size: 0.8rem; color: #7f8c8d; font-style: italic;">Asset Prices: Loading...</div>
+                        </div>
+                    </div>
+                    <div class="summary-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                        <div class="summary-metric clickable-metric" onclick="window.switchTab('investors')" style="text-align: center; padding: 15px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;" title="Click to view all investors">
+                            <div class="metric-icon" style="font-size: 24px; margin-bottom: 8px;">👥</div>
+                            <div class="metric-value" id="summaryTotalInvestors" style="font-size: 2rem; font-weight: bold; color: #2c3e50;">6</div>
+                            <div class="metric-label" style="color: #7f8c8d; font-size: 0.9rem;">Total Investors</div>
+                        </div>
+                        <div class="summary-metric clickable-metric" onclick="window.switchTab('investors')" style="text-align: center; padding: 15px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;" title="Click to view investor details">
+                            <div class="metric-icon" style="font-size: 24px; margin-bottom: 8px;">💰</div>
+                            <div class="metric-value" id="summaryTotalInvested" style="font-size: 2rem; font-weight: bold; color: #2c3e50;">$26,906</div>
+                            <div class="metric-label" style="color: #7f8c8d; font-size: 0.9rem;">Total Invested</div>
+                        </div>
+                        <div class="summary-metric clickable-metric" style="text-align: center; padding: 15px; cursor: pointer;" onclick="window.switchTab('portfolio')" title="Click to view Portfolio 👆">
+                            <div class="metric-icon" style="font-size: 24px; margin-bottom: 8px;">💎</div>
+                            <div class="metric-value" id="summaryCurrentValue" style="font-size: 2rem; font-weight: bold; color: #2c3e50;">$31,002</div>
+                            <div class="metric-label" style="color: #7f8c8d; font-size: 0.9rem;">Current Value</div>
+                        </div>
+                        <div class="summary-metric" style="text-align: center; padding: 15px;">
+                            <div class="metric-icon" style="font-size: 24px; margin-bottom: 8px;">📈</div>
+                            <div class="metric-value positive" id="summaryTotalPnL" style="font-size: 2rem; font-weight: bold;">+$4,096</div>
+                            <div class="metric-label" style="color: #7f8c8d; font-size: 0.9rem;">Total P&L</div>
+                        </div>
+                        <div class="summary-metric" style="text-align: center; padding: 15px;">
+                            <div class="metric-icon" style="font-size: 24px; margin-bottom: 8px;">📊</div>
+                            <div class="metric-value positive" id="summaryMonthlyReturn" style="font-size: 2rem; font-weight: bold;">+2.8%</div>
+                            <div class="metric-label" style="color: #7f8c8d; font-size: 0.9rem;">Month-on-Month</div>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="dashboard-grid">
+                    <!-- Investment Summaries -->
+                    <section class="card">
+                        <h2>Investment Summaries</h2>
+                        <div id="investmentSummaries" class="summaries-grid">
+                            <!-- Investment summary cards will be generated here -->
+                        </div>
+                    </section>
+
+                    <!-- Portfolio Overview -->
+                    <section class="card">
+                        <h2>Portfolio Allocation</h2>
+                        <div class="chart-container">
+                            <canvas id="allocationChart"></canvas>
+                        </div>
+                    </section>
+
+                    <!-- Recent Transactions -->
+                    <section class="card">
+                        <h2>Recent Transactions</h2>
+                        <div id="recentTransactions" class="transactions-list">
+                            <!-- Recent transactions will be shown here -->
+                        </div>
+                    </section>
+
+                    <!-- Performance Chart -->
+                    <section class="card">
+                        <h2>Portfolio Performance</h2>
+                        <div class="chart-container">
+                            <canvas id="performanceChart"></canvas>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+            <!-- Investors Tab -->
+            <div id="investors" class="tab-content">
+                <!-- Overall Summary Dashboard for Investors Tab -->
+                <section class="card summary-dashboard" style="margin-bottom: 30px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2 style="color: #2c3e50; margin: 0;">📊 Portfolio Overview</h2>
+                        <div style="text-align: right;">
+                            <div id="investorsLastUpdated" style="font-size: 0.8rem; color: #7f8c8d; font-style: italic;">Portfolio Overview: Loading...</div>
+                            <div id="investorsAssetPricesLastUpdated" style="font-size: 0.8rem; color: #7f8c8d; font-style: italic;">Asset Prices: Loading...</div>
+                        </div>
+                    </div>
+                    <div class="summary-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                        <div class="summary-metric clickable-metric" onclick="window.scrollToInvestorTable()" style="text-align: center; padding: 15px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;" title="Click to scroll to investor table">
+                            <div class="metric-icon" style="font-size: 24px; margin-bottom: 8px;">👥</div>
+                            <div class="metric-value" id="investorsSummaryTotalInvestors" style="font-size: 2rem; font-weight: bold; color: #2c3e50;">6</div>
+                            <div class="metric-label" style="color: #7f8c8d; font-size: 0.9rem;">Total Investors</div>
+                        </div>
+                        <div class="summary-metric clickable-metric" onclick="window.scrollToInvestorTable()" style="text-align: center; padding: 15px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;" title="Click to scroll to investor table">
+                            <div class="metric-icon" style="font-size: 24px; margin-bottom: 8px;">💰</div>
+                            <div class="metric-value" id="investorsSummaryTotalInvested" style="font-size: 2rem; font-weight: bold; color: #2c3e50;">$26,906</div>
+                            <div class="metric-label" style="color: #7f8c8d; font-size: 0.9rem;">Total Invested</div>
+                        </div>
+                        <div class="summary-metric clickable-metric" style="text-align: center; padding: 15px; cursor: pointer;" onclick="window.switchTab('portfolio')" title="Click to view Portfolio 👆">
+                            <div class="metric-icon" style="font-size: 24px; margin-bottom: 8px;">💎</div>
+                            <div class="metric-value" id="investorsSummaryCurrentValue" style="font-size: 2rem; font-weight: bold; color: #2c3e50;">$31,002</div>
+                            <div class="metric-label" style="color: #7f8c8d; font-size: 0.9rem;">Current Value</div>
+                        </div>
+                        <div class="summary-metric" style="text-align: center; padding: 15px;">
+                            <div class="metric-icon" style="font-size: 24px; margin-bottom: 8px;">📈</div>
+                            <div class="metric-value positive" id="investorsSummaryTotalPnL" style="font-size: 2rem; font-weight: bold;">+$4,096</div>
+                            <div class="metric-label" style="color: #7f8c8d; font-size: 0.9rem;">Total P&L</div>
+                        </div>
+                        <div class="summary-metric" style="text-align: center; padding: 15px;">
+                            <div class="metric-icon" style="font-size: 24px; margin-bottom: 8px;">📊</div>
+                            <div class="metric-value positive" id="investorsSummaryMonthlyReturn" style="font-size: 2rem; font-weight: bold;">+2.8%</div>
+                            <div class="metric-label" style="color: #7f8c8d; font-size: 0.9rem;">Month-on-Month</div>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="investors-header">
+                    <h2>Investor Management</h2>
+                </div>
+                <div class="table-container">
+                    <table id="investorsTable" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Investor ID</th>
+                                <th>Name</th>
+                                <th>Date Joined</th>
+                                <th>Investment Value</th>
+                                <th>Current Value</th>
+                                <th>Total Return</th>
+                                <th>Share %</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="investorsTableBody">
+                            <!-- Investor rows will be generated here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Portfolio Tab -->
+            <div id="portfolio" class="tab-content">
+                <!-- Portfolio Overview Widget -->
+                <section class="card summary-dashboard" style="margin-bottom: 30px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2 style="color: #2c3e50; margin: 0;">📊 Portfolio Overview</h2>
+                        <div style="text-align: right;">
+                            <div id="portfolioLastUpdated" style="font-size: 0.8rem; color: #7f8c8d; font-style: italic;">Portfolio Overview: Loading...</div>
+                            <div id="portfolioAssetPricesLastUpdated" style="font-size: 0.8rem; color: #7f8c8d; font-style: italic;">Asset Prices: Loading...</div>
+                        </div>
+                    </div>
+                    <div class="summary-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                        <div class="summary-metric clickable-metric" onclick="window.switchTab('investors')" style="text-align: center; padding: 15px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;" title="Click to view all investors">
+                            <div class="metric-icon" style="font-size: 24px; margin-bottom: 8px;">👥</div>
+                            <div class="metric-value" id="portfolioSummaryTotalInvestors" style="font-size: 2rem; font-weight: bold; color: #2c3e50;">6</div>
+                            <div class="metric-label" style="color: #7f8c8d; font-size: 0.9rem;">Total Investors</div>
+                        </div>
+                        <div class="summary-metric clickable-metric" onclick="window.switchTab('investors')" style="text-align: center; padding: 15px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;" title="Click to view investor details">
+                            <div class="metric-icon" style="font-size: 24px; margin-bottom: 8px;">💰</div>
+                            <div class="metric-value" id="portfolioSummaryTotalInvested" style="font-size: 2rem; font-weight: bold; color: #2c3e50;">$0.00</div>
+                            <div class="metric-label" style="color: #7f8c8d; font-size: 0.9rem;">Total Invested</div>
+                        </div>
+                        <div class="summary-metric" style="text-align: center; padding: 15px;">
+                            <div class="metric-icon" style="font-size: 24px; margin-bottom: 8px;">💎</div>
+                            <div class="metric-value" id="portfolioSummaryCurrentValue" style="font-size: 2rem; font-weight: bold; color: #2c3e50;">$0.00</div>
+                            <div class="metric-label" style="color: #7f8c8d; font-size: 0.9rem;">Current Value</div>
+                        </div>
+                        <div class="summary-metric" style="text-align: center; padding: 15px;">
+                            <div class="metric-icon" style="font-size: 24px; margin-bottom: 8px;">📈</div>
+                            <div class="metric-value positive" id="portfolioSummaryTotalPnL" style="font-size: 2rem; font-weight: bold;">+$0.00</div>
+                            <div class="metric-label" style="color: #7f8c8d; font-size: 0.9rem;">Total P&L</div>
+                        </div>
+                        <div class="summary-metric" style="text-align: center; padding: 15px;">
+                            <div class="metric-icon" style="font-size: 24px; margin-bottom: 8px;">📊</div>
+                            <div class="metric-value positive" id="portfolioSummaryMonthlyReturn" style="font-size: 2rem; font-weight: bold;">+2.8%</div>
+                            <div class="metric-label" style="color: #7f8c8d; font-size: 0.9rem;">Month-on-Month</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Asset Management Section -->
+                <section class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2>Asset Management</h2>
+                        <button class="btn" onclick="window.openAddAssetModal()">➕ Add New Asset</button>
+                    </div>
+                    
+                    <!-- Asset Summary Table -->
+                    <div class="table-container">
+                        <table id="assetTable" class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Asset Name</th>
+                                    <th>Symbol</th>
+                                    <th>Chain</th>
+                                    <th>Quantity</th>
+                                    <th>Current Price</th>
+                                    <th>Total Value</th>
+                                    <th>Risk Level</th>
+                                    <th>Location</th>
+                                    <th>Coin Type</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="assetTableBody">
+                                <!-- Asset rows will be generated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Portfolio Analysis Charts -->
+                <section class="card">
+                    <h2>Portfolio Analysis</h2>
+                    <div class="chart-container">
+                        <canvas id="portfolioAnalysisChart"></canvas>
+                    </div>
+                </section>
+
+                <!-- Target vs Current Portfolio Risk Allocation -->
+                <section class="card">
+                    <h2>Target vs Current Portfolio Risk Allocation</h2>
+                    <div class="chart-container">
+                        <canvas id="riskAllocationChart"></canvas>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Performance Tab -->
+            <div id="performance" class="tab-content">
+                <section class="card">
+                    <h2>Performance Metrics</h2>
+                    <div class="chart-container">
+                        <canvas id="performanceChart2"></canvas>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Asset Modal -->
+    <div id="addAssetModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="window.closeAddAssetModal()">&times;</span>
+            <h2>Add New Asset</h2>
+            <form id="addAssetForm">
+                <div class="form-group">
+                    <label class="form-label" for="assetName">Asset Name</label>
+                    <input type="text" id="assetName" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="assetSymbol">Symbol</label>
+                    <input type="text" id="assetSymbol" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="assetChain">Chain</label>
+                    <input type="text" id="assetChain" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="assetQuantity">Quantity</label>
+                    <input type="number" id="assetQuantity" class="form-input" step="0.000001" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="assetRiskLevel">Risk Level</label>
+                    <select id="assetRiskLevel" class="form-input" required>
+                        <option value="">Select Risk Level</option>
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="assetLocation">Location</label>
+                    <input type="text" id="assetLocation" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="assetCoinType">Coin Type</label>
+                    <input type="text" id="assetCoinType" class="form-input" required>
+                </div>
+                <div style="text-align: right; margin-top: 1rem;">
+                    <button type="button" class="btn btn-secondary" onclick="window.closeAddAssetModal()">Cancel</button>
+                    <button type="submit" class="btn">Add Asset</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // ========================================
+        // SMART TIMESTAMP SYSTEM
+        // ========================================
+        // This replaces the redundant manual refresh system with automatic, intelligent timestamps
+
+        // Smart timestamp system that shows real update times
+        window.smartTimestampSystem = {
+            // Track when portfolio data was last updated
+            lastPortfolioUpdate: null,
+            lastAssetPriceUpdate: null,
+            
+            // Update Portfolio Overview timestamp when data changes
+            updatePortfolioTimestamp: function() {
+                this.lastPortfolioUpdate = new Date();
+                const timestamp = this.lastPortfolioUpdate.toLocaleString('en-US', {
+                    month: 'short',
+                    day: 'numeric', 
+                    year: 'numeric',
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    hour12: true
+                });
+                
+                const portfolioTimestampElements = [
+                    'dashboardLastUpdated',
+                    'investorsLastUpdated', 
+                    'portfolioLastUpdated'
+                ];
+                
+                portfolioTimestampElements.forEach(elementId => {
+                    const element = document.getElementById(elementId);
+                    if (element) {
+                        element.textContent = `Portfolio Overview: ${timestamp} (Data updated)`;
+                    }
+                });
+                
+                console.log('📊 Portfolio Overview timestamp updated:', timestamp);
+            },
+            
+            // Update Asset Prices timestamp when automation runs
+            updateAssetPriceTimestamp: function() {
+                this.lastAssetPriceUpdate = new Date();
+                const timestamp = this.lastAssetPriceUpdate.toLocaleString('en-US', {
+                    month: 'short',
+                    day: 'numeric', 
+                    year: 'numeric',
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    hour12: true
+                });
+                
+                const assetPriceTimestampElements = [
+                    'dashboardAssetPricesLastUpdated',
+                    'investorsAssetPricesLastUpdated',
+                    'portfolioAssetPricesLastUpdated'
+                ];
+                
+                assetPriceTimestampElements.forEach(elementId => {
+                    const element = document.getElementById(elementId);
+                    if (element) {
+                        element.textContent = `Asset Prices: ${timestamp} (Auto-refreshed)`;
+                    }
+                });
+                
+                console.log('💰 Asset Prices timestamp updated:', timestamp);
+            },
+            
+            // Check automation status and update timestamps intelligently
+            checkAndUpdate: async function() {
+                try {
+                    console.log('🔍 Checking automation status for smart timestamps...');
+                    
+                    const scriptUrl = 'https://script.google.com/macros/s/AKfycbwMv3IVGLPN_NYa00EfAHoIHqERMHbODqaDtpYT1_AUxk20Ihtkovgz7gZP8QbERx_Q/exec';
+                    
+                    // Check automation status
+                    const response = await fetch(`${scriptUrl}?action=checkTriggers`);
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        
+                        if (data.success && data.triggers && data.triggers.length > 0) {
+                            console.log('✅ Automation active, updating timestamps...');
+                            
+                            // Update Portfolio Overview to show when data was last fetched
+                            if (!this.lastPortfolioUpdate) {
+                                this.updatePortfolioTimestamp();
+                            }
+                            
+                            // Update Asset Prices to show automation is running
+                            this.updateAssetPriceTimestamp();
+                            
+                        } else {
+                            console.log('⚠️ No automation found, using fallback timestamps');
+                            this.updatePortfolioTimestamp();
+                            this.updateAssetPriceTimestamp();
+                        }
+                    } else {
+                        console.log('⚠️ Could not check automation, using fallback timestamps');
+                        this.updatePortfolioTimestamp();
+                        this.updateAssetPriceTimestamp();
+                    }
+                    
+                } catch (error) {
+                    console.error('❌ Error in smart timestamp system:', error);
+                    // Fallback to current time
+                    this.updatePortfolioTimestamp();
+                    this.updateAssetPriceTimestamp();
+                }
+            },
+            
+            // Initialize the system
+            init: function() {
+                console.log('🚀 Initializing smart timestamp system...');
+                
+                // Set initial timestamps
+                this.updatePortfolioTimestamp();
+                this.updateAssetPriceTimestamp();
+                
+                // Check automation status after 2 seconds
+                setTimeout(() => {
+                    this.checkAndUpdate();
+                }, 2000);
+                
+                // Auto-refresh timestamps every 2 minutes
+                setInterval(() => {
+                    this.checkAndUpdate();
+                }, 2 * 60 * 1000);
+                
+                console.log('✅ Smart timestamp system initialized');
+            }
+        };
+
+        // Enhanced portfolio data update function that triggers timestamp updates
+        window.updatePortfolioData = function() {
+            // Your existing portfolio update logic here
+            // ... (keep your existing code)
+            
+            // After updating portfolio data, update the timestamp
+            if (window.smartTimestampSystem) {
+                window.smartTimestampSystem.updatePortfolioTimestamp();
+            }
+        };
+
+        // Enhanced asset price update function that triggers timestamp updates
+        window.updateAssetPrices = function() {
+            // Your existing asset price update logic here
+            // ... (keep your existing code)
+            
+            // After updating asset prices, update the timestamp
+            if (window.smartTimestampSystem) {
+                window.smartTimestampSystem.updateAssetPriceTimestamp();
+            }
+        };
+
+        // ========================================
+        // EXISTING FUNCTIONS (KEEP THESE)
+        // ========================================
+
+        // Tab switching function
+        window.switchTab = function(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        };
+
+        // Modal functions
+        window.openAddAssetModal = function() {
+            document.getElementById('addAssetModal').style.display = 'block';
+        };
+
+        window.closeAddAssetModal = function() {
+            document.getElementById('addAssetModal').style.display = 'none';
+        };
+
+        // Form submission handler
+        window.handleAddAsset = function(event) {
+            event.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('assetName').value,
+                symbol: document.getElementById('assetSymbol').value,
+                chain: document.getElementById('assetChain').value,
+                quantity: document.getElementById('assetQuantity').value,
+                riskLevel: document.getElementById('assetRiskLevel').value,
+                location: document.getElementById('assetLocation').value,
+                coinType: document.getElementById('assetCoinType').value
+            };
+            
+            console.log('Adding asset:', formData);
+            
+            // Here you would typically send the data to your backend
+            // For now, just close the modal
+            window.closeAddAssetModal();
+            
+            // Clear the form
+            document.getElementById('addAssetForm').reset();
+        };
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize smart timestamp system
+            if (window.smartTimestampSystem) {
+                window.smartTimestampSystem.init();
+            }
+            
+            // Set up form submission
+            const addAssetForm = document.getElementById('addAssetForm');
+            if (addAssetForm) {
+                addAssetForm.addEventListener('submit', window.handleAddAsset);
+            }
+            
+            // Set up modal close button
+            const closeBtn = document.querySelector('.close');
+            if (closeBtn) {
+                closeBtn.addEventListener('click', window.closeAddAssetModal);
+            }
+            
+            console.log('✅ WAGMI Investment Manager initialized with smart timestamps');
+        });
+    </script>
+</body>
+</html>

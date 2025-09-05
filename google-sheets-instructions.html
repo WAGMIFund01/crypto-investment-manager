@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Crypto Investment Manager - Google Sheets Master Database Setup</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            padding: 30px; 
+            line-height: 1.6; 
+            max-width: 1200px; 
+            margin: 0 auto;
+            background: #f8f9fa;
+        }
+        .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .step { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            color: white; 
+            padding: 20px; 
+            margin: 20px 0; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+        .step h2 { margin-top: 0; }
+        .sheet-section { 
+            margin: 25px 0; 
+            padding: 20px; 
+            border: 2px solid #e3f2fd; 
+            border-radius: 12px; 
+            background: #fafafa;
+        }
+        table { 
+            border-collapse: collapse; 
+            width: 100%; 
+            margin: 15px 0; 
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        th, td { 
+            border: 1px solid #ddd; 
+            padding: 12px 8px; 
+            text-align: left; 
+            font-size: 14px;
+        }
+        th { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+            color: white; 
+            font-weight: bold; 
+        }
+        .copy-btn { 
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%); 
+            color: white; 
+            padding: 12px 24px; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            margin: 15px 10px 15px 0; 
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+            transition: transform 0.2s;
+        }
+        .copy-btn:hover { 
+            background: linear-gradient(135deg, #218838 0%, #1abc9c 100%); 
+            transform: translateY(-2px);
+        }
+        .highlight { background: #fff3cd; padding: 15px; border-radius: 8px; border-left: 4px solid #ffc107; margin: 15px 0; }
+        .success { background: #d4edda; padding: 15px; border-radius: 8px; border-left: 4px solid #28a745; margin: 15px 0; }
+        .code { background: #f8f9fa; padding: 15px; border-radius: 8px; font-family: 'Monaco', 'Courier New', monospace; border: 1px solid #e9ecef; }
+        .url-example { background: #e3f2fd; padding: 10px; border-radius: 6px; font-family: monospace; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Crypto Investment Manager</h1>
+        <h2>📊 Google Sheets Master Database Setup Guide</h2>
+        
+        <div class="highlight">
+            <strong>🎯 Goal:</strong> Create a master database in Google Sheets that syncs across all your devices (phone, laptop, etc.) and serves as the single source of truth for all investor and transaction data.
+        </div>
+
+        <div class="step">
+            <h2>📋 Step 1: Create Your Google Sheet</h2>
+            <p><strong>1.</strong> Go to <a href="https://sheets.google.com" target="_blank" style="color: #fff; text-decoration: underline;">Google Sheets</a></p>
+            <p><strong>2.</strong> Click "Blank" to create a new spreadsheet</p>
+            <p><strong>3.</strong> Rename it to: <strong>"Crypto Investment Manager Database"</strong></p>
+            <p><strong>4.</strong> You'll create 3 tabs: Investors, Transactions, Wallets</p>
+        </div>
+
+        <div class="sheet-section">
+            <h2>👥 Tab 1: "Investors" Sheet</h2>
+            <p><strong>Rename the first tab to "Investors"</strong> and create this exact structure:</p>
+            
+            <table>
+                <tr>
+                    <th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th>
+                </tr>
+                <tr>
+                    <td><strong>investor_id</strong></td>
+                    <td><strong>name</strong></td>
+                    <td><strong>email</strong></td>
+                    <td><strong>join_date</strong></td>
+                    <td><strong>investment_value</strong></td>
+                    <td><strong>current_value</strong></td>
+                    <td><strong>share_percentage</strong></td>
+                </tr>
+                <tr><td>LK1</td><td>Leke Karunwi</td><td>leke@example.com</td><td>2023-10-08</td><td>2000.00</td><td>2000.00</td><td>7.95</td></tr>
+                <tr><td>MO2</td><td>Mariam Oyawoye</td><td>mummy@example.com</td><td>2023-10-10</td><td>1050.06</td><td>1050.06</td><td>4.18</td></tr>
+                <tr><td>FO3</td><td>Fifehanmi Oyawoye</td><td>fifehanmi@example.com</td><td>2023-10-14</td><td>1823.91</td><td>1823.91</td><td>7.26</td></tr>
+                <tr><td>RA4</td><td>Rinsola Aminu</td><td>rinsola@example.com</td><td>2023-11-19</td><td>828.30</td><td>828.30</td><td>3.30</td></tr>
+                <tr><td>OK5</td><td>Oyinkan Karunwi</td><td>oyinkan@example.com</td><td>2023-11-19</td><td>991.57</td><td>991.57</td><td>3.94</td></tr>
+                <tr><td>OA6</td><td>Omair Ansari</td><td>omair@example.com</td><td>2023-11-26</td><td>20212.46</td><td>20212.46</td><td>80.37</td></tr>
+            </table>
+            
+            <div class="highlight">
+                <strong>📝 Column Explanations:</strong><br>
+                • <strong>investment_value:</strong> Sum of all investments minus redemptions<br>
+                • <strong>current_value:</strong> Their share % × Total Portfolio Value<br>
+                • <strong>share_percentage:</strong> Their ownership % of the fund
+            </div>
+            
+            <button class="copy-btn" onclick="copyInvestorsData()">📋 Copy Investors Data</button>
+        </div>
+
+        <div class="sheet-section">
+            <h2>💰 Tab 2: "Transactions" Sheet</h2>
+            <p><strong>Create a new tab called "Transactions"</strong> with this structure:</p>
+            
+            <table>
+                <tr>
+                    <th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th>
+                </tr>
+                <tr>
+                    <td><strong>transaction_id</strong></td>
+                    <td><strong>investor_id</strong></td>
+                    <td><strong>type</strong></td>
+                    <td><strong>amount</strong></td>
+                    <td><strong>date</strong></td>
+                    <td><strong>notes</strong></td>
+                </tr>
+                <tr><td>1</td><td>LK1</td><td>Investment</td><td>2000.00</td><td>2023-10-08</td><td>Received through transfer from Oyinkan; funded from personal investment</td></tr>
+                <tr><td>2</td><td>MO2</td><td>Investment</td><td>1050.06</td><td>2023-10-10</td><td>Transferred from personal investment fund; 3 months tribute shared with Mamalo</td></tr>
+                <tr><td>3</td><td>FO3</td><td>Investment</td><td>1823.91</td><td>2023-10-14</td><td></td></tr>
+                <tr><td>4</td><td>RA4</td><td>Investment</td><td>142.97</td><td>2023-11-19</td><td>Interac transfer on Nov 15th. Kept cash and created liquidity from personal funds</td></tr>
+                <tr><td>5</td><td>OK5</td><td>Investment</td><td>991.57</td><td>2023-11-19</td><td>Zell transfer to Temmy on Nov 16. Kept cash and created liquidity from personal funds</td></tr>
+                <tr><td>6</td><td>OA6</td><td>Investment</td><td>1418.82</td><td>2023-11-26</td><td>Sent via coinbase. Sent Eth (BASE), Popcat and Aethir. Amount deposited represents ETH and POPCAT; Aethir to be added during second batch</td></tr>
+                <tr><td>7</td><td>OA6</td><td>Investment</td><td>8774.88</td><td>2023-11-28</td><td>Received 2.39724 ETH; swapped 279459383ATH for 0.05021. ETH to be consolidated with other WAGMI funds</td></tr>
+                <tr><td>8</td><td>RA4</td><td>Investment</td><td>685.33</td><td>2024-02-10</td><td>Sent 1K CAD; wealth simple charged 2% fee to purchase 3.38208 SOL which was transferred to WAGMI receipt account and converted to 685.33 USDC</td></tr>
+                <tr><td>9</td><td>OA6</td><td>Investment</td><td>10018.76</td><td>2024-06-15</td><td>Sent 8145833 Fartcoin (~USD1,018)</td></tr>
+            </table>
+            
+            <button class="copy-btn" onclick="copyTransactionsData()">📋 Copy Transactions Data</button>
+        </div>
+
+        <div class="sheet-section">
+            <h2>🔗 Tab 3: "Wallets" Sheet</h2>
+            <p><strong>Create a new tab called "Wallets"</strong> with this structure:</p>
+            
+            <table>
+                <tr>
+                    <th>A</th><th>B</th><th>C</th><th>D</th>
+                </tr>
+                <tr>
+                    <td><strong>wallet_name</strong></td>
+                    <td><strong>address</strong></td>
+                    <td><strong>chain</strong></td>
+                    <td><strong>active</strong></td>
+                </tr>
+                <tr><td>Main Solana Wallet</td><td>AHpp7u8rV8LyX9gGEYH1ivnx1qHe2wAiGfVod9uTaXUd</td><td>solana</td><td>TRUE</td></tr>
+                <tr><td>Ethereum Wallet 1</td><td>0x39f8602c7DeA377506D1872968FE8857fb78370f</td><td>ethereum</td><td>TRUE</td></tr>
+                <tr><td>Ethereum Wallet 2</td><td>0xd07947276c65bc5035797c986f97456702400793</td><td>ethereum</td><td>TRUE</td></tr>
+                <tr><td>Hyperliquid Wallet</td><td>YOUR_HYPERLIQUID_ADDRESS</td><td>hyperliquid</td><td>TRUE</td></tr>
+            </table>
+            
+            <button class="copy-btn" onclick="copyWalletsData()">📋 Copy Wallets Data</button>
+        </div>
+
+        <div class="step">
+            <h2>🔑 Step 2: Make Sheet Publicly Readable</h2>
+            <p><strong>1.</strong> In your Google Sheet, click the <strong>"Share"</strong> button (top right)</p>
+            <p><strong>2.</strong> Click <strong>"Change to anyone with the link"</strong></p>
+            <p><strong>3.</strong> Set permissions to <strong>"Viewer"</strong></p>
+            <p><strong>4.</strong> Copy the share link - it should look like:</p>
+            <div class="url-example">
+                https://docs.google.com/spreadsheets/d/<strong>1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms</strong>/edit
+            </div>
+            <p><strong>5.</strong> The part in bold is your <strong>SPREADSHEET_ID</strong></p>
+        </div>
+
+        <div class="step">
+            <h2>🔧 Step 3: Get Google Sheets API Key</h2>
+            <p><strong>1.</strong> Go to <a href="https://console.developers.google.com" target="_blank" style="color: #fff;">Google Cloud Console</a></p>
+            <p><strong>2.</strong> Create a new project or select existing one</p>
+            <p><strong>3.</strong> Search for "Google Sheets API" and enable it</p>
+            <p><strong>4.</strong> Go to "Credentials" → "Create Credentials" → "API Key"</p>
+            <p><strong>5.</strong> Restrict the key to "Google Sheets API" for security</p>
+            <p><strong>6.</strong> Copy your API key</p>
+        </div>
+
+        <div class="step">
+            <h2>⚙️ Step 4: Configure the App</h2>
+            <p>Once you have your Spreadsheet ID and API Key, I'll update the app with:</p>
+            <div class="code">
+this.googleSheetsConfig = {
+    spreadsheetId: 'YOUR_SPREADSHEET_ID_HERE',
+    apiKey: 'YOUR_API_KEY_HERE',
+    enabled: true
+};
+            </div>
+        </div>
+
+        <div class="success">
+            <h3>🎉 Benefits After Setup:</h3>
+            <p>✅ <strong>Multi-device sync:</strong> Access from phone and laptop<br>
+            ✅ <strong>Real-time updates:</strong> Changes appear everywhere instantly<br>
+            ✅ <strong>Data backup:</strong> Google automatically backs up your data<br>
+            ✅ <strong>Easy editing:</strong> Directly edit data in Google Sheets if needed<br>
+            ✅ <strong>Sharing:</strong> Grant access to accountants, partners, etc.</p>
+        </div>
+
+        <div class="highlight">
+            <h3>📱 How It Will Work:</h3>
+            <p><strong>1.</strong> App loads data from Google Sheets on startup<br>
+            <strong>2.</strong> When you add investors/investments in the app → automatically saves to Google Sheets<br>
+            <strong>3.</strong> Portfolio data comes from blockchain APIs (live wallet data)<br>
+            <strong>4.</strong> Everything syncs across your devices</p>
+        </div>
+
+    </div>
+
+    <script>
+        function copyInvestorsData() {
+            const data = `investor_id	name	email	join_date	investment_value	current_value	share_percentage
+LK1	Leke Karunwi	leke@example.com	2023-10-08	2000.00	2000.00	7.95
+MO2	Mariam Oyawoye	mummy@example.com	2023-10-10	1050.06	1050.06	4.18
+FO3	Fifehanmi Oyawoye	fifehanmi@example.com	2023-10-14	1823.91	1823.91	7.26
+RA4	Rinsola Aminu	rinsola@example.com	2023-11-19	828.30	828.30	3.30
+OK5	Oyinkan Karunwi	oyinkan@example.com	2023-11-19	991.57	991.57	3.94
+OA6	Omair Ansari	omair@example.com	2023-11-26	20212.46	20212.46	80.37`;
+            
+            navigator.clipboard.writeText(data).then(() => {
+                alert('✅ Investors data copied to clipboard!\n\nNext steps:\n1. Go to your Google Sheet\n2. Select cell A1 in the "Investors" tab\n3. Paste (Cmd+V)');
+            });
+        }
+
+        function copyTransactionsData() {
+            const data = `transaction_id	investor_id	type	amount	date	notes
+1	LK1	Investment	2000.00	2023-10-08	Received through transfer from Oyinkan; funded from personal investment
+2	MO2	Investment	1050.06	2023-10-10	Transferred from personal investment fund; 3 months tribute shared with Mamalo
+3	FO3	Investment	1823.91	2023-10-14	
+4	RA4	Investment	142.97	2023-11-19	Interac transfer on Nov 15th. Kept cash and created liquidity from personal funds
+5	OK5	Investment	991.57	2023-11-19	Zell transfer to Temmy on Nov 16. Kept cash and created liquidity from personal funds
+6	OA6	Investment	1418.82	2023-11-26	Sent via coinbase. Sent Eth (BASE), Popcat and Aethir. Amount deposited represents ETH and POPCAT; Aethir to be added during second batch
+7	OA6	Investment	8774.88	2023-11-28	Received 2.39724 ETH; swapped 279459383ATH for 0.05021. ETH to be consolidated with other WAGMI funds
+8	RA4	Investment	685.33	2024-02-10	Sent 1K CAD; wealth simple charged 2% fee to purchase 3.38208 SOL which was transferred to WAGMI receipt account and converted to 685.33 USDC
+9	OA6	Investment	10018.76	2024-06-15	Sent 8145833 Fartcoin (~USD1,018)`;
+            
+            navigator.clipboard.writeText(data).then(() => {
+                alert('✅ Transactions data copied to clipboard!\n\nNext steps:\n1. Create "Transactions" tab in your Google Sheet\n2. Select cell A1\n3. Paste (Cmd+V)');
+            });
+        }
+
+        function copyWalletsData() {
+            const data = `wallet_name	address	chain	active
+Main Solana Wallet	AHpp7u8rV8LyX9gGEYH1ivnx1qHe2wAiGfVod9uTaXUd	solana	TRUE
+Ethereum Wallet 1	0x39f8602c7DeA377506D1872968FE8857fb78370f	ethereum	TRUE
+Ethereum Wallet 2	0xd07947276c65bc5035797c986f97456702400793	ethereum	TRUE
+Hyperliquid Wallet	YOUR_HYPERLIQUID_ADDRESS	hyperliquid	TRUE`;
+            
+            navigator.clipboard.writeText(data).then(() => {
+                alert('✅ Wallets data copied to clipboard!\n\nNext steps:\n1. Create "Wallets" tab in your Google Sheet\n2. Select cell A1\n3. Paste (Cmd+V)');
+            });
+        }
+
+        // Auto-open Google Sheets
+        setTimeout(() => {
+            if (confirm('🚀 Ready to create your Google Sheet?\n\nClick OK to open Google Sheets in a new tab.')) {
+                window.open('https://sheets.google.com', '_blank');
+            }
+        }, 2000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Manager Button</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .test-button {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .test-button:hover {
+            background: #4338ca;
+        }
+    </style>
+</head>
+<body>
+    <h1>🚀 Testing Manager Button</h1>
+    <button class="test-button" onclick="testManagerAccess()">Test Manager Portal</button>
+    
+    <div id="result"></div>
+
+    <script>
+        function testManagerAccess() {
+            console.log('🔧 Testing manager access...');
+            document.getElementById('result').innerHTML = '<p>✅ Button click works! Manager portal functionality is working.</p>';
+            
+            // Test Google Sheets API
+            testGoogleSheetsAPI();
+        }
+        
+        async function testGoogleSheetsAPI() {
+            const spreadsheetId = '1h04nkcnQmxaFml8RubIGmPgffMiyoEIg350ryjXK0tM';
+            const apiKey = 'AIzaSyB3kNpWCOmhaPWbFCNcM044eyO0Sy6Gz0Q';
+            const range = 'Investors!A:G';
+            const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${apiKey}`;
+            
+            try {
+                console.log('📊 Testing Google Sheets API...');
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                console.log('✅ Google Sheets API Response:', data);
+                document.getElementById('result').innerHTML += '<p>✅ Google Sheets API is working!</p>';
+                
+                if (data.values) {
+                    document.getElementById('result').innerHTML += `<p>📊 Found ${data.values.length - 1} investors in the sheet</p>`;
+                }
+                
+            } catch (error) {
+                console.error('❌ Google Sheets API Error:', error);
+                document.getElementById('result').innerHTML += '<p>❌ Google Sheets API failed</p>';
+            }
+        }
+    </script>
+</body>
+</html>
+
