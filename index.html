@@ -1615,9 +1615,9 @@
                     <!-- Privacy Mode Icon -->
                     <div style="display: flex; align-items: center;">
                         <div id="privacyModeIcon" 
-                             style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; color: #8A8F98; opacity: 0.7; cursor: pointer;" 
+                             style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; color: #00ff88; opacity: 1; cursor: pointer;" 
                              title="Privacy mode" 
-                             aria-label="Privacy mode" onclick="alert('Privacy mode clicked!')">
+                             aria-label="Privacy mode" onclick="window.togglePrivacyMode()">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
                                 <line x1="1" y1="1" x2="23" y2="23"></line>
@@ -2313,6 +2313,34 @@
             } else if (tabName === 'performance') {
                 window.loadPerformanceData();
             }
+        };
+        
+        // Privacy mode functionality
+        window.privacyModeEnabled = true;
+        
+        // Function to update privacy icon appearance
+        window.updatePrivacyIcon = function() {
+            const icon = document.getElementById('privacyModeIcon');
+            if (icon) {
+                if (window.privacyModeEnabled) {
+                    // Privacy ON: Green slashed eye
+                    icon.style.color = '#00ff88';
+                    icon.style.opacity = '1';
+                    icon.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>';
+                } else {
+                    // Privacy OFF: Grey normal eye
+                    icon.style.color = '#8A8F98';
+                    icon.style.opacity = '0.7';
+                    icon.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>';
+                }
+            }
+        };
+        
+        // Privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            window.privacyModeEnabled = !window.privacyModeEnabled;
+            window.updatePrivacyIcon();
+            alert('Privacy mode: ' + (window.privacyModeEnabled ? 'ON' : 'OFF'));
         };
         
         // Function to restore app state on page refresh
@@ -5612,6 +5640,11 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🎯 Setting up inline event listeners...');
+            
+            // Initialize privacy icon to match the default state
+            if (window.updatePrivacyIcon) {
+                window.updatePrivacyIcon();
+            }
             
             // Manager portal card
             const managerCard = document.getElementById('managerPortalBtn');
