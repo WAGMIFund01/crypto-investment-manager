@@ -2563,10 +2563,10 @@
                     <tr>
                         <td class="sticky-column" style="position: sticky; left: 0; background: #1a1d23; z-index: 10; border-right: 1px solid #2d3139;">#ERROR</td>
                         <td>#ERROR</td>
-                        <td style="text-align: right;">#ERROR</td>
-                        <td style="text-align: right;">#ERROR</td>
-                        <td style="text-align: right;">#ERROR</td>
-                        <td style="text-align: right;">#ERROR</td>
+                        <td style="text-align: center;">#ERROR</td>
+                        <td style="text-align: center;">#ERROR</td>
+                        <td style="text-align: center;">#ERROR</td>
+                        <td style="text-align: center;">#ERROR</td>
                         <td style="text-align: center;">
                             <button style="background: #111; border-radius: 8px; padding: 6px 12px; border: 1px solid #2d3139; color: #e2e8f0; cursor: not-allowed;" disabled>#ERROR</button>
                         </td>
@@ -2649,10 +2649,10 @@
                         <tr style="border-bottom: 1px solid #2d3139; transition: background-color 0.2s ease;" onmouseover="this.style.backgroundColor='#1f2329'" onmouseout="this.style.backgroundColor=''">
                             <td class="sticky-column" style="position: sticky; left: 0; background: #1a1d23; z-index: 5; border-right: 1px solid #2d3139; padding: 12px 16px; font-weight: 600; color: #e2e8f0; text-align: left;">${investorId}</td>
                             <td style="padding: 12px 16px; color: #e2e8f0; text-align: left;">${name}</td>
-                            <td style="padding: 12px 16px; text-align: center; color: #e2e8f0;">${formattedInvestment}</td>
-                            <td style="padding: 12px 16px; text-align: center; color: #e2e8f0;">${formattedAUM}</td>
-                            <td style="padding: 12px 16px; text-align: center; color: ${returnColor}; font-weight: 500;">${formattedReturn}</td>
-                            <td style="padding: 12px 16px; text-align: center; color: #e2e8f0;">${formattedShare}</td>
+                            <td style="padding: 12px 16px; text-align: center !important; color: #e2e8f0;">${formattedInvestment}</td>
+                            <td style="padding: 12px 16px; text-align: center !important; color: #e2e8f0;">${formattedAUM}</td>
+                            <td style="padding: 12px 16px; text-align: center !important; color: ${returnColor}; font-weight: 500;">${formattedReturn}</td>
+                            <td style="padding: 12px 16px; text-align: center !important; color: #e2e8f0;">${formattedShare}</td>
                             <td style="padding: 12px 16px; text-align: center;">
                                 <button onclick="window.showInvestorDetails('${investorId}', '${name}', '${formattedDate}', ${investmentValue}, ${currentValue}, ${totalReturn}); event.stopPropagation();" 
                                         style="background: #111; border: none; border-radius: 8px; padding: 6px 12px; color: #e2e8f0; cursor: pointer; font-size: 12px; transition: background 0.2s;" 
