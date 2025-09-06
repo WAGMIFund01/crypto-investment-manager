@@ -1602,20 +1602,28 @@
                     <h2>Investor Management</h2>
                     
                     <!-- Search and Filter Controls -->
-                    <div class="investor-controls" style="display: flex; gap: 16px; align-items: center; margin-bottom: 20px; flex-wrap: wrap;">
-                        <div class="search-container" style="flex: 1; min-width: 250px;">
-                            <input type="text" id="investorSearch" placeholder="Search investors by name or ID..." 
-                                   style="width: 100%; padding: 8px 12px; border: 1px solid #3d4148; border-radius: 6px; background: #1a1d23; color: #e2e8f0; font-size: 14px;"
+                    <div class="investor-controls" style="margin-bottom: 24px;">
+                        <div class="tab-controls" style="display: flex; border-bottom: 1px solid #2d3139; margin-bottom: 16px;">
+                            <div class="tab active" id="searchTab" onclick="window.switchInvestorTab('search')" style="padding: 12px 16px; cursor: pointer; border-bottom: 2px solid #00ff88; color: #e2e8f0; font-size: 14px; font-weight: 500;">Search</div>
+                            <div class="tab" id="filtersTab" onclick="window.switchInvestorTab('filters')" style="padding: 12px 16px; cursor: pointer; border-bottom: 2px solid transparent; color: #7f8c8d; font-size: 14px; font-weight: 500;">Filters</div>
+                        </div>
+                        
+                        <div id="searchPanel" class="control-panel" style="display: block;">
+                            <input type="text" id="investorSearch" placeholder="Search by ID or Name..." 
+                                   style="width: 100%; max-width: 400px; padding: 10px 14px; border: 1px solid #3d4148; border-radius: 8px; background: #1a1d23; color: #e2e8f0; font-size: 14px;"
                                    onkeyup="window.filterInvestors()">
                         </div>
-                        <div class="filter-container" style="display: flex; gap: 8px; align-items: center;">
-                            <select id="returnFilter" style="padding: 8px 12px; border: 1px solid #3d4148; border-radius: 6px; background: #1a1d23; color: #e2e8f0; font-size: 14px;" onchange="window.filterInvestors()">
-                                <option value="">All Returns</option>
-                                <option value="positive">Positive Returns</option>
-                                <option value="negative">Negative Returns</option>
-                                <option value="high">High Returns (50%+)</option>
-                            </select>
-                            <button onclick="window.clearInvestorFilters()" style="padding: 8px 12px; background: #3d4148; border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; font-size: 14px; transition: background 0.2s;" onmouseover="this.style.background='#4a4f5a'" onmouseout="this.style.background='#3d4148'">Clear</button>
+                        
+                        <div id="filtersPanel" class="control-panel" style="display: none;">
+                            <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                                <select id="returnFilter" style="padding: 10px 14px; border: 1px solid #3d4148; border-radius: 8px; background: #1a1d23; color: #e2e8f0; font-size: 14px;" onchange="window.filterInvestors()">
+                                    <option value="">All Returns</option>
+                                    <option value="positive">Positive Returns</option>
+                                    <option value="negative">Negative Returns</option>
+                                    <option value="high">High Returns (50%+)</option>
+                                </select>
+                                <button onclick="window.clearInvestorFilters()" style="padding: 10px 16px; background: #3d4148; border: none; border-radius: 8px; color: #e2e8f0; cursor: pointer; font-size: 14px; transition: background 0.2s;" onmouseover="this.style.background='#4a4f5a'" onmouseout="this.style.background='#3d4148'">Clear Filters</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1623,28 +1631,25 @@
                     <table id="investorsTable" class="data-table">
                         <thead>
                             <tr>
-                                <th onclick="window.sortInvestors('id')" class="sortable-header" style="cursor: pointer; user-select: none; position: relative; padding-right: 20px;" onmouseover="this.style.background='#2d3139'" onmouseout="this.style.background=''">
-                                    Investor ID <span class="sort-indicator" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: #7f8c8d;">↕</span>
+                                <th onclick="window.sortInvestors('id')" class="sortable-header sticky-column" style="cursor: pointer; user-select: none; position: relative; padding-right: 20px; position: sticky; left: 0; background: #1a1d23; z-index: 10; border-right: 1px solid #2d3139;" onmouseover="this.style.background='#2d3139'" onmouseout="this.style.background='#1a1d23'">
+                                    ID <span class="sort-indicator" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: #7f8c8d;">↕</span>
                                 </th>
                                 <th onclick="window.sortInvestors('name')" class="sortable-header" style="cursor: pointer; user-select: none; position: relative; padding-right: 20px;" onmouseover="this.style.background='#2d3139'" onmouseout="this.style.background=''">
                                     Name <span class="sort-indicator" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: #7f8c8d;">↕</span>
                                 </th>
-                                <th onclick="window.sortInvestors('date')" class="sortable-header" style="cursor: pointer; user-select: none; position: relative; padding-right: 20px;" onmouseover="this.style.background='#2d3139'" onmouseout="this.style.background=''">
-                                    Date Joined <span class="sort-indicator" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: #7f8c8d;">↕</span>
+                                <th onclick="window.sortInvestors('investment')" class="sortable-header" style="cursor: pointer; user-select: none; position: relative; padding-right: 20px; text-align: right;" onmouseover="this.style.background='#2d3139'" onmouseout="this.style.background=''">
+                                    Initial Investment ($) <span class="sort-indicator" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: #7f8c8d;">↕</span>
                                 </th>
-                                <th onclick="window.sortInvestors('investment')" class="sortable-header" style="cursor: pointer; user-select: none; position: relative; padding-right: 20px;" onmouseover="this.style.background='#2d3139'" onmouseout="this.style.background=''">
-                                    Investment Value <span class="sort-indicator" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: #7f8c8d;">↕</span>
+                                <th onclick="window.sortInvestors('aum')" class="sortable-header" style="cursor: pointer; user-select: none; position: relative; padding-right: 20px; text-align: right;" onmouseover="this.style.background='#2d3139'" onmouseout="this.style.background=''">
+                                    Share of AUM ($) <span class="sort-indicator" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: #7f8c8d;">↕</span>
                                 </th>
-                                <th onclick="window.sortInvestors('current')" class="sortable-header" style="cursor: pointer; user-select: none; position: relative; padding-right: 20px;" onmouseover="this.style.background='#2d3139'" onmouseout="this.style.background=''">
-                                    Current Value <span class="sort-indicator" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: #7f8c8d;">↕</span>
+                                <th onclick="window.sortInvestors('return')" class="sortable-header" style="cursor: pointer; user-select: none; position: relative; padding-right: 20px; text-align: right;" onmouseover="this.style.background='#2d3139'" onmouseout="this.style.background=''">
+                                    Return (%) <span class="sort-indicator" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: #7f8c8d;">↕</span>
                                 </th>
-                                <th onclick="window.sortInvestors('return')" class="sortable-header" style="cursor: pointer; user-select: none; position: relative; padding-right: 20px;" onmouseover="this.style.background='#2d3139'" onmouseout="this.style.background=''">
-                                    Total Return <span class="sort-indicator" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: #7f8c8d;">↕</span>
-                                </th>
-                                <th onclick="window.sortInvestors('share')" class="sortable-header" style="cursor: pointer; user-select: none; position: relative; padding-right: 20px;" onmouseover="this.style.background='#2d3139'" onmouseout="this.style.background=''">
+                                <th onclick="window.sortInvestors('share')" class="sortable-header" style="cursor: pointer; user-select: none; position: relative; padding-right: 20px; text-align: right;" onmouseover="this.style.background='#2d3139'" onmouseout="this.style.background=''">
                                     Share % <span class="sort-indicator" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: #7f8c8d;">↕</span>
                                 </th>
-                                <th style="cursor: default;">Actions</th>
+                                <th style="cursor: default; text-align: center;">More</th>
                             </tr>
                         </thead>
                         <tbody id="investorsTableBody">
@@ -2772,17 +2777,30 @@
                 
                 const totalReturn = investor.investment > 0 ? ((investor.current - investor.investment) / investor.investment * 100) : 0;
                 
+                // Format values according to specifications
+                const formattedInvestment = `$${Math.round(investor.investment).toLocaleString()}`;
+                const formattedAUM = `$${Math.round(investor.current).toLocaleString()}`;
+                const formattedReturn = `${totalReturn >= 0 ? '+' : ''}${totalReturn.toFixed(1)}%`;
+                const formattedShare = `${investor.share.toFixed(1)}%`;
+                
+                // Color for return percentage
+                const returnColor = totalReturn >= 0 ? '#22C55E' : '#EF4444';
+                
                 tableHTML += `
-                    <tr onclick="window.showInvestorDetails('${investor.id}', '${investor.name}', '${formattedDate}', ${investor.investment}, ${investor.current}, ${totalReturn})" style="cursor: pointer;" title="Click to view transaction history">
-                        <td><strong>${investor.id}</strong></td>
-                        <td>${investor.name}</td>
-                        <td style="white-space: nowrap;">${formattedDate}</td>
-                        <td>$${investor.investment.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
-                        <td>$${investor.current.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
-                        <td class="${totalReturn >= 0 ? 'positive' : 'negative'}">${totalReturn >= 0 ? '+' : ''}${totalReturn.toFixed(1)}%</td>
-                        <td>${investor.share.toFixed(1)}%</td>
-                        <td>
-                            <small style="color: #666;">📊 Details</small>
+                    <tr style="border-bottom: 1px solid #2d3139;">
+                        <td class="sticky-column" style="position: sticky; left: 0; background: #1a1d23; z-index: 5; border-right: 1px solid #2d3139; padding: 12px 16px; font-weight: 600; color: #e2e8f0;">${investor.id}</td>
+                        <td style="padding: 12px 16px; color: #e2e8f0;">${investor.name}</td>
+                        <td style="padding: 12px 16px; text-align: right; color: #e2e8f0;">${formattedInvestment}</td>
+                        <td style="padding: 12px 16px; text-align: right; color: #e2e8f0;">${formattedAUM}</td>
+                        <td style="padding: 12px 16px; text-align: right; color: ${returnColor}; font-weight: 500;">${formattedReturn}</td>
+                        <td style="padding: 12px 16px; text-align: right; color: #e2e8f0;">${formattedShare}</td>
+                        <td style="padding: 12px 16px; text-align: center;">
+                            <button onclick="window.showInvestorDetails('${investor.id}', '${investor.name}', '${formattedDate}', ${investor.investment}, ${investor.current}, ${totalReturn}); event.stopPropagation();" 
+                                    style="background: #111; border: none; border-radius: 8px; padding: 6px 12px; color: #e2e8f0; cursor: pointer; font-size: 12px; transition: background 0.2s;" 
+                                    onmouseover="this.style.background='#1a1a1a'" 
+                                    onmouseout="this.style.background='#111'">
+                                More
+                            </button>
                         </td>
                     </tr>
                 `;
@@ -2852,17 +2870,30 @@
                     // Use return percentage from Google Sheets if available, otherwise calculate
                     const totalReturn = returnPercentage > 0 ? returnPercentage : (investmentValue > 0 ? ((currentValue - investmentValue) / investmentValue * 100) : 0);
                     
+                    // Format values according to specifications
+                    const formattedInvestment = `$${Math.round(investmentValue).toLocaleString()}`;
+                    const formattedAUM = `$${Math.round(currentValue).toLocaleString()}`;
+                    const formattedReturn = `${totalReturn >= 0 ? '+' : ''}${totalReturn.toFixed(1)}%`;
+                    const formattedShare = `${sharePercentage.toFixed(1)}%`;
+                    
+                    // Color for return percentage
+                    const returnColor = totalReturn >= 0 ? '#22C55E' : '#EF4444';
+                    
                     tableHTML += `
-                        <tr onclick="window.showInvestorDetails('${investorId}', '${name}', '${formattedDate}', ${investmentValue}, ${currentValue}, ${totalReturn})" style="cursor: pointer;" title="Click to view transaction history">
-                            <td><strong>${investorId}</strong></td>
-                            <td>${name}</td>
-                            <td style="white-space: nowrap;">${formattedDate}</td>
-                            <td>$${investmentValue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
-                            <td>$${currentValue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
-                            <td class="${totalReturn >= 0 ? 'positive' : 'negative'}">${totalReturn >= 0 ? '+' : ''}${totalReturn.toFixed(1)}%</td>
-                            <td>${sharePercentage.toFixed(1)}%</td>
-                            <td>
-                                <small style="color: #666;">📊 Details</small>
+                        <tr style="border-bottom: 1px solid #2d3139;">
+                            <td class="sticky-column" style="position: sticky; left: 0; background: #1a1d23; z-index: 5; border-right: 1px solid #2d3139; padding: 12px 16px; font-weight: 600; color: #e2e8f0;">${investorId}</td>
+                            <td style="padding: 12px 16px; color: #e2e8f0;">${name}</td>
+                            <td style="padding: 12px 16px; text-align: right; color: #e2e8f0;">${formattedInvestment}</td>
+                            <td style="padding: 12px 16px; text-align: right; color: #e2e8f0;">${formattedAUM}</td>
+                            <td style="padding: 12px 16px; text-align: right; color: ${returnColor}; font-weight: 500;">${formattedReturn}</td>
+                            <td style="padding: 12px 16px; text-align: right; color: #e2e8f0;">${formattedShare}</td>
+                            <td style="padding: 12px 16px; text-align: center;">
+                                <button onclick="window.showInvestorDetails('${investorId}', '${name}', '${formattedDate}', ${investmentValue}, ${currentValue}, ${totalReturn}); event.stopPropagation();" 
+                                        style="background: #111; border: none; border-radius: 8px; padding: 6px 12px; color: #e2e8f0; cursor: pointer; font-size: 12px; transition: background 0.2s;" 
+                                        onmouseover="this.style.background='#1a1a1a'" 
+                                        onmouseout="this.style.background='#111'">
+                                    More
+                                </button>
                             </td>
                         </tr>
                     `;
@@ -4050,25 +4081,21 @@
                         aValue = a.cells[1].textContent.trim();
                         bValue = b.cells[1].textContent.trim();
                         break;
-                    case 'date':
-                        aValue = new Date(a.cells[2].textContent.trim());
-                        bValue = new Date(b.cells[2].textContent.trim());
-                        break;
                     case 'investment':
+                        aValue = parseFloat(a.cells[2].textContent.replace(/[$,]/g, ''));
+                        bValue = parseFloat(b.cells[2].textContent.replace(/[$,]/g, ''));
+                        break;
+                    case 'aum':
                         aValue = parseFloat(a.cells[3].textContent.replace(/[$,]/g, ''));
                         bValue = parseFloat(b.cells[3].textContent.replace(/[$,]/g, ''));
                         break;
-                    case 'current':
-                        aValue = parseFloat(a.cells[4].textContent.replace(/[$,]/g, ''));
-                        bValue = parseFloat(b.cells[4].textContent.replace(/[$,]/g, ''));
-                        break;
                     case 'return':
-                        aValue = parseFloat(a.cells[5].textContent.replace(/[%+]/g, ''));
-                        bValue = parseFloat(b.cells[5].textContent.replace(/[%+]/g, ''));
+                        aValue = parseFloat(a.cells[4].textContent.replace(/[%+]/g, ''));
+                        bValue = parseFloat(b.cells[4].textContent.replace(/[%+]/g, ''));
                         break;
                     case 'share':
-                        aValue = parseFloat(a.cells[6].textContent.replace(/[%]/g, ''));
-                        bValue = parseFloat(b.cells[6].textContent.replace(/[%]/g, ''));
+                        aValue = parseFloat(a.cells[5].textContent.replace(/[%]/g, ''));
+                        bValue = parseFloat(b.cells[5].textContent.replace(/[%]/g, ''));
                         break;
                     default:
                         return 0;
@@ -4101,7 +4128,7 @@
             rows.forEach(row => {
                 const name = row.cells[1].textContent.toLowerCase();
                 const id = row.cells[0].textContent.toLowerCase();
-                const returnText = row.cells[5].textContent;
+                const returnText = row.cells[4].textContent;
                 const returnValue = parseFloat(returnText.replace(/[%+]/g, ''));
                 
                 let showRow = true;
@@ -4157,6 +4184,35 @@
             }
             
             console.log('✅ Cleared all investor filters');
+        };
+
+        // Function to switch between Search and Filters tabs
+        window.switchInvestorTab = function(tabName) {
+            console.log(`🔄 Switching to ${tabName} tab`);
+            
+            // Update tab appearance
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+                tab.style.borderBottom = '2px solid transparent';
+                tab.style.color = '#7f8c8d';
+            });
+            
+            const activeTab = document.getElementById(tabName + 'Tab');
+            if (activeTab) {
+                activeTab.classList.add('active');
+                activeTab.style.borderBottom = '2px solid #00ff88';
+                activeTab.style.color = '#e2e8f0';
+            }
+            
+            // Show/hide panels
+            document.querySelectorAll('.control-panel').forEach(panel => {
+                panel.style.display = 'none';
+            });
+            
+            const activePanel = document.getElementById(tabName + 'Panel');
+            if (activePanel) {
+                activePanel.style.display = 'block';
+            }
         };
 
         // === PORTFOLIO FUNCTIONALITY ===
