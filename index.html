@@ -1401,6 +1401,37 @@
         .kpi-value.negative {
             color: var(--status-error);
         }
+        
+        /* Filter Chip Styles */
+        .filter-chip {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .filter-chip:hover {
+            border-color: #00ff88 !important;
+            color: #00ff88 !important;
+            box-shadow: 0 0 8px rgba(0, 255, 136, 0.3);
+        }
+        
+        .filter-chip.active {
+            background: #00ff88 !important;
+            color: #000 !important;
+            border-color: #00ff88 !important;
+            font-weight: 600 !important;
+        }
+        
+        .filter-chip.active.negative {
+            background: #ff4757 !important;
+            color: #fff !important;
+            border-color: #ff4757 !important;
+        }
+        
+        .filter-chip.active.high {
+            background: #3742fa !important;
+            color: #fff !important;
+            border-color: #3742fa !important;
+        }
     </style>
 </head>
 <body>
@@ -1599,24 +1630,69 @@
             <div id="investors" class="tab-content">
 
                 <div class="investors-header">
-                    <!-- Search and Filter Controls -->
+                    <!-- Unified Search and Filter Controls -->
                     <div class="investor-controls" style="margin-bottom: 24px;">
-                        <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+                        <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap; justify-content: space-between;">
                             <!-- Search Bar -->
                             <input type="text" id="investorSearch" placeholder="Search by ID or Name..." 
-                                   style="flex: 1; min-width: 300px; padding: 10px 14px; border: 1px solid #3d4148; border-radius: 8px; background: #1a1d23; color: #e2e8f0; font-size: 14px;"
-                                   onkeyup="window.filterInvestors()">
+                                   style="flex: 1; min-width: 300px; max-width: 400px; padding: 12px 16px; border: 1px solid #3d4148; border-radius: 12px; background: #1a1d23; color: #e2e8f0; font-size: 14px; transition: border-color 0.2s;"
+                                   oninput="window.filterInvestors()"
+                                   onfocus="this.style.borderColor='#00ff88'"
+                                   onblur="this.style.borderColor='#3d4148'">
                             
-                            <!-- Filter Dropdown -->
-                            <select id="returnFilter" style="padding: 10px 14px; border: 1px solid #3d4148; border-radius: 8px; background: #1a1d23; color: #e2e8f0; font-size: 14px;" onchange="window.filterInvestors()">
-                                <option value="">All Returns</option>
-                                <option value="positive">Positive Returns</option>
-                                <option value="negative">Negative Returns</option>
-                                <option value="high">High Returns (50%+)</option>
-                            </select>
-                            
-                            <!-- Clear Filters Button -->
-                            <button onclick="window.clearInvestorFilters()" style="padding: 10px 16px; background: #3d4148; border: none; border-radius: 8px; color: #e2e8f0; cursor: pointer; font-size: 14px; transition: background 0.2s;" onmouseover="this.style.background='#4a4f5a'" onmouseout="this.style.background='#3d4148'">Clear Filters</button>
+                            <!-- Filter Tags Container -->
+                            <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                                <!-- Return Filters -->
+                                <div style="display: flex; gap: 6px; align-items: center;">
+                                    <span style="color: #7f8c8d; font-size: 12px; font-weight: 500; margin-right: 4px;">RETURNS:</span>
+                                    <button class="filter-chip" data-filter="positive" onclick="window.toggleFilter('positive')" 
+                                            style="padding: 6px 12px; border: 1px solid #3d4148; border-radius: 16px; background: transparent; color: #7f8c8d; font-size: 12px; cursor: pointer; transition: all 0.2s; font-weight: 500;">
+                                        Positive
+                                    </button>
+                                    <button class="filter-chip" data-filter="negative" onclick="window.toggleFilter('negative')" 
+                                            style="padding: 6px 12px; border: 1px solid #3d4148; border-radius: 16px; background: transparent; color: #7f8c8d; font-size: 12px; cursor: pointer; transition: all 0.2s; font-weight: 500;">
+                                        Negative
+                                    </button>
+                                    <button class="filter-chip" data-filter="high" onclick="window.toggleFilter('high')" 
+                                            style="padding: 6px 12px; border: 1px solid #3d4148; border-radius: 16px; background: transparent; color: #7f8c8d; font-size: 12px; cursor: pointer; transition: all 0.2s; font-weight: 500;">
+                                        High (50%+)
+                                    </button>
+                                </div>
+                                
+                                <!-- Investment Size Filters -->
+                                <div style="display: flex; gap: 6px; align-items: center;">
+                                    <span style="color: #7f8c8d; font-size: 12px; font-weight: 500; margin-right: 4px;">SIZE:</span>
+                                    <button class="filter-chip" data-filter="small" onclick="window.toggleFilter('small')" 
+                                            style="padding: 6px 12px; border: 1px solid #3d4148; border-radius: 16px; background: transparent; color: #7f8c8d; font-size: 12px; cursor: pointer; transition: all 0.2s; font-weight: 500;">
+                                        Small (&lt;$1K)
+                                    </button>
+                                    <button class="filter-chip" data-filter="medium" onclick="window.toggleFilter('medium')" 
+                                            style="padding: 6px 12px; border: 1px solid #3d4148; border-radius: 16px; background: transparent; color: #7f8c8d; font-size: 12px; cursor: pointer; transition: all 0.2s; font-weight: 500;">
+                                        Medium ($1K-$5K)
+                                    </button>
+                                    <button class="filter-chip" data-filter="large" onclick="window.toggleFilter('large')" 
+                                            style="padding: 6px 12px; border: 1px solid #3d4148; border-radius: 16px; background: transparent; color: #7f8c8d; font-size: 12px; cursor: pointer; transition: all 0.2s; font-weight: 500;">
+                                        Large (&gt;$5K)
+                                    </button>
+                                </div>
+                                
+                                <!-- AUM Filters -->
+                                <div style="display: flex; gap: 6px; align-items: center;">
+                                    <span style="color: #7f8c8d; font-size: 12px; font-weight: 500; margin-right: 4px;">AUM:</span>
+                                    <button class="filter-chip" data-filter="major" onclick="window.toggleFilter('major')" 
+                                            style="padding: 6px 12px; border: 1px solid #3d4148; border-radius: 16px; background: transparent; color: #7f8c8d; font-size: 12px; cursor: pointer; transition: all 0.2s; font-weight: 500;">
+                                        Major (&gt;20%)
+                                    </button>
+                                </div>
+                                
+                                <!-- Clear All Button -->
+                                <button onclick="window.clearAllFilters()" 
+                                        style="padding: 6px 12px; border: 1px solid #ff4757; border-radius: 16px; background: transparent; color: #ff4757; font-size: 12px; cursor: pointer; transition: all 0.2s; font-weight: 500; margin-left: 8px;"
+                                        onmouseover="this.style.background='#ff4757'; this.style.color='white'" 
+                                        onmouseout="this.style.background='transparent'; this.style.color='#ff4757'">
+                                    Clear All
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -3896,7 +3972,6 @@
             console.log('🔍 Filtering investors...');
             
             const searchTerm = document.getElementById('investorSearch').value.toLowerCase();
-            const returnFilter = document.getElementById('returnFilter').value;
             const tbody = document.getElementById('investorsTableBody');
             
             if (!tbody) return;
@@ -3904,11 +3979,18 @@
             const rows = tbody.querySelectorAll('tr');
             let visibleCount = 0;
             
+            // Get active filters
+            const activeFilters = window.getActiveFilters();
+            
             rows.forEach(row => {
                 const name = row.cells[1].textContent.toLowerCase();
                 const id = row.cells[0].textContent.toLowerCase();
                 const returnText = row.cells[6].textContent;
                 const returnValue = parseFloat(returnText.replace(/[%+]/g, ''));
+                const investmentText = row.cells[3].textContent;
+                const investmentValue = parseFloat(investmentText.replace(/[$,]/g, ''));
+                const shareText = row.cells[5].textContent;
+                const shareValue = parseFloat(shareText.replace(/[%]/g, ''));
                 
                 let showRow = true;
                 
@@ -3917,20 +3999,18 @@
                     showRow = false;
                 }
                 
-                // Return filter
-                if (returnFilter) {
-                    switch (returnFilter) {
-                        case 'positive':
-                            if (returnValue <= 0) showRow = false;
-                            break;
-                        case 'negative':
-                            if (returnValue >= 0) showRow = false;
-                            break;
-                        case 'high':
-                            if (returnValue < 50) showRow = false;
-                            break;
-                    }
-                }
+                // Return filters
+                if (activeFilters.positive && returnValue <= 0) showRow = false;
+                if (activeFilters.negative && returnValue >= 0) showRow = false;
+                if (activeFilters.high && returnValue < 50) showRow = false;
+                
+                // Investment size filters
+                if (activeFilters.small && investmentValue >= 1000) showRow = false;
+                if (activeFilters.medium && (investmentValue < 1000 || investmentValue > 5000)) showRow = false;
+                if (activeFilters.large && investmentValue <= 5000) showRow = false;
+                
+                // AUM filters
+                if (activeFilters.major && shareValue <= 20) showRow = false;
                 
                 row.style.display = showRow ? '' : 'none';
                 if (showRow) visibleCount++;
@@ -3939,12 +4019,59 @@
             console.log(`✅ Filtered investors: ${visibleCount} visible`);
         };
 
-        // Function to clear all filters
-        window.clearInvestorFilters = function() {
-            console.log('🧹 Clearing investor filters...');
+        // Function to get active filters
+        window.getActiveFilters = function() {
+            const filters = {
+                positive: false,
+                negative: false,
+                high: false,
+                small: false,
+                medium: false,
+                large: false,
+                major: false
+            };
             
+            document.querySelectorAll('.filter-chip.active').forEach(chip => {
+                const filterType = chip.getAttribute('data-filter');
+                if (filters.hasOwnProperty(filterType)) {
+                    filters[filterType] = true;
+                }
+            });
+            
+            return filters;
+        };
+        
+        // Function to toggle filter chips
+        window.toggleFilter = function(filterType) {
+            const chip = document.querySelector(`[data-filter="${filterType}"]`);
+            if (!chip) return;
+            
+            // Toggle active state
+            chip.classList.toggle('active');
+            
+            // Add specific class for styling
+            if (chip.classList.contains('active')) {
+                if (filterType === 'negative') chip.classList.add('negative');
+                if (filterType === 'high') chip.classList.add('high');
+            } else {
+                chip.classList.remove('negative', 'high');
+            }
+            
+            // Apply filter
+            window.filterInvestors();
+        };
+        
+        // Function to clear all filters
+        window.clearAllFilters = function() {
+            console.log('🧹 Clearing all filters...');
+            
+            // Clear search
             document.getElementById('investorSearch').value = '';
-            document.getElementById('returnFilter').value = '';
+            
+            // Clear all filter chips
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                chip.classList.remove('active', 'negative', 'high');
+            });
             
             // Reset sort indicators
             document.querySelectorAll('.sort-indicator').forEach(indicator => {
@@ -3956,13 +4083,9 @@
             window.investorTableState.currentSort = { column: null, direction: 'asc' };
             
             // Show all rows
-            const tbody = document.getElementById('investorsTableBody');
-            if (tbody) {
-                const rows = tbody.querySelectorAll('tr');
-                rows.forEach(row => row.style.display = '');
-            }
+            window.filterInvestors();
             
-            console.log('✅ Cleared all investor filters');
+            console.log('✅ All filters cleared');
         };
 
 
