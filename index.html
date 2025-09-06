@@ -2365,8 +2365,17 @@
                     nameCell.textContent = '••••••';
                 }
                 
-                // Mask Total Investment column (index 2)
-                const investmentCell = row.cells[2];
+                // Mask Initial Investment Date column (index 2)
+                const dateCell = row.cells[2];
+                if (dateCell && !dateCell.hasAttribute('data-original-value')) {
+                    dateCell.setAttribute('data-original-value', dateCell.textContent);
+                }
+                if (dateCell) {
+                    dateCell.textContent = '••••••';
+                }
+                
+                // Mask Total Investment column (index 3)
+                const investmentCell = row.cells[3];
                 if (investmentCell && !investmentCell.hasAttribute('data-original-value')) {
                     investmentCell.setAttribute('data-original-value', investmentCell.textContent);
                 }
@@ -2374,8 +2383,8 @@
                     investmentCell.textContent = '••••••';
                 }
                 
-                // Mask Share of AUM column (index 3)
-                const aumCell = row.cells[3];
+                // Mask Share of AUM column (index 4)
+                const aumCell = row.cells[4];
                 if (aumCell && !aumCell.hasAttribute('data-original-value')) {
                     aumCell.setAttribute('data-original-value', aumCell.textContent);
                 }
@@ -2404,15 +2413,22 @@
                     nameCell.removeAttribute('data-original-value');
                 }
                 
-                // Restore Total Investment column (index 2)
-                const investmentCell = row.cells[2];
+                // Restore Initial Investment Date column (index 2)
+                const dateCell = row.cells[2];
+                if (dateCell && dateCell.hasAttribute('data-original-value')) {
+                    dateCell.textContent = dateCell.getAttribute('data-original-value');
+                    dateCell.removeAttribute('data-original-value');
+                }
+                
+                // Restore Total Investment column (index 3)
+                const investmentCell = row.cells[3];
                 if (investmentCell && investmentCell.hasAttribute('data-original-value')) {
                     investmentCell.textContent = investmentCell.getAttribute('data-original-value');
                     investmentCell.removeAttribute('data-original-value');
                 }
                 
-                // Restore Share of AUM column (index 3)
-                const aumCell = row.cells[3];
+                // Restore Share of AUM column (index 4)
+                const aumCell = row.cells[4];
                 if (aumCell && aumCell.hasAttribute('data-original-value')) {
                     aumCell.textContent = aumCell.getAttribute('data-original-value');
                     aumCell.removeAttribute('data-original-value');
