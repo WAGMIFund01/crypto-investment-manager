@@ -1687,9 +1687,9 @@
                                 
                                 <!-- Clear All Button -->
                                 <button id="clearAllButton" onclick="window.clearAllFilters()" 
-                                        style="padding: 6px 12px; border: 1px solid #ff4757; border-radius: 16px; background: transparent; color: #ff4757; font-size: 12px; cursor: pointer; transition: all 0.2s; font-weight: 500; margin-left: 8px; display: none;"
-                                        onmouseover="this.style.background='#ff4757'; this.style.color='white'" 
-                                        onmouseout="this.style.background='transparent'; this.style.color='#ff4757'">
+                                        style="padding: 6px 12px; border: 1px solid #3d4148; border-radius: 16px; background: transparent; color: #7f8c8d; font-size: 12px; cursor: pointer; transition: all 0.2s; font-weight: 500; margin-left: 8px;"
+                                        onmouseover="this.style.background='#3d4148'; this.style.color='#e2e8f0'" 
+                                        onmouseout="this.style.background='transparent'; this.style.color='#7f8c8d'">
                                     Clear All
                                 </button>
                             </div>
@@ -4064,7 +4064,7 @@
             window.filterInvestors();
         };
         
-        // Function to update Clear All button visibility
+        // Function to update Clear All button state
         window.updateClearAllButton = function() {
             const clearAllButton = document.getElementById('clearAllButton');
             if (!clearAllButton) return;
@@ -4073,11 +4073,33 @@
             const activeFilters = window.getActiveFilters();
             const hasActiveFilters = Object.values(activeFilters).some(filter => filter === true);
             
-            // Show button if there's search text or active filters
+            // Update button styling based on filter state
             if (searchTerm || hasActiveFilters) {
-                clearAllButton.style.display = 'inline-block';
+                // Active state - colored
+                clearAllButton.style.borderColor = '#ff4757';
+                clearAllButton.style.color = '#ff4757';
+                clearAllButton.style.cursor = 'pointer';
+                clearAllButton.onmouseover = function() {
+                    this.style.background = '#ff4757';
+                    this.style.color = 'white';
+                };
+                clearAllButton.onmouseout = function() {
+                    this.style.background = 'transparent';
+                    this.style.color = '#ff4757';
+                };
             } else {
-                clearAllButton.style.display = 'none';
+                // Inactive state - greyed out
+                clearAllButton.style.borderColor = '#3d4148';
+                clearAllButton.style.color = '#7f8c8d';
+                clearAllButton.style.cursor = 'default';
+                clearAllButton.onmouseover = function() {
+                    this.style.background = '#3d4148';
+                    this.style.color = '#e2e8f0';
+                };
+                clearAllButton.onmouseout = function() {
+                    this.style.background = 'transparent';
+                    this.style.color = '#7f8c8d';
+                };
             }
         };
         
@@ -4105,11 +4127,8 @@
             // Show all rows
             window.filterInvestors();
             
-            // Hide Clear All button after clearing
-            const clearAllButton = document.getElementById('clearAllButton');
-            if (clearAllButton) {
-                clearAllButton.style.display = 'none';
-            }
+            // Reset Clear All button to greyed out state
+            window.updateClearAllButton();
             
             console.log('✅ All filters cleared');
         };
