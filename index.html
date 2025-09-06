@@ -1638,11 +1638,11 @@
                                 <th onclick="window.sortInvestors('aum')" class="sortable-header" style="cursor: pointer; user-select: none; position: relative; padding-right: 20px; text-align: center !important;" onmouseover="this.style.background='#2d3139'" onmouseout="this.style.background=''">
                                     Share of AUM ($) <span class="sort-indicator" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: #7f8c8d;">↕</span>
                                 </th>
-                                <th onclick="window.sortInvestors('return')" class="sortable-header" style="cursor: pointer; user-select: none; position: relative; padding-right: 20px; text-align: center !important;" onmouseover="this.style.background='#2d3139'" onmouseout="this.style.background=''">
-                                    Return (%) <span class="sort-indicator" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: #7f8c8d;">↕</span>
-                                </th>
                                 <th onclick="window.sortInvestors('share')" class="sortable-header" style="cursor: pointer; user-select: none; position: relative; padding-right: 20px; text-align: center !important;" onmouseover="this.style.background='#2d3139'" onmouseout="this.style.background=''">
                                     Share % <span class="sort-indicator" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: #7f8c8d;">↕</span>
+                                </th>
+                                <th onclick="window.sortInvestors('return')" class="sortable-header" style="cursor: pointer; user-select: none; position: relative; padding-right: 20px; text-align: center !important;" onmouseover="this.style.background='#2d3139'" onmouseout="this.style.background=''">
+                                    Return (%) <span class="sort-indicator" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: #7f8c8d;">↕</span>
                                 </th>
                                 <th style="cursor: default; text-align: center; width: 80px;"></th>
                             </tr>
@@ -2651,8 +2651,8 @@
                             <td style="padding: 12px 16px; color: #e2e8f0; text-align: left;">${name}</td>
                             <td style="padding: 12px 16px; text-align: center !important; color: #e2e8f0;">${formattedInvestment}</td>
                             <td style="padding: 12px 16px; text-align: center !important; color: #e2e8f0;">${formattedAUM}</td>
-                            <td style="padding: 12px 16px; text-align: center !important; color: ${returnColor}; font-weight: 500;">${formattedReturn}</td>
                             <td style="padding: 12px 16px; text-align: center !important; color: #e2e8f0;">${formattedShare}</td>
+                            <td style="padding: 12px 16px; text-align: center !important; color: ${returnColor}; font-weight: 500;">${formattedReturn}</td>
                             <td style="padding: 12px 16px; text-align: center;">
                                 <button onclick="window.showInvestorDetails('${investorId}', '${name}', '${formattedDate}', ${investmentValue}, ${currentValue}, ${totalReturn}); event.stopPropagation();" 
                                         style="background: #111; border: none; border-radius: 8px; padding: 6px 12px; color: #e2e8f0; cursor: pointer; font-size: 12px; transition: background 0.2s;" 
@@ -3808,13 +3808,13 @@
                         aValue = parseFloat(a.cells[3].textContent.replace(/[$,]/g, ''));
                         bValue = parseFloat(b.cells[3].textContent.replace(/[$,]/g, ''));
                         break;
-                    case 'return':
-                        aValue = parseFloat(a.cells[4].textContent.replace(/[%+]/g, ''));
-                        bValue = parseFloat(b.cells[4].textContent.replace(/[%+]/g, ''));
-                        break;
                     case 'share':
-                        aValue = parseFloat(a.cells[5].textContent.replace(/[%]/g, ''));
-                        bValue = parseFloat(b.cells[5].textContent.replace(/[%]/g, ''));
+                        aValue = parseFloat(a.cells[4].textContent.replace(/[%]/g, ''));
+                        bValue = parseFloat(b.cells[4].textContent.replace(/[%]/g, ''));
+                        break;
+                    case 'return':
+                        aValue = parseFloat(a.cells[5].textContent.replace(/[%+]/g, ''));
+                        bValue = parseFloat(b.cells[5].textContent.replace(/[%+]/g, ''));
                         break;
                     default:
                         return 0;
@@ -3847,7 +3847,7 @@
             rows.forEach(row => {
                 const name = row.cells[1].textContent.toLowerCase();
                 const id = row.cells[0].textContent.toLowerCase();
-                const returnText = row.cells[4].textContent;
+                const returnText = row.cells[5].textContent;
                 const returnValue = parseFloat(returnText.replace(/[%+]/g, ''));
                 
                 let showRow = true;
