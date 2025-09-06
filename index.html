@@ -2290,9 +2290,32 @@
                 return null;
             }
         };
+
+        // Function to fetch last update timestamp from Google Sheets
+        window.fetchLastUpdateTimestamp = async function() {
+            try {
+                console.log('🕒 Fetching last update timestamp from Google Sheets...');
+                const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/Last Update!A2?key=${API_KEY}`;
+                
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (data.values && data.values.length > 0 && data.values[0].length > 0) {
+                    const timestamp = data.values[0][0];
+                    console.log('✅ Successfully fetched last update timestamp:', timestamp);
+                    return timestamp;
+                } else {
+                    console.error('❌ No last update timestamp found');
+                    return null;
+                }
+            } catch (error) {
+                console.error('❌ Error fetching last update timestamp:', error);
+                return null;
+            }
+        };
         
         // Function to update KPI ribbon with formatted data
-        window.updateKPIRibbon = function(kpiData) {
+        window.updateKPIRibbon = async function(kpiData) {
             if (!kpiData || kpiData.length === 0) {
                 console.log('⚠️ No KPI data to display');
                 return;
@@ -2331,14 +2354,41 @@
             monthlyElement.textContent = formatPercentage(monthlyReturn);
             monthlyElement.style.color = monthlyReturn >= 0 ? '#00ff88' : '#ff4757';
             
-            // Update last updated timestamp
-            const now = new Date();
-            const timeString = now.toLocaleTimeString('en-US', { 
-                hour: 'numeric', 
-                minute: '2-digit',
-                hour12: true 
-            });
-            document.getElementById('kpiLastUpdated').textContent = `Last updated: ${timeString}`;
+            // Fetch and update last updated time from database
+            try {
+                const dbTimestamp = await window.fetchLastUpdateTimestamp();
+                if (dbTimestamp) {
+                    // Parse the ISO timestamp and format it for display
+                    const dbDate = new Date(dbTimestamp);
+                    const timeString = dbDate.toLocaleTimeString('en-US', { 
+                        hour: 'numeric', 
+                        minute: '2-digit',
+                        hour12: true 
+                    });
+                    document.getElementById('kpiLastUpdated').textContent = `Last updated: ${timeString}`;
+                    console.log('✅ Updated last updated time from database:', timeString);
+                } else {
+                    // Fallback to browser time if database timestamp is not available
+                    const now = new Date();
+                    const timeString = now.toLocaleTimeString('en-US', { 
+                        hour: 'numeric', 
+                        minute: '2-digit',
+                        hour12: true 
+                    });
+                    document.getElementById('kpiLastUpdated').textContent = `Last updated: ${timeString}`;
+                    console.log('⚠️ Using browser time as fallback:', timeString);
+                }
+            } catch (error) {
+                console.error('❌ Error fetching database timestamp:', error);
+                // Fallback to browser time
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('en-US', { 
+                    hour: 'numeric', 
+                    minute: '2-digit',
+                    hour12: true 
+                });
+                document.getElementById('kpiLastUpdated').textContent = `Last updated: ${timeString}`;
+            }
             
             console.log('✅ KPI ribbon updated successfully');
         };
@@ -6245,16 +6295,42 @@
                 console.error('❌ Error refreshing prices:', error);
                 alert('Error refreshing prices: ' + error.message);
             } finally {
-                // Restore KPI ribbon text
+                // Restore KPI ribbon text with database timestamp
                 const kpiLastUpdated = document.getElementById('kpiLastUpdated');
                 if (kpiLastUpdated) {
-                    const now = new Date();
-                    const timeString = now.toLocaleTimeString('en-US', { 
-                        hour: 'numeric', 
-                        minute: '2-digit',
-                        hour12: true 
-                    });
-                    kpiLastUpdated.textContent = `Last updated: ${timeString}`;
+                    try {
+                        const dbTimestamp = await window.fetchLastUpdateTimestamp();
+                        if (dbTimestamp) {
+                            // Parse the ISO timestamp and format it for display
+                            const dbDate = new Date(dbTimestamp);
+                            const timeString = dbDate.toLocaleTimeString('en-US', { 
+                                hour: 'numeric', 
+                                minute: '2-digit',
+                                hour12: true 
+                            });
+                            kpiLastUpdated.textContent = `Last updated: ${timeString}`;
+                            console.log('✅ Updated last updated time from database after refresh:', timeString);
+                        } else {
+                            // Fallback to browser time if database timestamp is not available
+                            const now = new Date();
+                            const timeString = now.toLocaleTimeString('en-US', { 
+                                hour: 'numeric', 
+                                minute: '2-digit',
+                                hour12: true 
+                            });
+                            kpiLastUpdated.textContent = `Last updated: ${timeString}`;
+                        }
+                    } catch (error) {
+                        console.error('❌ Error fetching database timestamp after refresh:', error);
+                        // Fallback to browser time
+                        const now = new Date();
+                        const timeString = now.toLocaleTimeString('en-US', { 
+                            hour: 'numeric', 
+                            minute: '2-digit',
+                            hour12: true 
+                        });
+                        kpiLastUpdated.textContent = `Last updated: ${timeString}`;
+                    }
                     kpiLastUpdated.style.color = '#94a3b8';
                     kpiLastUpdated.style.fontWeight = 'normal';
                 }
