@@ -1617,7 +1617,7 @@
                         <div id="privacyModeIcon" 
                              style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; color: #8A8F98; opacity: 0.7; cursor: pointer;" 
                              title="Privacy mode" 
-                             aria-label="Privacy mode" onclick="alert('Privacy mode clicked!')">
+                             aria-label="Privacy mode" onclick="window.togglePrivacyMode()">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
                                 <line x1="1" y1="1" x2="23" y2="23"></line>
@@ -2239,6 +2239,11 @@
             SUCCESS_MESSAGE_DURATION: 3000 // 3 seconds
         };
         
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
+        
         // Simple navigation function
         window.enterManagerView = function() {
             console.log('🔧 Entering Manager View (inline)...');
@@ -2263,9 +2268,19 @@
             }
         };
         
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
+        
         // Make it available globally for button clicks
         window.app = {
             enterManagerView: window.enterManagerView
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
         
         // ===================================================================
@@ -2315,6 +2330,11 @@
             }
         };
         
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
+        
         // Function to restore app state on page refresh
         window.restoreAppState = function() {
             console.log('🔄 Restoring app state...');
@@ -2354,6 +2374,11 @@
             }
         };
         
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
+        
         // ===================================================================
         // GOOGLE SHEETS API INTEGRATION
         // ===================================================================
@@ -2385,6 +2410,11 @@
             }
         };
         
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
+        
         // Function to fetch live transactions data
         window.fetchLiveTransactionData = async function() {
             try {
@@ -2405,6 +2435,11 @@
                 console.error('❌ Error fetching transaction data:', error);
                 return null;
             }
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
         
         // Function to fetch KPI data from Google Sheets
@@ -2428,6 +2463,11 @@
                 return null;
             }
         };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
 
         // Function to fetch last update timestamp from Google Sheets
         window.fetchLastUpdateTimestamp = async function() {
@@ -2450,6 +2490,11 @@
                 console.error('❌ Error fetching last update timestamp:', error);
                 return null;
             }
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
         
         // Function to update KPI ribbon with formatted data
@@ -2521,6 +2566,11 @@
             if (window.privacyMode) { window.privacyMode.applyMasking(); }
         };
         
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
+        
         // Helper function to format currency
         function formatCurrency(amount) {
             return new Intl.NumberFormat('en-US', {
@@ -2544,6 +2594,11 @@
             if (kpiData) {
                 window.updateKPIRibbon(kpiData);
             }
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
         
         // Basic data loading functions
@@ -2581,6 +2636,11 @@
             }
         };
         
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
+        
         // Function to calculate and update summary dashboard
         window.updateSummaryDashboard = function(investorData) {
             console.log('📊 Updating summary dashboard...');
@@ -2615,6 +2675,11 @@
             }
             
             console.log('📊 Processed rows:', investorData.length, 'investors found:', totalInvestors);
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
 
         // Function to display live investor data
@@ -2681,6 +2746,11 @@
             window.loadLiveTransactions();
         };
         
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
+        
         // Function to load live transactions
         window.loadLiveTransactions = async function() {
             const transactionData = await window.fetchLiveTransactionData();
@@ -2712,6 +2782,11 @@
                     transactionsContainer.innerHTML = transactionsHTML;
                 }
             }
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
         
         
@@ -2755,6 +2830,11 @@
                     </tr>
                 `;
             }
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
         
         
@@ -2858,6 +2938,11 @@
             }
         };
         
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
+        
         window.loadPortfolioData = async function() {
             console.log('💼 Loading portfolio data...');
             
@@ -2892,6 +2977,11 @@
                 // Portfolio data failed to load - error already logged
             }
         };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
 
         // Function to load performance data
         window.loadPerformanceData = async function() {
@@ -2916,6 +3006,11 @@
             } catch (error) {
                 console.error('❌ Error loading performance data:', error);
             }
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
 
         // Function to display portfolio data from database
@@ -3121,6 +3216,11 @@
                 window.generatePortfolioCharts(sortedPortfolioData);
             }, 100);
         };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
 
         // Function to update portfolio summary
         window.updatePortfolioSummary = async function(portfolioData) {
@@ -3144,6 +3244,11 @@
             if (lastUpdatedElement) {
                 lastUpdatedElement.textContent = `Last updated: ${new Date().toLocaleTimeString()}`;
             }
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
 
         // Function to display empty portfolio state
@@ -3171,6 +3276,11 @@
                 assetsCount.textContent = '0 assets';
             }
         };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
 
         // Function to save portfolio history snapshot
         window.savePortfolioHistory = async function(totalValue, reason = 'Asset Update') {
@@ -3185,6 +3295,11 @@
                     date: new Date().toLocaleDateString(),
                     time: new Date().toLocaleTimeString()
                 };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
                 
                 const webhookUrl = CONFIG.GOOGLE_APPS_SCRIPT_URL;
                 
@@ -3216,6 +3331,11 @@
                 return false;
             }
         };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
 
 
         // ===================================================================
@@ -3229,6 +3349,11 @@
             'High risk': 40,
             'Degen': 1,
             'Stablecoin': 10
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
         
         // Function to fetch target allocation from Google Sheets
@@ -3274,6 +3399,11 @@
                 return window.targetAllocation;
             }
         };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
 
         window.generatePortfolioCharts = async function(portfolioData) {
             console.log('📊 Generating portfolio analysis charts...');
@@ -3290,6 +3420,11 @@
             } catch (error) {
                 console.error('❌ Error generating portfolio charts:', error);
             }
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
 
         // Generate 100% Stacked Bar Chart for all portfolio categories
@@ -3374,6 +3509,11 @@
                 'Degen': '#DC2626',    // Dark red for Degen
                 'Unknown': '#9CA3AF'   // Gray for Unknown
             };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
 
             const typeColors = {
                 'Major': '#3B82F6',      // Blue for Major
@@ -3382,6 +3522,11 @@
                 'Stablecoin': '#6B7280', // Gray for Stablecoin
                 'Unknown': '#9CA3AF'     // Gray for Unknown
             };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
 
             const locationColors = ['#3B82F6', '#10B981', '#F59E0B', '#8B5CF6', '#EF4444', '#06B6D4', '#84CC16', '#F97316', '#64748B'];
 
@@ -3406,6 +3551,11 @@
                 'Low': [],
                 'Unknown': []
             };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
 
             // Group tokens by risk level
             tokenPercentages.forEach((item) => {
@@ -3569,6 +3719,11 @@
                 }
             });
         };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
 
         // Generate Target vs Current Allocation Stacked Bar Chart
         window.generateTargetVsCurrentCharts = function(portfolioData) {
@@ -3605,6 +3760,11 @@
             // Generate stacked bar chart
             window.generateTargetVsCurrentStackedChart(window.targetAllocation, currentPercentages);
         };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
 
         // Generate Target vs Current Allocation Stacked Bar Chart
         window.generateTargetVsCurrentStackedChart = function(targetAllocation, currentPercentages) {
@@ -3628,6 +3788,11 @@
                 'Stablecoin': '#3B82F6',   // Blue
                 'None': '#9CA3AF'          // Light Gray for "None" category
             };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
 
             // Get all risk categories (union of target and current)
             const allRiskCategories = [...new Set([
@@ -3792,6 +3957,11 @@
                 }
             });
         };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
 
         // Function to fetch live transaction data for a specific investor
         window.fetchInvestorTransactions = async function(investorId) {
@@ -3840,6 +4010,11 @@
                 console.error('❌ Error fetching transactions:', error);
                 return [];
             }
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
 
         // Function to show investor details modal
@@ -3912,11 +4087,21 @@
             // Update the table with live data or error message
             transactionsBody.innerHTML = transactionHTML || '<tr><td colspan="4" style="text-align: center; padding: 20px; color: #7f8c8d;">No transactions found</td></tr>';
         };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
 
         // Function to close investor details modal
         window.closeInvestorModal = function() {
             console.log('❌ Closing investor details modal');
             document.getElementById('investorDetailsModal').classList.remove('active');
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
 
         // Function to scroll to investor table (for Investors tab)
@@ -3933,6 +4118,11 @@
                 console.log('⚠️ Investor table not found');
             }
         };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
 
         // === INVESTOR TABLE ENHANCEMENTS ===
         
@@ -3941,6 +4131,11 @@
             currentSort: { column: null, direction: 'asc' },
             allInvestors: [],
             filteredInvestors: []
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
 
         // Function to sort investors table
@@ -4025,6 +4220,11 @@
             
             console.log(`✅ Sorted investors by ${column} (${direction})`);
         };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
 
         // Function to filter investors
         window.filterInvestors = function() {
@@ -4082,6 +4282,11 @@
             // Show/hide Clear All button based on filter state
             window.updateClearAllButton();
         };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
 
         // Function to get active filters
         window.getActiveFilters = function() {
@@ -4096,6 +4301,11 @@
                 moderate: false,
                 major: false
             };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
             
             document.querySelectorAll('.filter-chip.active').forEach(chip => {
                 const filterType = chip.getAttribute('data-filter');
@@ -4105,6 +4315,11 @@
             });
             
             return filters;
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
         
         // Function to update chip states based on mutual exclusivity
@@ -4153,6 +4368,11 @@
                     chip.classList.add('disabled');
                 }
             });
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
         
         // Function to toggle filter chips with mutual exclusivity
@@ -4207,6 +4427,11 @@
             window.filterInvestors();
         };
         
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
+        
         // Function to update Clear All button state
         window.updateClearAllButton = function() {
             const clearAllButton = document.getElementById('clearAllButton');
@@ -4226,10 +4451,20 @@
                     this.style.background = '#ff4757';
                     this.style.color = 'white';
                 };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
                 clearAllButton.onmouseout = function() {
                     this.style.background = 'transparent';
                     this.style.color = '#ff4757';
                 };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
             } else {
                 // Inactive state - greyed out with no hover effects
                 clearAllButton.style.borderColor = '#3d4148';
@@ -4238,6 +4473,11 @@
                 clearAllButton.onmouseover = null;
                 clearAllButton.onmouseout = null;
             }
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
         
         // Function to clear all filters
@@ -4280,6 +4520,11 @@
             
             console.log('✅ All filters cleared');
         };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
 
 
         // === PORTFOLIO FUNCTIONALITY ===
@@ -4294,6 +4539,11 @@
             locations: new Set(),
             coinTypes: new Set(),
             blockchains: new Set(['Ethereum', 'Solana', 'Bitcoin', 'Hyperliquid', 'Polygon', 'Arbitrum', 'Optimism', 'Base'])
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
 
         // Function to update autocomplete data from portfolio
@@ -4326,6 +4576,11 @@
                 coinTypes: Array.from(window.autocompleteData.coinTypes),
                 blockchains: Array.from(window.autocompleteData.blockchains)
             });
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
 
         // Function to setup autocomplete for a field
@@ -4410,6 +4665,11 @@
             }
         };
         
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
+        
         // Debug function to test data
         window.debugPortfolioData = function() {
             console.log('📊 Portfolio data loaded successfully');
@@ -4426,6 +4686,11 @@
                 console.error('❌ Error loading portfolio data:', error);
             });
                 };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
 
         // Function to get custom Hyperliquid assets
         window.getCustomHyperliquidAssets = function(query) {
@@ -4453,6 +4718,11 @@
                 asset.symbol.toLowerCase().includes(queryLower) ||
                 asset.id.toLowerCase().includes(queryLower)
             );
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
         
         // Function to open Add Asset modal
@@ -4493,10 +4763,20 @@
             document.getElementById('valuePreview').innerHTML = '<div style="font-size: 1.5rem; font-weight: bold; color: #1976d2;">$0.00</div><div style="font-size: 0.9rem; color: #7f8c8d;">Live price will be fetched automatically</div>';
         };
         
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
+        
         // Function to close Add Asset modal
         window.closeAddAssetModal = function() {
             console.log('❌ Closing Add Asset modal');
             document.getElementById('addAssetModal').classList.remove('active');
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
         
 
@@ -4545,6 +4825,11 @@
             }
         };
         
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
+        
 
         
         // Function to display asset search results
@@ -4566,6 +4851,11 @@
             
             dropdown.innerHTML = html;
             dropdown.style.display = 'block';
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
         
         // Function to detect blockchain based on asset
@@ -4605,6 +4895,11 @@
             // Default to Ethereum for most other assets (since CoinGecko has many ERC-20 tokens)
             return 'Ethereum';
         };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
 
         // Function to select an asset
         window.selectAsset = async function(assetId, assetName, assetSymbol, assetImage) {
@@ -4637,6 +4932,11 @@
             
             // Fetch current price
             await window.updateValuePreview(assetId);
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
         
         // Function to handle adding asset to portfolio
@@ -4711,6 +5011,11 @@
                     location: location,
                     coinType: coinType
                 };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
                 
                 // Add to database
                 const success = await window.addAssetToDatabase(assetData);
@@ -4729,6 +5034,11 @@
                 console.error('❌ Error adding asset:', error);
                 alert('Error adding asset. Please try again.');
             }
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
 
         // Function to add asset to Google Sheets Portfolio tab via Google Apps Script
@@ -4822,6 +5132,11 @@
                 return false;
             }
         };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
 
         // Function to fetch portfolio data from Google Sheets
         window.fetchPortfolioData = async function() {
@@ -4844,6 +5159,11 @@
                 return null;
             }
         };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
 
 
 
@@ -4863,6 +5183,11 @@
                 managerView.style.display = 'none';
                 console.log('✅ Returned to login screen and cleared saved state');
             }
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
 
         // Function to delete an asset from portfolio
@@ -4899,6 +5224,11 @@
                     console.error('❌ Error deleting asset:', error);
                     alert(`Error deleting ${assetName}. Please try again.`);
                 });
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
 
         // Function to delete asset from Google Sheets Portfolio tab via Google Apps Script
@@ -4942,6 +5272,11 @@
                 console.error('❌ Error deleting asset from database:', error);
                 return false;
             }
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
 
         // Asset editing functions (quantity + new fields)
@@ -4991,6 +5326,11 @@
                 <button class="asset-cancel-btn" onclick="window.cancelEditAssetFields('${uniqueRowId}')">Cancel</button>
             `;
         };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
 
         window.cancelEditAssetFields = function(uniqueRowId) {
             console.log(`❌ Cancelling edit for row ${uniqueRowId}`);
@@ -5020,6 +5360,11 @@
                 <button class="asset-edit-btn" onclick="window.editAssetFields('${uniqueRowId}')">Edit</button>
                 <button class="asset-delete-btn" onclick="window.deleteAsset('${uniqueRowId}')">Delete</button>
             `;
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
 
         window.saveAssetFields = async function(uniqueRowId) {
@@ -5080,6 +5425,11 @@
                 alert('Error updating asset. Please try again.');
             }
         };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
 
         window.updateAssetFieldsInDatabase = async function(assetSymbol, fieldData) {
             try {
@@ -5103,6 +5453,11 @@
                 console.error('❌ Error updating asset fields in database:', error);
                 return false;
             }
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
 
         // Legacy function for backward compatibility
@@ -5141,6 +5496,11 @@
             // Store original value for cancel
             quantityInput.dataset.originalValue = quantityInput.value;
         };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
 
         window.cancelEditAssetQuantity = function(assetSymbol) {
             console.log(`❌ Cancelling edit for ${assetSymbol}`);
@@ -5162,6 +5522,11 @@
             actionsDiv.innerHTML = `
                 <button class="asset-edit-btn" onclick="window.editAssetQuantity('${assetSymbol}')">Edit</button>
             `;
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
 
         window.saveAssetQuantity = async function(assetSymbol) {
@@ -5244,6 +5609,11 @@
                 console.log(`🏁 [DEBUG] ===== FINISHED SAVE ASSET QUANTITY =====`);
             }
         };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
 
         window.updateAssetQuantityInDatabase = async function(assetSymbol, newQuantity) {
             try {
@@ -5293,6 +5663,11 @@
                     quantity: newQuantity,
                     totalValue: newTotalValue
                 };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
 
                 const webhookUrl = CONFIG.GOOGLE_APPS_SCRIPT_URL;
                 
@@ -5349,12 +5724,22 @@
                 console.log(`🏁 [DEBUG] ===== FINISHED DATABASE UPDATE =====`);
             }
         };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
 
         // SIMPLE DEBUG: Basic test function
         window.simpleTest = function() {
             console.log('🧪 Simple test function works!');
             alert('✅ JavaScript is working! Now try: window.testGoogleAppsScript()');
             return 'JavaScript is working!';
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
 
         // DEBUG: Test function to isolate Google Apps Script issues
@@ -5382,6 +5767,11 @@
                 quantity: 12345,
                 totalValue: 123.45
             };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
             
             try {
                 const postResponse = await fetch(webhookUrl, {
@@ -5426,6 +5816,11 @@
             
             console.log(`🏁 [TEST] ===== FINISHED TESTING GOOGLE APPS SCRIPT =====`);
         };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
 
         // Rate limiting system for CoinGecko API
         window.apiRateLimit = {
@@ -5451,6 +5846,11 @@
                 return Math.max(0, waitTime);
             }
         };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
 
         // Cache system for API responses
         window.priceCache = {
@@ -5475,6 +5875,11 @@
                 });
             }
         };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
 
         // Fallback prices for common assets
         window.fallbackPrices = {
@@ -5487,6 +5892,11 @@
             'btc': 45000,
             'sol': 100,
             'ada': 0.5
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
 
         // Function to update value preview with rate limiting and caching
@@ -5602,6 +6012,11 @@
                     </div>
                 `;
             }
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
 
         // Set up event listeners when DOM is ready
@@ -5910,6 +6325,11 @@
                 
                 console.log('✅ Last updated timestamp system initialized');
             }
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
 
         // ========================================
@@ -6287,6 +6707,11 @@
                         totalReturn,
                         monthlyReturn
                     };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
                     
                     console.log('✅ Portfolio Overview metrics calculated from displayed table');
                     console.log(`📊 Final metrics: ${totalInvestors} investors, $${totalInvested.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} invested, $${totalCurrentValue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})} current, ${totalReturn.toFixed(1)}% return`);
@@ -6302,6 +6727,11 @@
                         totalReturn: 0,
                         monthlyReturn: 0
                     };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
                 }
             },
             
@@ -6320,6 +6750,11 @@
                 
                 console.log('✅ Dynamic Performance Metrics System initialized');
             }
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
 
         // ========================================
@@ -6343,6 +6778,11 @@
             } else {
                 console.error('❌ Performance calculator not available');
             }
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
         
         /**
@@ -6402,6 +6842,11 @@
             }
         };
         
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
+        
         /**
          * Debug Google Sheets Structure
          * 
@@ -6418,6 +6863,11 @@
             } else {
                 console.error('❌ App not available');
             }
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
         
         /**
@@ -6455,6 +6905,11 @@
             } catch (error) {
                 console.error('❌ Error refreshing from Google Sheets:', error);
             }
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
         
         /**
@@ -6517,6 +6972,11 @@
                 alert('❌ Error testing Google Sheets data: ' + error.message);
                 return null;
             }
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
         
         // ========================================
@@ -6649,6 +7109,11 @@
             }
             
         };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
 
 
         // Initialize last updated timestamp system when page loads
@@ -6742,6 +7207,11 @@
             }
         };
         
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
+        };
+        
         // Initialize privacy mode when page loads (always enabled)
         if (window.privacyMode) {
             window.privacyMode.init();
@@ -6781,6 +7251,11 @@
             }
             
             return `${timeString} • ${dateLabel}`;
+        };
+        
+        // Simple privacy mode toggle function
+        window.togglePrivacyMode = function() {
+            alert('Privacy mode toggled!');
         };
 
         </script>
