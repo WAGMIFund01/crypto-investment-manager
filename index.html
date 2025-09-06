@@ -1636,7 +1636,7 @@
                             <!-- Search Bar -->
                             <input type="text" id="investorSearch" placeholder="Search by ID or Name..." 
                                    style="flex: 1; min-width: 300px; max-width: 400px; padding: 12px 16px; border: 1px solid #3d4148; border-radius: 12px; background: #1a1d23; color: #e2e8f0; font-size: 14px; transition: border-color 0.2s;"
-                                   oninput="window.filterInvestors()"
+                                   oninput="window.filterInvestors(); window.updateClearAllButton();"
                                    onfocus="this.style.borderColor='#00ff88'"
                                    onblur="this.style.borderColor='#3d4148'">
                             
@@ -1657,7 +1657,7 @@
                                             style="padding: 6px 12px; border: 1px solid #3d4148; border-radius: 16px; background: transparent; color: #7f8c8d; font-size: 12px; cursor: pointer; transition: all 0.2s; font-weight: 500;">
                                         High (50%+)
                                     </button>
-                                </div>
+                            </div>
                                 
                                 <!-- Investment Size Filters -->
                                 <div style="display: flex; gap: 6px; align-items: center;">
@@ -1674,7 +1674,7 @@
                                             style="padding: 6px 12px; border: 1px solid #3d4148; border-radius: 16px; background: transparent; color: #7f8c8d; font-size: 12px; cursor: pointer; transition: all 0.2s; font-weight: 500;">
                                         Large (&gt;$5K)
                                     </button>
-                                </div>
+                        </div>
                                 
                                 <!-- AUM Filters -->
                                 <div style="display: flex; gap: 6px; align-items: center;">
@@ -1683,18 +1683,18 @@
                                             style="padding: 6px 12px; border: 1px solid #3d4148; border-radius: 16px; background: transparent; color: #7f8c8d; font-size: 12px; cursor: pointer; transition: all 0.2s; font-weight: 500;">
                                         Major (&gt;20%)
                                     </button>
-                                </div>
+                            </div>
                                 
                                 <!-- Clear All Button -->
-                                <button onclick="window.clearAllFilters()" 
-                                        style="padding: 6px 12px; border: 1px solid #ff4757; border-radius: 16px; background: transparent; color: #ff4757; font-size: 12px; cursor: pointer; transition: all 0.2s; font-weight: 500; margin-left: 8px;"
+                                <button id="clearAllButton" onclick="window.clearAllFilters()" 
+                                        style="padding: 6px 12px; border: 1px solid #ff4757; border-radius: 16px; background: transparent; color: #ff4757; font-size: 12px; cursor: pointer; transition: all 0.2s; font-weight: 500; margin-left: 8px; display: none;"
                                         onmouseover="this.style.background='#ff4757'; this.style.color='white'" 
                                         onmouseout="this.style.background='transparent'; this.style.color='#ff4757'">
                                     Clear All
                                 </button>
                             </div>
-                        </div>
-                    </div>
+                            </div>
+                            </div>
                 </div>
                 <div class="table-container">
                     <table id="investorsTable" class="data-table">
@@ -4017,6 +4017,9 @@
             });
             
             console.log(`✅ Filtered investors: ${visibleCount} visible`);
+            
+            // Show/hide Clear All button based on filter state
+            window.updateClearAllButton();
         };
 
         // Function to get active filters
@@ -4061,6 +4064,23 @@
             window.filterInvestors();
         };
         
+        // Function to update Clear All button visibility
+        window.updateClearAllButton = function() {
+            const clearAllButton = document.getElementById('clearAllButton');
+            if (!clearAllButton) return;
+            
+            const searchTerm = document.getElementById('investorSearch').value.trim();
+            const activeFilters = window.getActiveFilters();
+            const hasActiveFilters = Object.values(activeFilters).some(filter => filter === true);
+            
+            // Show button if there's search text or active filters
+            if (searchTerm || hasActiveFilters) {
+                clearAllButton.style.display = 'inline-block';
+            } else {
+                clearAllButton.style.display = 'none';
+            }
+        };
+        
         // Function to clear all filters
         window.clearAllFilters = function() {
             console.log('🧹 Clearing all filters...');
@@ -4084,6 +4104,12 @@
             
             // Show all rows
             window.filterInvestors();
+            
+            // Hide Clear All button after clearing
+            const clearAllButton = document.getElementById('clearAllButton');
+            if (clearAllButton) {
+                clearAllButton.style.display = 'none';
+            }
             
             console.log('✅ All filters cleared');
         };
