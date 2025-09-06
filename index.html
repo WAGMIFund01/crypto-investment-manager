@@ -3025,6 +3025,12 @@
                 
                 console.log('✅ Finished processing all investors, updating table');
                 investorsTableBody.innerHTML = tableHTML;
+                
+                // Apply privacy masks immediately after populating table if privacy mode is enabled
+                if (window.privacyModeEnabled && window.applyPrivacyMasks) {
+                    console.log('🔒 Applying privacy masks immediately after table population...');
+                    window.applyPrivacyMasks();
+                }
             }
         };
         
@@ -5921,12 +5927,6 @@
             setTimeout(async () => {
                 console.log('🔄 Force loading data for Dashboard tab...');
                 await window.loadInvestorsData();
-                
-                // Apply privacy masks after data is loaded if privacy mode is enabled
-                if (window.privacyModeEnabled && window.applyPrivacyMasks) {
-                    console.log('🔒 Applying privacy masks after data load...');
-                    window.applyPrivacyMasks();
-                }
             }, 1000);
         });
 
