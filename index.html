@@ -2391,6 +2391,15 @@
                 if (aumCell) {
                     aumCell.textContent = '••••••';
                 }
+                
+                // Mask Share of AUM % column (index 5)
+                const aumPercentCell = row.cells[5];
+                if (aumPercentCell && !aumPercentCell.hasAttribute('data-original-value')) {
+                    aumPercentCell.setAttribute('data-original-value', aumPercentCell.textContent);
+                }
+                if (aumPercentCell) {
+                    aumPercentCell.textContent = '••••••';
+                }
             });
         };
         
@@ -2432,6 +2441,13 @@
                 if (aumCell && aumCell.hasAttribute('data-original-value')) {
                     aumCell.textContent = aumCell.getAttribute('data-original-value');
                     aumCell.removeAttribute('data-original-value');
+                }
+                
+                // Restore Share of AUM % column (index 5)
+                const aumPercentCell = row.cells[5];
+                if (aumPercentCell && aumPercentCell.hasAttribute('data-original-value')) {
+                    aumPercentCell.textContent = aumPercentCell.getAttribute('data-original-value');
+                    aumPercentCell.removeAttribute('data-original-value');
                 }
             });
         };
