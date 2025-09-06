@@ -1498,10 +1498,10 @@
                     
                     <!-- Navigation -->
                     <nav style="display: flex; gap: 20px;">
-                        <a href="#" onclick="window.switchTab('dashboard')" class="nav-link" style="color: #e2e8f0; text-decoration: none; font-size: 14px; transition: color 0.2s; cursor: pointer;" onmouseover="this.style.color='#00ff88'" onmouseout="this.style.color='#e2e8f0'">Dashboard</a>
-                        <a href="#" onclick="window.switchTab('investors')" class="nav-link" style="color: #e2e8f0; text-decoration: none; font-size: 14px; transition: color 0.2s; cursor: pointer;" onmouseover="this.style.color='#00ff88'" onmouseout="this.style.color='#e2e8f0'">Investors</a>
-                        <a href="#" onclick="window.switchTab('portfolio')" class="nav-link" style="color: #e2e8f0; text-decoration: none; font-size: 14px; transition: color 0.2s; cursor: pointer;" onmouseover="this.style.color='#00ff88'" onmouseout="this.style.color='#e2e8f0'">Portfolio</a>
-                        <a href="#" onclick="window.switchTab('performance')" class="nav-link" style="color: #e2e8f0; text-decoration: none; font-size: 14px; transition: color 0.2s; cursor: pointer;" onmouseover="this.style.color='#00ff88'" onmouseout="this.style.color='#e2e8f0'">Performance</a>
+                        <a href="#" onclick="window.switchTab('dashboard')" class="nav-link" data-tab="dashboard" style="color: #e2e8f0; text-decoration: none; font-size: 14px; transition: color 0.2s; cursor: pointer;" onmouseover="if(!this.classList.contains('active')) this.style.color='#00ff88'" onmouseout="if(!this.classList.contains('active')) this.style.color='#e2e8f0'">Dashboard</a>
+                        <a href="#" onclick="window.switchTab('investors')" class="nav-link" data-tab="investors" style="color: #e2e8f0; text-decoration: none; font-size: 14px; transition: color 0.2s; cursor: pointer;" onmouseover="if(!this.classList.contains('active')) this.style.color='#00ff88'" onmouseout="if(!this.classList.contains('active')) this.style.color='#e2e8f0'">Investors</a>
+                        <a href="#" onclick="window.switchTab('portfolio')" class="nav-link" data-tab="portfolio" style="color: #e2e8f0; text-decoration: none; font-size: 14px; transition: color 0.2s; cursor: pointer;" onmouseover="if(!this.classList.contains('active')) this.style.color='#00ff88'" onmouseout="if(!this.classList.contains('active')) this.style.color='#e2e8f0'">Portfolio</a>
+                        <a href="#" onclick="window.switchTab('performance')" class="nav-link" data-tab="performance" style="color: #e2e8f0; text-decoration: none; font-size: 14px; transition: color 0.2s; cursor: pointer;" onmouseover="if(!this.classList.contains('active')) this.style.color='#00ff88'" onmouseout="if(!this.classList.contains('active')) this.style.color='#e2e8f0'">Performance</a>
                     </nav>
                 </div>
                 
@@ -2111,6 +2111,23 @@
             tabContents.forEach(tab => tab.classList.remove('active'));
             const targetTab = document.getElementById(tabName);
             if (targetTab) targetTab.classList.add('active');
+            
+            // Update KPI ribbon navigation active state
+            const navLinks = document.querySelectorAll('.kpi-ribbon .nav-link');
+            navLinks.forEach(link => {
+                const linkTab = link.getAttribute('data-tab');
+                if (linkTab === tabName) {
+                    // Set active state - vibrant green color
+                    link.style.color = '#00ff88';
+                    link.style.fontWeight = '600';
+                    link.classList.add('active');
+                } else {
+                    // Set inactive state - white color
+                    link.style.color = '#e2e8f0';
+                    link.style.fontWeight = '400';
+                    link.classList.remove('active');
+                }
+            });
             
             // Load basic data for the tab
             if (tabName === 'dashboard') {
