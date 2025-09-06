@@ -934,7 +934,7 @@
         .brand-name {
             font-size: 3rem;
             font-weight: 700;
-            color: var(--accent-green);
+            color: #00ff88; /* Vibrant light green from reference */
             margin: 0 0 0.5rem 0;
             letter-spacing: 0.05em;
         }
@@ -969,15 +969,17 @@
 
         /* Button Hover Effects */
         .manager-btn:hover {
-            background: var(--accent-green) !important;
-            color: var(--bg-primary) !important;
+            background: #00cc6a !important; /* Darker green on hover */
+            color: #000000 !important;
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
         }
 
         .investor-btn:hover {
-            background: var(--accent-orange) !important;
-            color: var(--bg-primary) !important;
+            background: #ff6b35 !important; /* Darker orange on hover */
+            color: #ffffff !important;
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
         }
 
         /* Primary Investor Login Styling */
@@ -994,11 +996,24 @@
             margin-bottom: 1.5rem;
         }
 
+        /* Input Field Styling */
+        #investorIdInput:focus {
+            outline: none;
+            border-color: #00ff88 !important;
+            box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.1);
+        }
+
+        #investorIdInput::placeholder {
+            color: var(--text-muted);
+            opacity: 0.7;
+        }
+
         /* Manager Access Button Styling */
         .manager-access .manager-btn:hover {
-            background: var(--bg-tertiary) !important;
-            color: var(--text-primary) !important;
-            border-color: var(--border-primary) !important;
+            background: #00cc6a !important; /* Darker green on hover */
+            color: #000000 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 255, 136, 0.3);
         }
 
         /* Responsive Design */
@@ -1423,7 +1438,7 @@
                 
                 <!-- Brand Hero Area -->
                 <div class="brand-hero" style="margin-bottom: 3rem;">
-                    <h1 class="brand-name" style="font-size: 3rem; font-weight: 700; color: var(--accent-green); margin: 0 0 0.5rem 0; letter-spacing: 0.05em;">
+                    <h1 class="brand-name" style="font-size: 3rem; font-weight: 700; color: #00ff88; margin: 0 0 0.5rem 0; letter-spacing: 0.05em;">
                         WAGMI
                     </h1>
                     <p class="brand-tagline" style="font-size: 1.1rem; color: var(--text-secondary); margin: 0; font-weight: 400;">
@@ -1437,7 +1452,7 @@
                         Access Your Portfolio
                     </h2>
                     <div class="investor-form" style="margin-bottom: 1.5rem;">
-                        <input type="text" id="investorIdInput" placeholder="Enter your Investor ID (e.g., OAG)" style="width: 100%; padding: 1rem 1.25rem; border: 2px solid var(--border-primary); border-radius: 12px; background: var(--bg-primary); color: var(--text-primary); font-size: 1.1rem; margin-bottom: 0.75rem; text-align: center;">
+                        <input type="text" id="investorIdInput" placeholder="Enter your Investor ID (e.g., OAG)" style="width: 100%; padding: 1rem 1.25rem; border: 2px solid var(--border-primary); border-radius: 12px; background: var(--bg-primary); color: var(--text-primary); font-size: 1.1rem; margin-bottom: 0.75rem; text-align: center; transition: all 0.3s ease;">
                         <div id="investorError" class="error-message" style="color: var(--accent-orange); font-size: 0.875rem; text-align: center; display: none;">
                             Invalid Investor ID
                         </div>
@@ -1455,8 +1470,8 @@
 
             <!-- Manager Dashboard Access (Bottom Right) -->
             <div class="manager-access" style="position: absolute; bottom: 2rem; right: 2rem;">
-                <button class="btn btn-outline manager-btn" id="managerPortalButton" style="padding: 0.75rem 1.5rem; border: 1px solid var(--border-secondary); color: var(--text-muted); background: transparent; border-radius: 8px; font-size: 0.875rem; font-weight: 500; cursor: pointer; transition: all 0.3s ease;">
-                    Manager Dashboard
+                <button class="btn btn-primary manager-btn" id="managerPortalButton" style="padding: 0.75rem 1.5rem; background: #00ff88; color: #000000; border: none; border-radius: 8px; font-size: 0.875rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+                    Access Manager Dashboard
                 </button>
             </div>
         </div>
