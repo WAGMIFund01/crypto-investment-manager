@@ -2318,6 +2318,7 @@
         // Privacy mode functionality
         // Load privacy mode state from localStorage, default to false
         window.privacyModeEnabled = localStorage.getItem('wagmi_privacy_mode') === 'true';
+        console.log('🔒 Privacy mode loaded from localStorage:', window.privacyModeEnabled);
         
         // Function to update privacy icon appearance and apply/remove masks
         window.updatePrivacyIcon = function() {
@@ -2455,6 +2456,7 @@
             window.privacyModeEnabled = !window.privacyModeEnabled;
             // Save privacy mode state to localStorage
             localStorage.setItem('wagmi_privacy_mode', window.privacyModeEnabled.toString());
+            console.log('🔒 Privacy mode toggled to:', window.privacyModeEnabled);
             window.updatePrivacyIcon();
             alert('Privacy mode: ' + (window.privacyModeEnabled ? 'ON' : 'OFF'));
         };
@@ -2679,6 +2681,14 @@
             }
             
             console.log('✅ KPI ribbon updated successfully');
+            
+            // Apply privacy masks if privacy mode is enabled
+            if (window.privacyModeEnabled && window.applyPrivacyMasks) {
+                // Small delay to ensure DOM is updated
+                setTimeout(() => {
+                    window.applyPrivacyMasks();
+                }, 50);
+            }
         };
         
         // Helper function to format currency
