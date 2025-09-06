@@ -2499,11 +2499,9 @@
                 console.log('🏠 No manager view state to restore, staying on login screen');
             }
             
-            // Restore privacy mode state and apply masking if needed
-            if (window.privacyModeEnabled && window.applyPrivacyMasks) {
-                console.log('🔒 Privacy mode was ON, applying masks...');
-                // Apply masking immediately to prevent flash of unmasked data
-                window.applyPrivacyMasks();
+            // Restore privacy mode state - masking will be applied after data loads
+            if (window.privacyModeEnabled) {
+                console.log('🔒 Privacy mode was ON, will apply masks after data loads...');
             }
         };
         
@@ -5920,9 +5918,15 @@
             window.restoreAppState();
             
             // Force initial data load for Dashboard tab
-            setTimeout(() => {
+            setTimeout(async () => {
                 console.log('🔄 Force loading data for Dashboard tab...');
-                window.loadInvestorsData();
+                await window.loadInvestorsData();
+                
+                // Apply privacy masks after data is loaded if privacy mode is enabled
+                if (window.privacyModeEnabled && window.applyPrivacyMasks) {
+                    console.log('🔒 Applying privacy masks after data load...');
+                    window.applyPrivacyMasks();
+                }
             }, 1000);
         });
 
