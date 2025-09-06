@@ -1687,9 +1687,7 @@
                                 
                                 <!-- Clear All Button -->
                                 <button id="clearAllButton" onclick="window.clearAllFilters()" 
-                                        style="padding: 6px 12px; border: 1px solid #3d4148; border-radius: 16px; background: transparent; color: #7f8c8d; font-size: 12px; cursor: pointer; transition: all 0.2s; font-weight: 500; margin-left: 8px;"
-                                        onmouseover="this.style.background='#3d4148'; this.style.color='#e2e8f0'" 
-                                        onmouseout="this.style.background='transparent'; this.style.color='#7f8c8d'">
+                                        style="padding: 6px 12px; border: 1px solid #3d4148; border-radius: 16px; background: transparent; color: #7f8c8d; font-size: 12px; cursor: default; transition: all 0.2s; font-weight: 500; margin-left: 8px;">
                                     Clear All
                                 </button>
                             </div>
@@ -4075,7 +4073,7 @@
             
             // Update button styling based on filter state
             if (searchTerm || hasActiveFilters) {
-                // Active state - colored
+                // Active state - colored with hover effects
                 clearAllButton.style.borderColor = '#ff4757';
                 clearAllButton.style.color = '#ff4757';
                 clearAllButton.style.cursor = 'pointer';
@@ -4088,18 +4086,12 @@
                     this.style.color = '#ff4757';
                 };
             } else {
-                // Inactive state - greyed out
+                // Inactive state - greyed out with no hover effects
                 clearAllButton.style.borderColor = '#3d4148';
                 clearAllButton.style.color = '#7f8c8d';
                 clearAllButton.style.cursor = 'default';
-                clearAllButton.onmouseover = function() {
-                    this.style.background = '#3d4148';
-                    this.style.color = '#e2e8f0';
-                };
-                clearAllButton.onmouseout = function() {
-                    this.style.background = 'transparent';
-                    this.style.color = '#7f8c8d';
-                };
+                clearAllButton.onmouseover = null;
+                clearAllButton.onmouseout = null;
             }
         };
         
