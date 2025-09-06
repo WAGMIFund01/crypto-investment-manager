@@ -4,7 +4,7 @@
   "description": "WAGMI Investment Manager - Professional crypto investment tracking platform",
   "main": "index.html",
   "scripts": {
-    "build": "echo 'No build step needed for static site'",
+    "build": "echo 'Static site - no build required'",
     "start": "python3 -m http.server 8000"
   },
   "keywords": ["crypto", "investment", "portfolio", "tracking", "fintech"],
