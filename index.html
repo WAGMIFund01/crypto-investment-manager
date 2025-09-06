@@ -2344,43 +2344,20 @@
             console.log('📊 Updating summary dashboard...');
             console.log('📊 Investor data received:', investorData?.length, 'rows');
             
+            // Note: Portfolio Overview widgets have been removed - KPI ribbon now handles all metrics
+            // This function is kept for compatibility but no longer updates UI elements
+            console.log('📊 Summary dashboard update skipped - KPI ribbon handles all metrics now');
+            
             if (!investorData || investorData.length <= 1) {
-                // Use fallback data for all tabs (Dashboard, Investors, Portfolio)
-                const fallbackTotalInvested = 26906;
-                const fallbackCurrentValue = 31002;
-                const fallbackTotalPnL = fallbackCurrentValue - fallbackTotalInvested; // $4,096
-                
-                // Dashboard tab
-                document.getElementById('summaryTotalInvestors').textContent = '6';
-                document.getElementById('summaryTotalInvested').textContent = '$26,906.00';
-                document.getElementById('summaryCurrentValue').textContent = '$31,002.00';
-                document.getElementById('summaryTotalPnL').textContent = `+$${fallbackTotalPnL.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-                document.getElementById('summaryMonthlyReturn').textContent = '+2.8%';
-                
-                // Investors tab
-                document.getElementById('investorsSummaryTotalInvestors').textContent = '6';
-                document.getElementById('investorsSummaryTotalInvested').textContent = '$26,906.00';
-                document.getElementById('investorsSummaryCurrentValue').textContent = '$31,002.00';
-                document.getElementById('investorsSummaryTotalPnL').textContent = `+$${fallbackTotalPnL.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-                document.getElementById('investorsSummaryMonthlyReturn').textContent = '+2.8%';
-                
-                // Portfolio tab
-                document.getElementById('portfolioSummaryTotalInvestors').textContent = '6';
-                document.getElementById('portfolioSummaryTotalInvested').textContent = '$26,906.00';
-                document.getElementById('portfolioSummaryCurrentValue').textContent = '$31,002.00';
-                document.getElementById('portfolioSummaryTotalPnL').textContent = `+$${fallbackTotalPnL.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-                document.getElementById('portfolioSummaryMonthlyReturn').textContent = '+2.8%';
-                
-                // Timestamps are now handled by the unified smart timestamp system
-                
+                console.log('📊 Using fallback data (handled by KPI ribbon)');
                 return;
             }
             
+            // Process data for logging purposes (no UI updates needed)
             let totalInvestors = 0;
             let totalInvested = 0;
             let totalCurrentValue = 0;
             
-            // Process data (header already skipped in fetchLiveInvestorData)
             for (let i = 0; i < investorData.length; i++) {
                 const row = investorData[i];
                 if (row && row.length >= 5) {
@@ -2395,65 +2372,6 @@
                 }
             }
             
-            // Calculate returns and P&L
-            const totalPnL = totalCurrentValue - totalInvested;
-            const cumulativeReturn = totalInvested > 0 ? ((totalCurrentValue - totalInvested) / totalInvested * 100) : 0;
-            const monthlyReturn = 2.8; // Sample monthly return - in real app, this would be calculated from historical data
-            
-            // Update summary dashboard (Dashboard tab)
-            document.getElementById('summaryTotalInvestors').textContent = totalInvestors.toString();
-            document.getElementById('summaryTotalInvested').textContent = `$${totalInvested.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            document.getElementById('summaryCurrentValue').textContent = `$${totalCurrentValue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            
-            // Update Total P&L with proper styling (2 decimal places with conditional formatting)
-            const summaryPnLElement = document.getElementById('summaryTotalPnL');
-            const pnlSign = totalPnL >= 0 ? '+' : '';
-            summaryPnLElement.textContent = `${pnlSign}$${Math.abs(totalPnL).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            summaryPnLElement.className = totalPnL >= 0 ? 'metric-value positive' : 'metric-value negative';
-            summaryPnLElement.style.color = totalPnL >= 0 ? 'var(--text-success)' : 'var(--text-danger)';
-            
-            // Update monthly return with proper styling (1 decimal place with conditional formatting)
-            const monthlyElement = document.getElementById('summaryMonthlyReturn');
-            const monthlySign = monthlyReturn >= 0 ? '+' : '';
-            monthlyElement.textContent = `${monthlySign}${monthlyReturn.toFixed(1)}%`;
-            monthlyElement.className = monthlyReturn >= 0 ? 'metric-value positive' : 'metric-value negative';
-            monthlyElement.style.color = monthlyReturn >= 0 ? 'var(--text-success)' : 'var(--text-danger)';
-
-            // Update summary dashboard (Investors tab) - same data
-            document.getElementById('investorsSummaryTotalInvestors').textContent = totalInvestors.toString();
-            document.getElementById('investorsSummaryTotalInvested').textContent = `$${totalInvested.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            document.getElementById('investorsSummaryCurrentValue').textContent = `$${totalCurrentValue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            
-            // Update Investors tab Total P&L (2 decimal places with conditional formatting)
-            const investorsPnLElement = document.getElementById('investorsSummaryTotalPnL');
-            investorsPnLElement.textContent = `${pnlSign}$${Math.abs(totalPnL).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            investorsPnLElement.className = totalPnL >= 0 ? 'metric-value positive' : 'metric-value negative';
-            investorsPnLElement.style.color = totalPnL >= 0 ? 'var(--text-success)' : 'var(--text-danger)';
-            
-            const investorsMonthlyElement = document.getElementById('investorsSummaryMonthlyReturn');
-            investorsMonthlyElement.textContent = `${monthlySign}${monthlyReturn.toFixed(1)}%`;
-            investorsMonthlyElement.className = monthlyReturn >= 0 ? 'metric-value positive' : 'metric-value negative';
-            investorsMonthlyElement.style.color = monthlyReturn >= 0 ? 'var(--text-success)' : 'var(--text-danger)';
-            
-            // Update Portfolio tab - same data
-            document.getElementById('portfolioSummaryTotalInvestors').textContent = totalInvestors.toString();
-            document.getElementById('portfolioSummaryTotalInvested').textContent = `$${totalInvested.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            document.getElementById('portfolioSummaryCurrentValue').textContent = `$${totalCurrentValue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            
-            // Update Portfolio tab Total P&L (2 decimal places with conditional formatting)
-            const portfolioPnLElement = document.getElementById('portfolioSummaryTotalPnL');
-            portfolioPnLElement.textContent = `${pnlSign}$${Math.abs(totalPnL).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-            portfolioPnLElement.className = totalPnL >= 0 ? 'metric-value positive' : 'metric-value negative';
-            portfolioPnLElement.style.color = totalPnL >= 0 ? 'var(--text-success)' : 'var(--text-danger)';
-            
-            const portfolioMonthlyElement = document.getElementById('portfolioSummaryMonthlyReturn');
-            portfolioMonthlyElement.textContent = `${monthlySign}${monthlyReturn.toFixed(1)}%`;
-            portfolioMonthlyElement.className = monthlyReturn >= 0 ? 'metric-value positive' : 'metric-value negative';
-            portfolioMonthlyElement.style.color = monthlyReturn >= 0 ? 'var(--text-success)' : 'var(--text-danger)';
-            
-            console.log(`📊 Summary updated: ${totalInvestors} investors, $${totalInvested.toLocaleString()} invested, ${totalPnL >= 0 ? '+' : ''}$${Math.abs(totalPnL).toLocaleString()} P&L`);
-            
-            // Timestamps are now handled by the unified smart timestamp system
             console.log('📊 Processed rows:', investorData.length, 'investors found:', totalInvestors);
         };
 
