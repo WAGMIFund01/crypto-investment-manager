@@ -1654,10 +1654,17 @@
                                    onblur="this.style.borderColor='#3d4148'">
                             
                             <!-- Filter Tags Container -->
-                            <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
-                                <!-- Return Filters Group -->
-                                <div style="display: flex; flex-direction: column; gap: 4px;">
-                                    <span style="color: #7f8c8d; font-size: 11px; font-weight: 400; text-transform: uppercase; letter-spacing: 0.5px;">Returns</span>
+                            <div style="display: flex; flex-direction: column; gap: 4px;">
+                                <!-- Category Labels Row -->
+                                <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                                    <span style="color: #7f8c8d; font-size: 5.5px; font-weight: 400; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.5; width: 60px;">Returns</span>
+                                    <span style="color: #7f8c8d; font-size: 5.5px; font-weight: 400; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.5; width: 60px;">Size</span>
+                                    <span style="color: #7f8c8d; font-size: 5.5px; font-weight: 400; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.5; width: 60px;">AUM %</span>
+                                </div>
+                                
+                                <!-- Filter Tags Row -->
+                                <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                                    <!-- Return Filters -->
                                     <div style="display: flex; gap: 6px; align-items: center;">
                                         <button class="filter-chip" data-filter="positive" data-group="returns" onclick="window.toggleFilter('positive')" 
                                                 style="padding: 6px 12px; border: 1px solid #3d4148; border-radius: 16px; background: transparent; color: #7f8c8d; font-size: 12px; cursor: pointer; transition: all 0.2s; font-weight: 500;">
@@ -1671,12 +1678,9 @@
                                                 style="padding: 6px 12px; border: 1px solid #3d4148; border-radius: 16px; background: transparent; color: #7f8c8d; font-size: 12px; cursor: pointer; transition: all 0.2s; font-weight: 500;">
                                             High (50%+)
                                         </button>
-                            </div>
-                        </div>
-                                
-                                <!-- Investment Size Filters Group -->
-                                <div style="display: flex; flex-direction: column; gap: 4px;">
-                                    <span style="color: #7f8c8d; font-size: 11px; font-weight: 400; text-transform: uppercase; letter-spacing: 0.5px;">Size</span>
+                                    </div>
+                                    
+                                    <!-- Investment Size Filters -->
                                     <div style="display: flex; gap: 6px; align-items: center;">
                                         <button class="filter-chip" data-filter="small" data-group="size" onclick="window.toggleFilter('small')" 
                                                 style="padding: 6px 12px; border: 1px solid #3d4148; border-radius: 16px; background: transparent; color: #7f8c8d; font-size: 12px; cursor: pointer; transition: all 0.2s; font-weight: 500;">
@@ -1690,12 +1694,9 @@
                                                 style="padding: 6px 12px; border: 1px solid #3d4148; border-radius: 16px; background: transparent; color: #7f8c8d; font-size: 12px; cursor: pointer; transition: all 0.2s; font-weight: 500;">
                                             Large (&gt;$5K)
                                         </button>
-                            </div>
-                            </div>
-                                
-                                <!-- AUM Filters Group -->
-                                <div style="display: flex; flex-direction: column; gap: 4px;">
-                                    <span style="color: #7f8c8d; font-size: 11px; font-weight: 400; text-transform: uppercase; letter-spacing: 0.5px;">AUM %</span>
+                                    </div>
+                                    
+                                    <!-- AUM Filters -->
                                     <div style="display: flex; gap: 6px; align-items: center;">
                                         <button class="filter-chip" data-filter="minor" data-group="aum" onclick="window.toggleFilter('minor')" 
                                                 style="padding: 6px 12px; border: 1px solid #3d4148; border-radius: 16px; background: transparent; color: #7f8c8d; font-size: 12px; cursor: pointer; transition: all 0.2s; font-weight: 500;">
@@ -1709,14 +1710,14 @@
                                                 style="padding: 6px 12px; border: 1px solid #3d4148; border-radius: 16px; background: transparent; color: #7f8c8d; font-size: 12px; cursor: pointer; transition: all 0.2s; font-weight: 500;">
                                             Major (&gt;20%)
                                         </button>
-                            </div>
-                            </div>
-                                
-                                <!-- Clear All Button -->
-                                <button id="clearAllButton" onclick="window.clearAllFilters()" 
-                                        style="padding: 6px 12px; border: 1px solid #3d4148; border-radius: 16px; background: transparent; color: #7f8c8d; font-size: 12px; cursor: default; transition: all 0.2s; font-weight: 500;">
-                                    Clear All
-                                </button>
+                                    </div>
+                                    
+                                    <!-- Clear All Button -->
+                                    <button id="clearAllButton" onclick="window.clearAllFilters()" 
+                                            style="padding: 6px 12px; border: 1px solid #3d4148; border-radius: 16px; background: transparent; color: #7f8c8d; font-size: 12px; cursor: default; transition: all 0.2s; font-weight: 500;">
+                                        Clear All
+                                    </button>
+                                </div>
                             </div>
                         </div>
                             </div>
