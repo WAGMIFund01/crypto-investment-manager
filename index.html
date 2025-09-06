@@ -1632,6 +1632,9 @@
                                 <th onclick="window.sortInvestors('name')" class="sortable-header" style="cursor: pointer; user-select: none; position: relative; padding: 12px 16px;" onmouseover="this.style.background='#2d3139'; this.querySelector('.sort-indicator').style.color='#00ff88'" onmouseout="this.style.background=''; this.querySelector('.sort-indicator').style.color='#7f8c8d'">
                                     <span class="sort-indicator" style="position: absolute; left: 4px; top: 50%; transform: translateY(-50%); color: #7f8c8d; transition: color 0.2s ease;">↕</span> Name
                                 </th>
+                                <th onclick="window.sortInvestors('date')" class="sortable-header" style="cursor: pointer; user-select: none; position: relative; padding: 12px 16px; text-align: center !important;" onmouseover="this.style.background='#2d3139'; this.querySelector('.sort-indicator').style.color='#00ff88'" onmouseout="this.style.background=''; this.querySelector('.sort-indicator').style.color='#7f8c8d'">
+                                    <span class="sort-indicator" style="position: absolute; left: 4px; top: 50%; transform: translateY(-50%); color: #7f8c8d; transition: color 0.2s ease;">↕</span> Initial Investment Date
+                                </th>
                                 <th onclick="window.sortInvestors('investment')" class="sortable-header" style="cursor: pointer; user-select: none; position: relative; padding: 12px 16px; text-align: center !important;" onmouseover="this.style.background='#2d3139'; this.querySelector('.sort-indicator').style.color='#00ff88'" onmouseout="this.style.background=''; this.querySelector('.sort-indicator').style.color='#7f8c8d'">
                                     <span class="sort-indicator" style="position: absolute; left: 4px; top: 50%; transform: translateY(-50%); color: #7f8c8d; transition: color 0.2s ease;">↕</span> Initial Investment ($)
                                 </th>
@@ -2567,6 +2570,7 @@
                         <td style="text-align: center;">#ERROR</td>
                         <td style="text-align: center;">#ERROR</td>
                         <td style="text-align: center;">#ERROR</td>
+                        <td style="text-align: center;">#ERROR</td>
                         <td style="text-align: center;">
                             <button style="background: #111; border-radius: 8px; padding: 6px 12px; border: 1px solid #2d3139; color: #e2e8f0; cursor: not-allowed;" disabled>#ERROR</button>
                         </td>
@@ -2584,7 +2588,7 @@
             const investorsTableBody = document.getElementById('investorsTableBody');
             if (investorsTableBody) {
                 // Show loading state while processing
-                investorsTableBody.innerHTML = '<tr><td colspan="8" style="text-align: center; padding: 20px; color: #7f8c8d;">Loading investor data from Google Sheets...</td></tr>';
+                investorsTableBody.innerHTML = '<tr><td colspan="9" style="text-align: center; padding: 20px; color: #7f8c8d;">Loading investor data from Google Sheets...</td></tr>';
                 
                 let tableHTML = '';
                 
@@ -2649,6 +2653,7 @@
                         <tr style="border-bottom: 1px solid #2d3139; transition: background-color 0.2s ease;" onmouseover="this.style.backgroundColor='#1f2329'" onmouseout="this.style.backgroundColor=''">
                             <td class="sticky-column" style="position: sticky; left: 0; background: #1a1d23; z-index: 5; border-right: 1px solid #2d3139; padding: 12px 16px; font-weight: 600; color: #e2e8f0; text-align: left;">${investorId}</td>
                             <td style="padding: 12px 16px; color: #e2e8f0; text-align: left;">${name}</td>
+                            <td style="padding: 12px 16px; text-align: center !important; color: #e2e8f0;">${formattedDate}</td>
                             <td style="padding: 12px 16px; text-align: center !important; color: #e2e8f0;">${formattedInvestment}</td>
                             <td style="padding: 12px 16px; text-align: center !important; color: #e2e8f0;">${formattedAUM}</td>
                             <td style="padding: 12px 16px; text-align: center !important; color: #e2e8f0;">${formattedShare}</td>
@@ -3800,21 +3805,28 @@
                         aValue = a.cells[1].textContent.trim();
                         bValue = b.cells[1].textContent.trim();
                         break;
-                    case 'investment':
-                        aValue = parseFloat(a.cells[2].textContent.replace(/[$,]/g, ''));
-                        bValue = parseFloat(b.cells[2].textContent.replace(/[$,]/g, ''));
+                    case 'date':
+                        // Parse dates for sorting (MM/DD/YYYY format)
+                        const aDateStr = a.cells[2].textContent.trim();
+                        const bDateStr = b.cells[2].textContent.trim();
+                        aValue = new Date(aDateStr);
+                        bValue = new Date(bDateStr);
                         break;
-                    case 'aum':
+                    case 'investment':
                         aValue = parseFloat(a.cells[3].textContent.replace(/[$,]/g, ''));
                         bValue = parseFloat(b.cells[3].textContent.replace(/[$,]/g, ''));
                         break;
+                    case 'aum':
+                        aValue = parseFloat(a.cells[4].textContent.replace(/[$,]/g, ''));
+                        bValue = parseFloat(b.cells[4].textContent.replace(/[$,]/g, ''));
+                        break;
                     case 'share':
-                        aValue = parseFloat(a.cells[4].textContent.replace(/[%]/g, ''));
-                        bValue = parseFloat(b.cells[4].textContent.replace(/[%]/g, ''));
+                        aValue = parseFloat(a.cells[5].textContent.replace(/[%]/g, ''));
+                        bValue = parseFloat(b.cells[5].textContent.replace(/[%]/g, ''));
                         break;
                     case 'return':
-                        aValue = parseFloat(a.cells[5].textContent.replace(/[%+]/g, ''));
-                        bValue = parseFloat(b.cells[5].textContent.replace(/[%+]/g, ''));
+                        aValue = parseFloat(a.cells[6].textContent.replace(/[%+]/g, ''));
+                        bValue = parseFloat(b.cells[6].textContent.replace(/[%+]/g, ''));
                         break;
                     default:
                         return 0;
@@ -3847,7 +3859,7 @@
             rows.forEach(row => {
                 const name = row.cells[1].textContent.toLowerCase();
                 const id = row.cells[0].textContent.toLowerCase();
-                const returnText = row.cells[5].textContent;
+                const returnText = row.cells[6].textContent;
                 const returnValue = parseFloat(returnText.replace(/[%+]/g, ''));
                 
                 let showRow = true;
