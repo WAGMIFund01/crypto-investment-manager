@@ -2316,7 +2316,8 @@
         };
         
         // Privacy mode functionality
-        window.privacyModeEnabled = false;
+        // Load privacy mode state from localStorage, default to false
+        window.privacyModeEnabled = localStorage.getItem('wagmi_privacy_mode') === 'true';
         
         // Function to update privacy icon appearance and apply/remove masks
         window.updatePrivacyIcon = function() {
@@ -2452,6 +2453,8 @@
         // Privacy mode toggle function
         window.togglePrivacyMode = function() {
             window.privacyModeEnabled = !window.privacyModeEnabled;
+            // Save privacy mode state to localStorage
+            localStorage.setItem('wagmi_privacy_mode', window.privacyModeEnabled.toString());
             window.updatePrivacyIcon();
             alert('Privacy mode: ' + (window.privacyModeEnabled ? 'ON' : 'OFF'));
         };
@@ -2492,6 +2495,14 @@
                 }
             } else {
                 console.log('🏠 No manager view state to restore, staying on login screen');
+            }
+            
+            // Restore privacy mode state and apply masking if needed
+            if (window.privacyModeEnabled && window.applyPrivacyMasks) {
+                console.log('🔒 Privacy mode was ON, applying masks...');
+                setTimeout(() => {
+                    window.applyPrivacyMasks();
+                }, 200); // Delay to ensure data is loaded first
             }
         };
         
