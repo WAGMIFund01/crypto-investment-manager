@@ -2210,6 +2210,10 @@
         window.switchTab = function(tabName) {
             console.log('🔄 Switching to tab:', tabName);
             
+            // Save current tab state to localStorage
+            localStorage.setItem('wagmi_current_tab', tabName);
+            localStorage.setItem('wagmi_manager_view_active', 'true');
+            
             // Update tab content
             const tabContents = document.querySelectorAll('.tab-content');
             tabContents.forEach(tab => tab.classList.remove('active'));
@@ -2225,6 +2229,45 @@
                 window.loadPortfolioData();
             } else if (tabName === 'performance') {
                 window.loadPerformanceData();
+            }
+        };
+        
+        // Function to restore app state on page refresh
+        window.restoreAppState = function() {
+            console.log('🔄 Restoring app state...');
+            
+            // Check if manager view was active
+            const managerViewActive = localStorage.getItem('wagmi_manager_view_active');
+            const currentTab = localStorage.getItem('wagmi_current_tab');
+            
+            if (managerViewActive === 'true') {
+                console.log('📱 Restoring manager view...');
+                
+                // Hide login screen and show manager view
+                const loginScreen = document.getElementById('loginScreen');
+                const managerView = document.getElementById('managerView');
+                
+                if (loginScreen && managerView) {
+                    loginScreen.style.display = 'none';
+                    managerView.style.display = 'block';
+                    console.log('✅ Manager view restored');
+                    
+                    // Restore the specific tab if one was saved
+                    if (currentTab && ['dashboard', 'investors', 'portfolio', 'performance'].includes(currentTab)) {
+                        console.log(`📊 Restoring tab: ${currentTab}`);
+                        setTimeout(() => {
+                            window.switchTab(currentTab);
+                        }, 100); // Small delay to ensure DOM is ready
+                    } else {
+                        // Default to dashboard if no valid tab saved
+                        console.log('📊 No valid tab saved, defaulting to dashboard');
+                        setTimeout(() => {
+                            window.switchTab('dashboard');
+                        }, 100);
+                    }
+                }
+            } else {
+                console.log('🏠 No manager view state to restore, staying on login screen');
             }
         };
         
@@ -4661,13 +4704,18 @@
         // Back to login function
         window.backToLogin = function() {
             console.log('🏠 Returning to login screen...');
+            
+            // Clear saved app state
+            localStorage.removeItem('wagmi_current_tab');
+            localStorage.removeItem('wagmi_manager_view_active');
+            
             const loginScreen = document.getElementById('loginScreen');
             const managerView = document.getElementById('managerView');
             
             if (loginScreen && managerView) {
                 loginScreen.style.display = 'flex';
                 managerView.style.display = 'none';
-                console.log('✅ Returned to login screen');
+                console.log('✅ Returned to login screen and cleared saved state');
             }
         };
 
@@ -5544,6 +5592,9 @@
             // DEBUG: Test if JavaScript is working
             console.log('🧪 [DEBUG] JavaScript is loading...');
             console.log('🧪 [DEBUG] window.testGoogleAppsScript available:', typeof window.testGoogleAppsScript);
+            
+            // Restore app state on page refresh
+            window.restoreAppState();
             
             // Force initial data load for Dashboard tab
             setTimeout(() => {
