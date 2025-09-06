@@ -1432,6 +1432,19 @@
             color: #fff !important;
             border-color: #3742fa !important;
         }
+        
+        .filter-chip.disabled {
+            opacity: 0.4 !important;
+            cursor: not-allowed !important;
+            border-color: #2d3139 !important;
+            color: #5a5f6a !important;
+        }
+        
+        .filter-chip.disabled:hover {
+            border-color: #2d3139 !important;
+            color: #5a5f6a !important;
+            box-shadow: none !important;
+        }
     </style>
 </head>
 <body>
@@ -1645,45 +1658,53 @@
                                 <!-- Return Filters -->
                                 <div style="display: flex; gap: 6px; align-items: center;">
                                     <span style="color: #7f8c8d; font-size: 12px; font-weight: 500; margin-right: 4px;">RETURNS:</span>
-                                    <button class="filter-chip" data-filter="positive" onclick="window.toggleFilter('positive')" 
+                                    <button class="filter-chip" data-filter="positive" data-group="returns" onclick="window.toggleFilter('positive')" 
                                             style="padding: 6px 12px; border: 1px solid #3d4148; border-radius: 16px; background: transparent; color: #7f8c8d; font-size: 12px; cursor: pointer; transition: all 0.2s; font-weight: 500;">
                                         Positive
                                     </button>
-                                    <button class="filter-chip" data-filter="negative" onclick="window.toggleFilter('negative')" 
+                                    <button class="filter-chip" data-filter="negative" data-group="returns" onclick="window.toggleFilter('negative')" 
                                             style="padding: 6px 12px; border: 1px solid #3d4148; border-radius: 16px; background: transparent; color: #7f8c8d; font-size: 12px; cursor: pointer; transition: all 0.2s; font-weight: 500;">
                                         Negative
                                     </button>
-                                    <button class="filter-chip" data-filter="high" onclick="window.toggleFilter('high')" 
+                                    <button class="filter-chip" data-filter="high" data-group="returns" onclick="window.toggleFilter('high')" 
                                             style="padding: 6px 12px; border: 1px solid #3d4148; border-radius: 16px; background: transparent; color: #7f8c8d; font-size: 12px; cursor: pointer; transition: all 0.2s; font-weight: 500;">
                                         High (50%+)
                                     </button>
-                            </div>
+                                </div>
                                 
                                 <!-- Investment Size Filters -->
                                 <div style="display: flex; gap: 6px; align-items: center;">
                                     <span style="color: #7f8c8d; font-size: 12px; font-weight: 500; margin-right: 4px;">SIZE:</span>
-                                    <button class="filter-chip" data-filter="small" onclick="window.toggleFilter('small')" 
+                                    <button class="filter-chip" data-filter="small" data-group="size" onclick="window.toggleFilter('small')" 
                                             style="padding: 6px 12px; border: 1px solid #3d4148; border-radius: 16px; background: transparent; color: #7f8c8d; font-size: 12px; cursor: pointer; transition: all 0.2s; font-weight: 500;">
                                         Small (&lt;$1K)
                                     </button>
-                                    <button class="filter-chip" data-filter="medium" onclick="window.toggleFilter('medium')" 
+                                    <button class="filter-chip" data-filter="medium" data-group="size" onclick="window.toggleFilter('medium')" 
                                             style="padding: 6px 12px; border: 1px solid #3d4148; border-radius: 16px; background: transparent; color: #7f8c8d; font-size: 12px; cursor: pointer; transition: all 0.2s; font-weight: 500;">
                                         Medium ($1K-$5K)
                                     </button>
-                                    <button class="filter-chip" data-filter="large" onclick="window.toggleFilter('large')" 
+                                    <button class="filter-chip" data-filter="large" data-group="size" onclick="window.toggleFilter('large')" 
                                             style="padding: 6px 12px; border: 1px solid #3d4148; border-radius: 16px; background: transparent; color: #7f8c8d; font-size: 12px; cursor: pointer; transition: all 0.2s; font-weight: 500;">
                                         Large (&gt;$5K)
                                     </button>
-                        </div>
+                                </div>
                                 
                                 <!-- AUM Filters -->
                                 <div style="display: flex; gap: 6px; align-items: center;">
                                     <span style="color: #7f8c8d; font-size: 12px; font-weight: 500; margin-right: 4px;">AUM %:</span>
-                                    <button class="filter-chip" data-filter="major" onclick="window.toggleFilter('major')" 
+                                    <button class="filter-chip" data-filter="minor" data-group="aum" onclick="window.toggleFilter('minor')" 
+                                            style="padding: 6px 12px; border: 1px solid #3d4148; border-radius: 16px; background: transparent; color: #7f8c8d; font-size: 12px; cursor: pointer; transition: all 0.2s; font-weight: 500;">
+                                        Minor (&lt;5%)
+                                    </button>
+                                    <button class="filter-chip" data-filter="moderate" data-group="aum" onclick="window.toggleFilter('moderate')" 
+                                            style="padding: 6px 12px; border: 1px solid #3d4148; border-radius: 16px; background: transparent; color: #7f8c8d; font-size: 12px; cursor: pointer; transition: all 0.2s; font-weight: 500;">
+                                        Moderate (5-20%)
+                                    </button>
+                                    <button class="filter-chip" data-filter="major" data-group="aum" onclick="window.toggleFilter('major')" 
                                             style="padding: 6px 12px; border: 1px solid #3d4148; border-radius: 16px; background: transparent; color: #7f8c8d; font-size: 12px; cursor: pointer; transition: all 0.2s; font-weight: 500;">
                                         Major (&gt;20%)
                                     </button>
-                            </div>
+                                </div>
                                 
                                 <!-- Clear All Button -->
                                 <button id="clearAllButton" onclick="window.clearAllFilters()" 
@@ -4008,6 +4029,8 @@
                 if (activeFilters.large && investmentValue <= 5000) showRow = false;
                 
                 // AUM filters
+                if (activeFilters.minor && shareValue >= 5) showRow = false;
+                if (activeFilters.moderate && (shareValue < 5 || shareValue > 20)) showRow = false;
                 if (activeFilters.major && shareValue <= 20) showRow = false;
                 
                 row.style.display = showRow ? '' : 'none';
@@ -4029,6 +4052,8 @@
                 small: false,
                 medium: false,
                 large: false,
+                minor: false,
+                moderate: false,
                 major: false
             };
             
@@ -4042,21 +4067,101 @@
             return filters;
         };
         
-        // Function to toggle filter chips
+        // Function to update chip states based on mutual exclusivity
+        window.updateChipStates = function() {
+            const activeFilters = window.getActiveFilters();
+            
+            // Update all chips
+            document.querySelectorAll('.filter-chip').forEach(chip => {
+                const filterType = chip.getAttribute('data-filter');
+                const group = chip.getAttribute('data-group');
+                
+                // Reset chip state
+                chip.classList.remove('active', 'negative', 'high', 'disabled');
+                
+                // Check if this chip should be active
+                if (activeFilters[filterType]) {
+                    chip.classList.add('active');
+                    
+                    // Add specific styling classes
+                    if (filterType === 'negative') chip.classList.add('negative');
+                    if (filterType === 'high') chip.classList.add('high');
+                }
+                
+                // Check if this chip should be disabled due to mutual exclusivity
+                let shouldDisable = false;
+                
+                if (group === 'returns') {
+                    // Positive and Negative are mutually exclusive
+                    if (filterType === 'positive' && activeFilters.negative) shouldDisable = true;
+                    if (filterType === 'negative' && activeFilters.positive) shouldDisable = true;
+                    // High is compatible with Positive but not with Negative
+                    if (filterType === 'high' && activeFilters.negative) shouldDisable = true;
+                } else if (group === 'size') {
+                    // Size filters are mutually exclusive
+                    if (filterType === 'small' && (activeFilters.medium || activeFilters.large)) shouldDisable = true;
+                    if (filterType === 'medium' && (activeFilters.small || activeFilters.large)) shouldDisable = true;
+                    if (filterType === 'large' && (activeFilters.small || activeFilters.medium)) shouldDisable = true;
+                } else if (group === 'aum') {
+                    // AUM filters are mutually exclusive
+                    if (filterType === 'minor' && (activeFilters.moderate || activeFilters.major)) shouldDisable = true;
+                    if (filterType === 'moderate' && (activeFilters.minor || activeFilters.major)) shouldDisable = true;
+                    if (filterType === 'major' && (activeFilters.minor || activeFilters.moderate)) shouldDisable = true;
+                }
+                
+                if (shouldDisable && !activeFilters[filterType]) {
+                    chip.classList.add('disabled');
+                }
+            });
+        };
+        
+        // Function to toggle filter chips with mutual exclusivity
         window.toggleFilter = function(filterType) {
             const chip = document.querySelector(`[data-filter="${filterType}"]`);
-            if (!chip) return;
+            if (!chip || chip.classList.contains('disabled')) return;
             
-            // Toggle active state
-            chip.classList.toggle('active');
+            const group = chip.getAttribute('data-group');
+            const isCurrentlyActive = chip.classList.contains('active');
             
-            // Add specific class for styling
-            if (chip.classList.contains('active')) {
+            if (isCurrentlyActive) {
+                // Simply deactivate if currently active
+                chip.classList.remove('active', 'negative', 'high');
+            } else {
+                // Handle mutual exclusivity when activating
+                if (group === 'returns') {
+                    // Remove conflicting return filters
+                    if (filterType === 'positive') {
+                        document.querySelector('[data-filter="negative"]')?.classList.remove('active', 'negative');
+                    } else if (filterType === 'negative') {
+                        document.querySelector('[data-filter="positive"]')?.classList.remove('active');
+                        document.querySelector('[data-filter="high"]')?.classList.remove('active', 'high');
+                    } else if (filterType === 'high') {
+                        document.querySelector('[data-filter="negative"]')?.classList.remove('active', 'negative');
+                    }
+                } else if (group === 'size') {
+                    // Remove other size filters
+                    document.querySelectorAll('[data-group="size"]').forEach(sizeChip => {
+                        if (sizeChip.getAttribute('data-filter') !== filterType) {
+                            sizeChip.classList.remove('active');
+                        }
+                    });
+                } else if (group === 'aum') {
+                    // Remove other AUM filters
+                    document.querySelectorAll('[data-group="aum"]').forEach(aumChip => {
+                        if (aumChip.getAttribute('data-filter') !== filterType) {
+                            aumChip.classList.remove('active');
+                        }
+                    });
+                }
+                
+                // Activate the selected filter
+                chip.classList.add('active');
                 if (filterType === 'negative') chip.classList.add('negative');
                 if (filterType === 'high') chip.classList.add('high');
-            } else {
-                chip.classList.remove('negative', 'high');
             }
+            
+            // Update all chip states
+            window.updateChipStates();
             
             // Apply filter
             window.filterInvestors();
@@ -4104,7 +4209,7 @@
             
             // Clear all filter chips
             document.querySelectorAll('.filter-chip').forEach(chip => {
-                chip.classList.remove('active', 'negative', 'high');
+                chip.classList.remove('active', 'negative', 'high', 'disabled');
             });
             
             // Reset sort indicators
@@ -4118,6 +4223,9 @@
             
             // Show all rows
             window.filterInvestors();
+            
+            // Update chip states after clearing
+            window.updateChipStates();
             
             // Force Clear All button to inactive state
             const clearAllButton = document.getElementById('clearAllButton');
