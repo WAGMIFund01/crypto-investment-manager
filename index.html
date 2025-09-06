@@ -1600,20 +1600,51 @@
 
                 <div class="investors-header">
                     <h2>Investor Management</h2>
-
+                    
+                    <!-- Search and Filter Controls -->
+                    <div class="investor-controls" style="display: flex; gap: 16px; align-items: center; margin-bottom: 20px; flex-wrap: wrap;">
+                        <div class="search-container" style="flex: 1; min-width: 250px;">
+                            <input type="text" id="investorSearch" placeholder="Search investors by name or ID..." 
+                                   style="width: 100%; padding: 8px 12px; border: 1px solid #3d4148; border-radius: 6px; background: #1a1d23; color: #e2e8f0; font-size: 14px;"
+                                   onkeyup="window.filterInvestors()">
+                        </div>
+                        <div class="filter-container" style="display: flex; gap: 8px; align-items: center;">
+                            <select id="returnFilter" style="padding: 8px 12px; border: 1px solid #3d4148; border-radius: 6px; background: #1a1d23; color: #e2e8f0; font-size: 14px;" onchange="window.filterInvestors()">
+                                <option value="">All Returns</option>
+                                <option value="positive">Positive Returns</option>
+                                <option value="negative">Negative Returns</option>
+                                <option value="high">High Returns (50%+)</option>
+                            </select>
+                            <button onclick="window.clearInvestorFilters()" style="padding: 8px 12px; background: #3d4148; border: none; border-radius: 6px; color: #e2e8f0; cursor: pointer; font-size: 14px; transition: background 0.2s;" onmouseover="this.style.background='#4a4f5a'" onmouseout="this.style.background='#3d4148'">Clear</button>
+                        </div>
+                    </div>
                 </div>
                 <div class="table-container">
                     <table id="investorsTable" class="data-table">
                         <thead>
                             <tr>
-                                <th>Investor ID</th>
-                                <th>Name</th>
-                                <th>Date Joined</th>
-                                <th>Investment Value</th>
-                                <th>Current Value</th>
-                                <th>Total Return</th>
-                                <th>Share %</th>
-                                <th>Actions</th>
+                                <th onclick="window.sortInvestors('id')" class="sortable-header" style="cursor: pointer; user-select: none; position: relative; padding-right: 20px;" onmouseover="this.style.background='#2d3139'" onmouseout="this.style.background=''">
+                                    Investor ID <span class="sort-indicator" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: #7f8c8d;">↕</span>
+                                </th>
+                                <th onclick="window.sortInvestors('name')" class="sortable-header" style="cursor: pointer; user-select: none; position: relative; padding-right: 20px;" onmouseover="this.style.background='#2d3139'" onmouseout="this.style.background=''">
+                                    Name <span class="sort-indicator" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: #7f8c8d;">↕</span>
+                                </th>
+                                <th onclick="window.sortInvestors('date')" class="sortable-header" style="cursor: pointer; user-select: none; position: relative; padding-right: 20px;" onmouseover="this.style.background='#2d3139'" onmouseout="this.style.background=''">
+                                    Date Joined <span class="sort-indicator" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: #7f8c8d;">↕</span>
+                                </th>
+                                <th onclick="window.sortInvestors('investment')" class="sortable-header" style="cursor: pointer; user-select: none; position: relative; padding-right: 20px;" onmouseover="this.style.background='#2d3139'" onmouseout="this.style.background=''">
+                                    Investment Value <span class="sort-indicator" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: #7f8c8d;">↕</span>
+                                </th>
+                                <th onclick="window.sortInvestors('current')" class="sortable-header" style="cursor: pointer; user-select: none; position: relative; padding-right: 20px;" onmouseover="this.style.background='#2d3139'" onmouseout="this.style.background=''">
+                                    Current Value <span class="sort-indicator" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: #7f8c8d;">↕</span>
+                                </th>
+                                <th onclick="window.sortInvestors('return')" class="sortable-header" style="cursor: pointer; user-select: none; position: relative; padding-right: 20px;" onmouseover="this.style.background='#2d3139'" onmouseout="this.style.background=''">
+                                    Total Return <span class="sort-indicator" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: #7f8c8d;">↕</span>
+                                </th>
+                                <th onclick="window.sortInvestors('share')" class="sortable-header" style="cursor: pointer; user-select: none; position: relative; padding-right: 20px;" onmouseover="this.style.background='#2d3139'" onmouseout="this.style.background=''">
+                                    Share % <span class="sort-indicator" style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); color: #7f8c8d;">↕</span>
+                                </th>
+                                <th style="cursor: default;">Actions</th>
                             </tr>
                         </thead>
                         <tbody id="investorsTableBody">
@@ -3963,6 +3994,169 @@
             } else {
                 console.log('⚠️ Investor table not found');
             }
+        };
+
+        // === INVESTOR TABLE ENHANCEMENTS ===
+        
+        // Global variables for investor table state
+        window.investorTableState = {
+            currentSort: { column: null, direction: 'asc' },
+            allInvestors: [],
+            filteredInvestors: []
+        };
+
+        // Function to sort investors table
+        window.sortInvestors = function(column) {
+            console.log(`🔄 Sorting investors by ${column}`);
+            
+            const tbody = document.getElementById('investorsTableBody');
+            if (!tbody) return;
+            
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            if (rows.length === 0) return;
+            
+            // Determine sort direction
+            let direction = 'asc';
+            if (window.investorTableState.currentSort.column === column) {
+                direction = window.investorTableState.currentSort.direction === 'asc' ? 'desc' : 'asc';
+            }
+            
+            // Update sort state
+            window.investorTableState.currentSort = { column, direction };
+            
+            // Update sort indicators
+            document.querySelectorAll('.sort-indicator').forEach(indicator => {
+                indicator.textContent = '↕';
+                indicator.style.color = '#7f8c8d';
+            });
+            
+            // Update current column indicator
+            const currentHeader = document.querySelector(`th[onclick*="${column}"] .sort-indicator`);
+            if (currentHeader) {
+                currentHeader.textContent = direction === 'asc' ? '↑' : '↓';
+                currentHeader.style.color = '#00ff88';
+            }
+            
+            // Sort rows
+            rows.sort((a, b) => {
+                let aValue, bValue;
+                
+                switch (column) {
+                    case 'id':
+                        aValue = a.cells[0].textContent.trim();
+                        bValue = b.cells[0].textContent.trim();
+                        break;
+                    case 'name':
+                        aValue = a.cells[1].textContent.trim();
+                        bValue = b.cells[1].textContent.trim();
+                        break;
+                    case 'date':
+                        aValue = new Date(a.cells[2].textContent.trim());
+                        bValue = new Date(b.cells[2].textContent.trim());
+                        break;
+                    case 'investment':
+                        aValue = parseFloat(a.cells[3].textContent.replace(/[$,]/g, ''));
+                        bValue = parseFloat(b.cells[3].textContent.replace(/[$,]/g, ''));
+                        break;
+                    case 'current':
+                        aValue = parseFloat(a.cells[4].textContent.replace(/[$,]/g, ''));
+                        bValue = parseFloat(b.cells[4].textContent.replace(/[$,]/g, ''));
+                        break;
+                    case 'return':
+                        aValue = parseFloat(a.cells[5].textContent.replace(/[%+]/g, ''));
+                        bValue = parseFloat(b.cells[5].textContent.replace(/[%+]/g, ''));
+                        break;
+                    case 'share':
+                        aValue = parseFloat(a.cells[6].textContent.replace(/[%]/g, ''));
+                        bValue = parseFloat(b.cells[6].textContent.replace(/[%]/g, ''));
+                        break;
+                    default:
+                        return 0;
+                }
+                
+                if (aValue < bValue) return direction === 'asc' ? -1 : 1;
+                if (aValue > bValue) return direction === 'asc' ? 1 : -1;
+                return 0;
+            });
+            
+            // Re-append sorted rows
+            rows.forEach(row => tbody.appendChild(row));
+            
+            console.log(`✅ Sorted investors by ${column} (${direction})`);
+        };
+
+        // Function to filter investors
+        window.filterInvestors = function() {
+            console.log('🔍 Filtering investors...');
+            
+            const searchTerm = document.getElementById('investorSearch').value.toLowerCase();
+            const returnFilter = document.getElementById('returnFilter').value;
+            const tbody = document.getElementById('investorsTableBody');
+            
+            if (!tbody) return;
+            
+            const rows = tbody.querySelectorAll('tr');
+            let visibleCount = 0;
+            
+            rows.forEach(row => {
+                const name = row.cells[1].textContent.toLowerCase();
+                const id = row.cells[0].textContent.toLowerCase();
+                const returnText = row.cells[5].textContent;
+                const returnValue = parseFloat(returnText.replace(/[%+]/g, ''));
+                
+                let showRow = true;
+                
+                // Search filter
+                if (searchTerm && !name.includes(searchTerm) && !id.includes(searchTerm)) {
+                    showRow = false;
+                }
+                
+                // Return filter
+                if (returnFilter) {
+                    switch (returnFilter) {
+                        case 'positive':
+                            if (returnValue <= 0) showRow = false;
+                            break;
+                        case 'negative':
+                            if (returnValue >= 0) showRow = false;
+                            break;
+                        case 'high':
+                            if (returnValue < 50) showRow = false;
+                            break;
+                    }
+                }
+                
+                row.style.display = showRow ? '' : 'none';
+                if (showRow) visibleCount++;
+            });
+            
+            console.log(`✅ Filtered investors: ${visibleCount} visible`);
+        };
+
+        // Function to clear all filters
+        window.clearInvestorFilters = function() {
+            console.log('🧹 Clearing investor filters...');
+            
+            document.getElementById('investorSearch').value = '';
+            document.getElementById('returnFilter').value = '';
+            
+            // Reset sort indicators
+            document.querySelectorAll('.sort-indicator').forEach(indicator => {
+                indicator.textContent = '↕';
+                indicator.style.color = '#7f8c8d';
+            });
+            
+            // Reset sort state
+            window.investorTableState.currentSort = { column: null, direction: 'asc' };
+            
+            // Show all rows
+            const tbody = document.getElementById('investorsTableBody');
+            if (tbody) {
+                const rows = tbody.querySelectorAll('tr');
+                rows.forEach(row => row.style.display = '');
+            }
+            
+            console.log('✅ Cleared all investor filters');
         };
 
         // === PORTFOLIO FUNCTIONALITY ===
