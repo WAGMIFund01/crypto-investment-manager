@@ -6394,12 +6394,18 @@
                     kpiLastUpdated.style.fontWeight = '600';
                 }
                 
-                // Show loading state for all refresh buttons
+                // Show loading state for all refresh buttons (only those with text content)
                 const refreshButtons = document.querySelectorAll('button[onclick="window.refreshPortfolioData()"]');
                 refreshButtons.forEach(button => {
-                    const originalText = button.textContent;
-                    button.textContent = 'Refreshing...';
-                    button.disabled = true;
+                    // Only set text content if the button has text content (not just SVG icons)
+                    if (button.textContent.trim() !== '') {
+                        const originalText = button.textContent;
+                        button.textContent = 'Refreshing...';
+                        button.disabled = true;
+                    } else {
+                        // For buttons with only SVG icons, just disable them
+                        button.disabled = true;
+                    }
                 });
                 
                 // Call your Google Apps Script to refresh prices
@@ -6465,7 +6471,10 @@
                 // Restore button state for all refresh buttons
                 const refreshButtons = document.querySelectorAll('button[onclick="window.refreshPortfolioData()"]');
                 refreshButtons.forEach(button => {
-                    button.textContent = 'Refresh';
+                    // Only restore text content if the button originally had text content
+                    if (button.textContent.trim() !== '') {
+                        button.textContent = 'Refresh';
+                    }
                     button.disabled = false;
                 });
             }
