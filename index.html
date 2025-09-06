@@ -6386,6 +6386,14 @@
             console.log('🔄 Manual portfolio refresh triggered by user');
             
             try {
+                // Show loading state for KPI ribbon
+                const kpiLastUpdated = document.getElementById('kpiLastUpdated');
+                if (kpiLastUpdated) {
+                    kpiLastUpdated.textContent = 'Refreshing...';
+                    kpiLastUpdated.style.color = '#00ff88';
+                    kpiLastUpdated.style.fontWeight = '600';
+                }
+                
                 // Show loading state for all refresh buttons
                 const refreshButtons = document.querySelectorAll('button[onclick="window.refreshPortfolioData()"]');
                 refreshButtons.forEach(button => {
@@ -6440,6 +6448,20 @@
                 console.error('❌ Error refreshing prices:', error);
                 alert('Error refreshing prices: ' + error.message);
             } finally {
+                // Restore KPI ribbon text
+                const kpiLastUpdated = document.getElementById('kpiLastUpdated');
+                if (kpiLastUpdated) {
+                    const now = new Date();
+                    const timeString = now.toLocaleTimeString('en-US', { 
+                        hour: 'numeric', 
+                        minute: '2-digit',
+                        hour12: true 
+                    });
+                    kpiLastUpdated.textContent = `Last updated: ${timeString}`;
+                    kpiLastUpdated.style.color = '#94a3b8';
+                    kpiLastUpdated.style.fontWeight = 'normal';
+                }
+                
                 // Restore button state for all refresh buttons
                 const refreshButtons = document.querySelectorAll('button[onclick="window.refreshPortfolioData()"]');
                 refreshButtons.forEach(button => {
