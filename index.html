@@ -1461,24 +1461,12 @@
         
         /* Privacy Mode Masking Styles */
         .privacy-masked {
-            color: #6B7280 !important;
-            opacity: 0.85 !important;
+            color: #8A8F98 !important;
+            opacity: 0.7 !important;
             user-select: none !important;
             -webkit-user-select: none !important;
             -moz-user-select: none !important;
             -ms-user-select: none !important;
-        }
-        
-        .privacy-masked::before {
-            content: "••••••" !important;
-            color: #6B7280 !important;
-            opacity: 0.85 !important;
-        }
-        
-        .privacy-masked-currency::before {
-            content: "$•••••" !important;
-            color: #6B7280 !important;
-            opacity: 0.85 !important;
         }
     </style>
 </head>
@@ -1607,8 +1595,8 @@
                     <div style="width: 1px; height: 24px; background: #3d4148;"></div>
                     
                     <!-- Cumulative Return -->
-                    <div class="kpi-metric" style="text-align: center;">
-                        <div style="font-size: 12px; color: #94a3b8; margin-bottom: 2px;">Cumulative Return</div>
+                    <div class="kpi-metric" style="text-align: center; min-width: 80px;">
+                        <div style="font-size: 12px; color: #94a3b8; margin-bottom: 2px; white-space: nowrap;">Cum. Return</div>
                         <div id="kpiCumulativeReturn" style="font-size: 16px; font-weight: 600; color: #00ff88;">+0.0%</div>
                                 </div>
                     
@@ -1616,38 +1604,26 @@
                     <div style="width: 1px; height: 24px; background: #3d4148;"></div>
                     
                     <!-- Month-on-Month -->
-                    <div class="kpi-metric" style="text-align: center;">
-                        <div style="font-size: 12px; color: #94a3b8; margin-bottom: 2px;">Month-on-Month</div>
+                    <div class="kpi-metric" style="text-align: center; min-width: 60px;">
+                        <div style="font-size: 12px; color: #94a3b8; margin-bottom: 2px; white-space: nowrap;">MoM</div>
                         <div id="kpiMonthlyReturn" style="font-size: 16px; font-weight: 600; color: #00ff88;">+0.0%</div>
                             </div>
                             </div>
                 
                 <!-- Privacy Mode & Last Updated Section -->
                 <div style="display: flex; align-items: center; gap: 16px;">
-                    <!-- Privacy Mode Toggle -->
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; user-select: none;">
-                            <input type="checkbox" id="privacyModeToggle" 
-                                   style="display: none;" 
-                                   onchange="window.togglePrivacyMode()">
-                            <div id="privacyToggleSwitch" 
-                                 style="position: relative; width: 44px; height: 24px; background: #2D3139; border-radius: 12px; transition: all 0.15s ease; cursor: pointer;" 
-                                 onclick="window.togglePrivacyMode()" 
-                                 onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.togglePrivacyMode();}" 
-                                 tabindex="0" 
-                                 role="switch" 
-                                 aria-checked="false" 
-                                 aria-label="Privacy mode toggle">
-                                <div id="privacyToggleKnob" 
-                                     style="position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: #FFFFFF; border-radius: 50%; transition: all 0.15s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"></div>
-                                <div id="privacyToggleIcon" 
-                                     style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #7f8c8d; font-size: 10px; transition: all 0.15s ease;">
-                                    🔒
-                            </div>
-                            </div>
-                            <span style="color: #999999; font-size: 12px; font-weight: 500;">Privacy mode</span>
-                        </label>
-                            </div>
+                    <!-- Privacy Mode Icon -->
+                    <div style="display: flex; align-items: center;">
+                        <div id="privacyModeIcon" 
+                             style="display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; color: #8A8F98; opacity: 0.7; cursor: help;" 
+                             title="Privacy mode is enforced." 
+                             aria-label="Privacy mode is enforced">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                                <line x1="1" y1="1" x2="23" y2="23"></line>
+                            </svg>
+                        </div>
+                    </div>
                     
                     <!-- Last Updated & Refresh -->
                     <div style="display: flex; align-items: center; gap: 8px;">
@@ -2522,34 +2498,22 @@
                 if (dbTimestamp) {
                     // Parse the ISO timestamp and format it for display
                     const dbDate = new Date(dbTimestamp);
-                    const timeString = dbDate.toLocaleTimeString('en-US', { 
-                        hour: 'numeric', 
-                        minute: '2-digit',
-                        hour12: true 
-                    });
-                    document.getElementById('kpiLastUpdated').textContent = `Last updated: ${timeString}`;
-                    console.log('✅ Updated last updated time from database:', timeString);
+                    const compactTimeString = window.formatCompactTimestamp(dbDate);
+                    document.getElementById('kpiLastUpdated').textContent = compactTimeString;
+                    console.log('✅ Updated last updated time from database:', compactTimeString);
                 } else {
                     // Fallback to browser time if database timestamp is not available
                     const now = new Date();
-                    const timeString = now.toLocaleTimeString('en-US', { 
-                        hour: 'numeric', 
-                        minute: '2-digit',
-                        hour12: true 
-                    });
-                    document.getElementById('kpiLastUpdated').textContent = `Last updated: ${timeString}`;
-                    console.log('⚠️ Using browser time as fallback:', timeString);
+                    const compactTimeString = window.formatCompactTimestamp(now);
+                    document.getElementById('kpiLastUpdated').textContent = compactTimeString;
+                    console.log('⚠️ Using browser time as fallback:', compactTimeString);
                 }
             } catch (error) {
                 console.error('❌ Error fetching database timestamp:', error);
                 // Fallback to browser time
                 const now = new Date();
-                const timeString = now.toLocaleTimeString('en-US', { 
-                    hour: 'numeric', 
-                    minute: '2-digit',
-                    hour12: true 
-                });
-                document.getElementById('kpiLastUpdated').textContent = `Last updated: ${timeString}`;
+                const compactTimeString = window.formatCompactTimestamp(now);
+                document.getElementById('kpiLastUpdated').textContent = compactTimeString;
             }
             
             console.log('✅ KPI ribbon updated successfully');
@@ -6649,33 +6613,21 @@
                         if (dbTimestamp) {
                             // Parse the ISO timestamp and format it for display
                             const dbDate = new Date(dbTimestamp);
-                            const timeString = dbDate.toLocaleTimeString('en-US', { 
-                                hour: 'numeric', 
-                                minute: '2-digit',
-                                hour12: true 
-                            });
-                            kpiLastUpdated.textContent = `Last updated: ${timeString}`;
-                            console.log('✅ Updated last updated time from database after refresh:', timeString);
+                            const compactTimeString = window.formatCompactTimestamp(dbDate);
+                            kpiLastUpdated.textContent = compactTimeString;
+                            console.log('✅ Updated last updated time from database after refresh:', compactTimeString);
                         } else {
                             // Fallback to browser time if database timestamp is not available
                             const now = new Date();
-                            const timeString = now.toLocaleTimeString('en-US', { 
-                                hour: 'numeric', 
-                                minute: '2-digit',
-                                hour12: true 
-                            });
-                            kpiLastUpdated.textContent = `Last updated: ${timeString}`;
+                            const compactTimeString = window.formatCompactTimestamp(now);
+                            kpiLastUpdated.textContent = compactTimeString;
                         }
                     } catch (error) {
                         console.error('❌ Error fetching database timestamp after refresh:', error);
                         // Fallback to browser time
                         const now = new Date();
-                        const timeString = now.toLocaleTimeString('en-US', { 
-                            hour: 'numeric', 
-                            minute: '2-digit',
-                            hour12: true 
-                        });
-                        kpiLastUpdated.textContent = `Last updated: ${timeString}`;
+                        const compactTimeString = window.formatCompactTimestamp(now);
+                        kpiLastUpdated.textContent = compactTimeString;
                     }
                     kpiLastUpdated.style.color = '#94a3b8';
                     kpiLastUpdated.style.fontWeight = 'normal';
@@ -6706,63 +6658,22 @@
         }
 
         // ========================================
-        // PRIVACY MODE SYSTEM
+        // PRIVACY MODE SYSTEM (ALWAYS ON)
         // ========================================
         
-        // Privacy Mode State Management
+        // Privacy Mode State Management - Always Enabled
         window.privacyMode = {
-            isEnabled: false,
+            isEnabled: true, // Always true - privacy mode cannot be disabled
             
-            // Initialize privacy mode from localStorage
+            // Initialize privacy mode - always enabled
             init: function() {
-                const savedState = localStorage.getItem('wagmi_privacy_mode');
-                if (savedState === 'true') {
-                    this.enable();
-                } else {
-                    this.disable();
-                }
-                console.log('🔒 Privacy mode initialized:', this.isEnabled ? 'ON' : 'OFF');
-            },
-            
-            // Enable privacy mode
-            enable: function() {
-                this.isEnabled = true;
+                // Set privacy mode as always enabled in localStorage
                 localStorage.setItem('wagmi_privacy_mode', 'true');
-                this.updateToggleUI(true);
                 this.applyMasking();
-                console.log('🔒 Privacy mode enabled');
+                console.log('🔒 Privacy mode initialized: ALWAYS ON');
             },
             
-            // Disable privacy mode
-            disable: function() {
-                this.isEnabled = false;
-                localStorage.setItem('wagmi_privacy_mode', 'false');
-                this.updateToggleUI(false);
-                this.removeMasking();
-                console.log('🔓 Privacy mode disabled');
-            },
-            
-            // Update toggle UI
-            updateToggleUI: function(isOn) {
-                const toggle = document.getElementById('privacyToggleSwitch');
-                const knob = document.getElementById('privacyToggleKnob');
-                const icon = document.getElementById('privacyToggleIcon');
-                const checkbox = document.getElementById('privacyModeToggle');
-                
-                if (toggle && knob && icon && checkbox) {
-                    if (isOn) {
-                        toggle.classList.add('privacy-on');
-                        toggle.setAttribute('aria-checked', 'true');
-                        checkbox.checked = true;
-                    } else {
-                        toggle.classList.remove('privacy-on');
-                        toggle.setAttribute('aria-checked', 'false');
-                        checkbox.checked = false;
-                    }
-                }
-            },
-            
-            // Apply masking to sensitive data
+            // Apply masking to sensitive data (always applied)
             applyMasking: function() {
                 // Mask KPI Total AUM
                 this.maskKPITotalAUM();
@@ -6774,138 +6685,99 @@
                 this.maskInvestorModal();
             },
             
-            // Remove masking from sensitive data
-            removeMasking: function() {
-                // Restore KPI Total AUM
-                this.restoreKPITotalAUM();
-                
-                // Restore investor table data
-                this.restoreInvestorTable();
-                
-                // Restore investor modal data
-                this.restoreInvestorModal();
-            },
-            
-            // Mask KPI Total AUM
+            // Mask KPI Total AUM with six dots
             maskKPITotalAUM: function() {
                 const aumElement = document.querySelector('[data-kpi="total-aum"]');
                 if (aumElement) {
                     aumElement.setAttribute('data-original-value', aumElement.textContent);
-                    aumElement.textContent = '$•••••';
+                    aumElement.textContent = '••••••';
                     aumElement.classList.add('privacy-masked');
                     aumElement.setAttribute('aria-label', 'Hidden in privacy mode');
                 }
             },
             
-            // Restore KPI Total AUM
-            restoreKPITotalAUM: function() {
-                const aumElement = document.querySelector('[data-kpi="total-aum"]');
-                if (aumElement && aumElement.hasAttribute('data-original-value')) {
-                    aumElement.textContent = aumElement.getAttribute('data-original-value');
-                    aumElement.removeAttribute('data-original-value');
-                    aumElement.classList.remove('privacy-masked');
-                    aumElement.removeAttribute('aria-label');
-                }
-            },
-            
-            // Mask investor table data
+            // Mask investor table data with six dots
             maskInvestorTable: function() {
                 const table = document.getElementById('investorsTableBody');
                 if (!table) return;
                 
                 const rows = table.querySelectorAll('tr');
                 rows.forEach(row => {
-                    // Mask name (show ID only)
+                    // Mask name (only six dots, no ID)
                     const nameCell = row.cells[1]; // Name column
                     if (nameCell && !nameCell.hasAttribute('data-original-value')) {
                         nameCell.setAttribute('data-original-value', nameCell.textContent);
-                        const idCell = row.cells[0]; // ID column
-                        const investorId = idCell ? idCell.textContent : 'Unknown';
-                        nameCell.innerHTML = `${investorId} — <span class="privacy-masked">Hidden</span>`;
+                        nameCell.textContent = '••••••';
+                        nameCell.classList.add('privacy-masked');
                         nameCell.setAttribute('aria-label', 'Hidden in privacy mode');
                     }
                     
-                    // Mask investment amount
+                    // Mask investment amount (six dots)
                     const investmentCell = row.cells[3]; // Investment column
                     if (investmentCell && !investmentCell.hasAttribute('data-original-value')) {
                         investmentCell.setAttribute('data-original-value', investmentCell.textContent);
-                        investmentCell.textContent = '$•••••';
+                        investmentCell.textContent = '••••••';
                         investmentCell.classList.add('privacy-masked');
                         investmentCell.setAttribute('aria-label', 'Hidden in privacy mode');
                     }
                     
-                    // Mask AUM amount
+                    // Mask AUM amount (six dots)
                     const aumCell = row.cells[4]; // AUM column
                     if (aumCell && !aumCell.hasAttribute('data-original-value')) {
                         aumCell.setAttribute('data-original-value', aumCell.textContent);
-                        aumCell.textContent = '$•••••';
+                        aumCell.textContent = '••••••';
                         aumCell.classList.add('privacy-masked');
                         aumCell.setAttribute('aria-label', 'Hidden in privacy mode');
                     }
                 });
             },
             
-            // Restore investor table data
-            restoreInvestorTable: function() {
-                const table = document.getElementById('investorsTableBody');
-                if (!table) return;
-                
-                const rows = table.querySelectorAll('tr');
-                rows.forEach(row => {
-                    // Restore name
-                    const nameCell = row.cells[1];
-                    if (nameCell && nameCell.hasAttribute('data-original-value')) {
-                        nameCell.textContent = nameCell.getAttribute('data-original-value');
-                        nameCell.removeAttribute('data-original-value');
-                        nameCell.removeAttribute('aria-label');
-                    }
-                    
-                    // Restore investment amount
-                    const investmentCell = row.cells[3];
-                    if (investmentCell && investmentCell.hasAttribute('data-original-value')) {
-                        investmentCell.textContent = investmentCell.getAttribute('data-original-value');
-                        investmentCell.removeAttribute('data-original-value');
-                        investmentCell.classList.remove('privacy-masked');
-                        investmentCell.removeAttribute('aria-label');
-                    }
-                    
-                    // Restore AUM amount
-                    const aumCell = row.cells[4];
-                    if (aumCell && aumCell.hasAttribute('data-original-value')) {
-                        aumCell.textContent = aumCell.getAttribute('data-original-value');
-                        aumCell.removeAttribute('data-original-value');
-                        aumCell.classList.remove('privacy-masked');
-                        aumCell.removeAttribute('aria-label');
-                    }
-                });
-            },
-            
-            // Mask investor modal data
+            // Mask investor modal data (placeholder)
             maskInvestorModal: function() {
-                // This will be implemented when we work on the modal
                 console.log('🔒 Investor modal masking (to be implemented)');
-            },
-            
-            // Restore investor modal data
-            restoreInvestorModal: function() {
-                // This will be implemented when we work on the modal
-                console.log('🔓 Investor modal restoration (to be implemented)');
             }
         };
         
-        // Toggle privacy mode function
-        window.togglePrivacyMode = function() {
-            if (window.privacyMode.isEnabled) {
-                window.privacyMode.disable();
-            } else {
-                window.privacyMode.enable();
-            }
-        };
-        
-        // Initialize privacy mode when page loads
+        // Initialize privacy mode when page loads (always enabled)
         if (window.privacyMode) {
             window.privacyMode.init();
         }
+        
+        // ========================================
+        // COMPACT TIMESTAMP FORMATTING
+        // ========================================
+        
+        // Format timestamp in compact format: "12:28 AM • Today" or "12:28 AM • Sep 2, 2018"
+        window.formatCompactTimestamp = function(date) {
+            const now = new Date();
+            const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+            const targetDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+            
+            // Format time
+            const timeString = date.toLocaleTimeString('en-US', {
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true
+            });
+            
+            // Determine date label
+            let dateLabel;
+            if (targetDate.getTime() === today.getTime()) {
+                dateLabel = 'Today';
+            } else if (targetDate.getTime() === yesterday.getTime()) {
+                dateLabel = 'Yesterday';
+            } else {
+                dateLabel = date.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric'
+                });
+            }
+            
+            return `${timeString} • ${dateLabel}`;
+        };
 
         </script>
 </body>
