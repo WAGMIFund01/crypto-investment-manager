@@ -2221,14 +2221,14 @@
         // ===================================================================
         
         // Google Sheets configuration
-        const SPREADSHEET_ID = '1h04nkcnQmxaFml8RubIGmPgffMiyoEIg350ryjXK0tM';
+        const SPREADSHEET_ID = '1h04nkcnQmxaFml8RublGmPgffMiyoElg35';
         const API_KEY = 'AIzaSyAWXECv5w1HjPmWcTnEqifMifJk-kKeEDA';
         
         // Function to fetch live data from Google Sheets
         window.fetchLiveInvestorData = async function() {
             try {
                 console.log('📊 Fetching live investor data from Google Sheets...');
-                const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/Table2!A:H?key=${API_KEY}`;
+                const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/Investors!A:H?key=${API_KEY}`;
                 
                 const response = await fetch(url);
                 const data = await response.json();
