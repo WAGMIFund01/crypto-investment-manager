@@ -2318,7 +2318,7 @@
         // Privacy mode functionality
         window.privacyModeEnabled = true;
         
-        // Function to update privacy icon appearance
+        // Function to update privacy icon appearance and apply/remove masks
         window.updatePrivacyIcon = function() {
             const icon = document.getElementById('privacyModeIcon');
             if (icon) {
@@ -2327,13 +2327,89 @@
                     icon.style.color = '#00ff88';
                     icon.style.opacity = '1';
                     icon.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>';
+                    
+                    // Apply privacy masks
+                    window.applyPrivacyMasks();
                 } else {
                     // Privacy OFF: Grey normal eye
                     icon.style.color = '#8A8F98';
                     icon.style.opacity = '0.7';
                     icon.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>';
+                    
+                    // Remove privacy masks
+                    window.removePrivacyMasks();
                 }
             }
+        };
+        
+        // Function to apply privacy masks
+        window.applyPrivacyMasks = function() {
+            // Mask KPI ribbon Total AUM
+            const kpiTotalAUM = document.getElementById('kpiTotalAUM');
+            if (kpiTotalAUM) {
+                kpiTotalAUM.setAttribute('data-original-value', kpiTotalAUM.textContent);
+                kpiTotalAUM.textContent = '••••••';
+            }
+            
+            // Mask investor table data
+            const investorRows = document.querySelectorAll('#investorsTable tbody tr');
+            investorRows.forEach(row => {
+                // Mask Name column (index 1)
+                const nameCell = row.cells[1];
+                if (nameCell) {
+                    nameCell.setAttribute('data-original-value', nameCell.textContent);
+                    nameCell.textContent = '••••••';
+                }
+                
+                // Mask Total Investment column (index 2)
+                const investmentCell = row.cells[2];
+                if (investmentCell) {
+                    investmentCell.setAttribute('data-original-value', investmentCell.textContent);
+                    investmentCell.textContent = '••••••';
+                }
+                
+                // Mask Share of AUM column (index 3)
+                const aumCell = row.cells[3];
+                if (aumCell) {
+                    aumCell.setAttribute('data-original-value', aumCell.textContent);
+                    aumCell.textContent = '••••••';
+                }
+            });
+        };
+        
+        // Function to remove privacy masks
+        window.removePrivacyMasks = function() {
+            // Restore KPI ribbon Total AUM
+            const kpiTotalAUM = document.getElementById('kpiTotalAUM');
+            if (kpiTotalAUM && kpiTotalAUM.hasAttribute('data-original-value')) {
+                kpiTotalAUM.textContent = kpiTotalAUM.getAttribute('data-original-value');
+                kpiTotalAUM.removeAttribute('data-original-value');
+            }
+            
+            // Restore investor table data
+            const investorRows = document.querySelectorAll('#investorsTable tbody tr');
+            investorRows.forEach(row => {
+                // Restore Name column (index 1)
+                const nameCell = row.cells[1];
+                if (nameCell && nameCell.hasAttribute('data-original-value')) {
+                    nameCell.textContent = nameCell.getAttribute('data-original-value');
+                    nameCell.removeAttribute('data-original-value');
+                }
+                
+                // Restore Total Investment column (index 2)
+                const investmentCell = row.cells[2];
+                if (investmentCell && investmentCell.hasAttribute('data-original-value')) {
+                    investmentCell.textContent = investmentCell.getAttribute('data-original-value');
+                    investmentCell.removeAttribute('data-original-value');
+                }
+                
+                // Restore Share of AUM column (index 3)
+                const aumCell = row.cells[3];
+                if (aumCell && aumCell.hasAttribute('data-original-value')) {
+                    aumCell.textContent = aumCell.getAttribute('data-original-value');
+                    aumCell.removeAttribute('data-original-value');
+                }
+            });
         };
         
         // Privacy mode toggle function
