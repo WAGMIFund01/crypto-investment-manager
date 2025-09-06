@@ -4198,7 +4198,12 @@
                     console.log(`💰 Fetching price for adding ${selectedAssetSymbol}`);
                     window.apiRateLimit.recordRequest();
                     
-                    const priceResponse = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${selectedAssetId}&vs_currencies=usd&include_24hr_change=true`);
+                    const priceResponse = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${selectedAssetId}&vs_currencies=usd&include_24hr_change=true`, {
+                        headers: {
+                            'Accept': 'application/json',
+                            'x-cg-demo-api-key': 'CG-QgGwi5RiGpRpircAtdTcYTvk'
+                        }
+                    });
                     if (priceResponse.ok) {
                         const priceData = await priceResponse.json();
                         currentPrice = priceData[selectedAssetId]?.usd || 0;
@@ -5066,7 +5071,8 @@
                 
                 const response = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${assetId}&vs_currencies=usd&include_24hr_change=true`, {
                     headers: {
-                        'Accept': 'application/json'
+                        'Accept': 'application/json',
+                        'x-cg-demo-api-key': 'CG-QgGwi5RiGpRpircAtdTcYTvk'
                     }
                 });
                 

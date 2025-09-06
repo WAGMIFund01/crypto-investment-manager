@@ -1,0 +1,39 @@
+# Backup files
+*.backup*
+*.txt
+*.py
+*.sh
+*.gs
+
+# Documentation files (keep only README.md)
+*.md
+!README.md
+
+# Test files
+test-*
+temp-*
+*update*
+*landing*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Node modules (if any)
+node_modules/
+npm-debug.log*
+
+# Environment files
+.env
+.env.local
+.env.production
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/
