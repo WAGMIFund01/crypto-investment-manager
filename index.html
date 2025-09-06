@@ -1556,39 +1556,6 @@
             
             <!-- Dashboard Tab -->
             <div id="dashboard" class="tab-content active">
-                    <!-- Overall Summary Dashboard -->
-                    <section class="card summary-dashboard" style="margin-bottom: 30px;">
-                                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                                <h2 style="color: #2c3e50; margin: 0;">📊 Portfolio Overview</h2>
-                            </div>
-                        <div class="summary-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
-                            <div class="summary-metric clickable-metric" onclick="window.switchTab('investors')" style="text-align: center; padding: 15px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;" title="Click to view all investors">
-                                <div class="metric-icon" style="font-size: 24px; margin-bottom: 8px;">👥</div>
-                                <div class="metric-value" id="summaryTotalInvestors" style="font-size: 2rem; font-weight: bold; color: #2c3e50;">6</div>
-                                <div class="metric-label" style="color: #7f8c8d; font-size: 0.9rem;">Total Investors</div>
-                            </div>
-                            <div class="summary-metric clickable-metric" onclick="window.switchTab('investors')" style="text-align: center; padding: 15px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;" title="Click to view investor details">
-                                <div class="metric-icon" style="font-size: 24px; margin-bottom: 8px;">💰</div>
-                                <div class="metric-value" id="summaryTotalInvested" style="font-size: 2rem; font-weight: bold; color: #2c3e50;">$26,906</div>
-                                <div class="metric-label" style="color: #7f8c8d; font-size: 0.9rem;">Total Invested</div>
-                            </div>
-                            <div class="summary-metric clickable-metric" style="text-align: center; padding: 15px; cursor: pointer;" onclick="window.switchTab('portfolio')" title="Click to view Portfolio 👆">
-                                <div class="metric-icon" style="font-size: 24px; margin-bottom: 8px;">💎</div>
-                                <div class="metric-value" id="summaryCurrentValue" style="font-size: 2rem; font-weight: bold; color: #2c3e50;">$31,002</div>
-                                <div class="metric-label" style="color: #7f8c8d; font-size: 0.9rem;">Current Value</div>
-                            </div>
-                            <div class="summary-metric" style="text-align: center; padding: 15px;">
-                                <div class="metric-icon" style="font-size: 24px; margin-bottom: 8px;">📈</div>
-                                <div class="metric-value positive" id="summaryTotalPnL" style="font-size: 2rem; font-weight: bold;">+$4,096</div>
-                                <div class="metric-label" style="color: #7f8c8d; font-size: 0.9rem;">Total P&L</div>
-                            </div>
-                            <div class="summary-metric" style="text-align: center; padding: 15px;">
-                                <div class="metric-icon" style="font-size: 24px; margin-bottom: 8px;">📊</div>
-                                <div class="metric-value positive" id="summaryMonthlyReturn" style="font-size: 2rem; font-weight: bold;">+2.8%</div>
-                                <div class="metric-label" style="color: #7f8c8d; font-size: 0.9rem;">Month-on-Month</div>
-                            </div>
-                        </div>
-                    </section>
 
                 <div class="dashboard-grid">
                     <!-- Investment Summaries -->
@@ -1628,39 +1595,6 @@
 
             <!-- Investors Tab -->
             <div id="investors" class="tab-content">
-                    <!-- Overall Summary Dashboard for Investors Tab -->
-                    <section class="card summary-dashboard" style="margin-bottom: 30px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                            <h2 style="color: #2c3e50; margin: 0;">📊 Portfolio Overview</h2>
-                        </div>
-                        <div class="summary-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
-                            <div class="summary-metric clickable-metric" onclick="window.scrollToInvestorTable()" style="text-align: center; padding: 15px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;" title="Click to scroll to investor table">
-                                <div class="metric-icon" style="font-size: 24px; margin-bottom: 8px;">👥</div>
-                                <div class="metric-value" id="investorsSummaryTotalInvestors" style="font-size: 2rem; font-weight: bold; color: #2c3e50;">6</div>
-                                <div class="metric-label" style="color: #7f8c8d; font-size: 0.9rem;">Total Investors</div>
-                            </div>
-                            <div class="summary-metric clickable-metric" onclick="window.scrollToInvestorTable()" style="text-align: center; padding: 15px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;" title="Click to scroll to investor table">
-                                <div class="metric-icon" style="font-size: 24px; margin-bottom: 8px;">💰</div>
-                                <div class="metric-value" id="investorsSummaryTotalInvested" style="font-size: 2rem; font-weight: bold; color: #2c3e50;">$26,906</div>
-                                <div class="metric-label" style="color: #7f8c8d; font-size: 0.9rem;">Total Invested</div>
-                            </div>
-                            <div class="summary-metric clickable-metric" style="text-align: center; padding: 15px; cursor: pointer;" onclick="window.switchTab('portfolio')" title="Click to view Portfolio 👆">
-                                <div class="metric-icon" style="font-size: 24px; margin-bottom: 8px;">💎</div>
-                                <div class="metric-value" id="investorsSummaryCurrentValue" style="font-size: 2rem; font-weight: bold; color: #2c3e50;">$31,002</div>
-                                <div class="metric-label" style="color: #7f8c8d; font-size: 0.9rem;">Current Value</div>
-                            </div>
-                            <div class="summary-metric" style="text-align: center; padding: 15px;">
-                                <div class="metric-icon" style="font-size: 24px; margin-bottom: 8px;">📈</div>
-                                <div class="metric-value positive" id="investorsSummaryTotalPnL" style="font-size: 2rem; font-weight: bold;">+$4,096</div>
-                                <div class="metric-label" style="color: #7f8c8d; font-size: 0.9rem;">Total P&L</div>
-                            </div>
-                            <div class="summary-metric" style="text-align: center; padding: 15px;">
-                                <div class="metric-icon" style="font-size: 24px; margin-bottom: 8px;">📊</div>
-                                <div class="metric-value positive" id="investorsSummaryMonthlyReturn" style="font-size: 2rem; font-weight: bold;">+2.8%</div>
-                                <div class="metric-label" style="color: #7f8c8d; font-size: 0.9rem;">Month-on-Month</div>
-                            </div>
-                        </div>
-                    </section>
 
                 <div class="investors-header">
                     <h2>Investor Management</h2>
@@ -1689,39 +1623,6 @@
 
             <!-- Portfolio Tab -->
             <div id="portfolio" class="tab-content">
-                    <!-- Portfolio Overview Widget -->
-                    <section class="card summary-dashboard" style="margin-bottom: 30px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                            <h2 style="color: #2c3e50; margin: 0;">📊 Portfolio Overview</h2>
-                        </div>
-                        <div class="summary-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
-                            <div class="summary-metric clickable-metric" onclick="window.switchTab('investors')" style="text-align: center; padding: 15px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;" title="Click to view all investors">
-                                <div class="metric-icon" style="font-size: 24px; margin-bottom: 8px;">👥</div>
-                                <div class="metric-value" id="portfolioSummaryTotalInvestors" style="font-size: 2rem; font-weight: bold; color: #2c3e50;">6</div>
-                                <div class="metric-label" style="color: #7f8c8d; font-size: 0.9rem;">Total Investors</div>
-                            </div>
-                            <div class="summary-metric clickable-metric" onclick="window.switchTab('investors')" style="text-align: center; padding: 15px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s;" title="Click to view investor details">
-                                <div class="metric-icon" style="font-size: 24px; margin-bottom: 8px;">💰</div>
-                                <div class="metric-value" id="portfolioSummaryTotalInvested" style="font-size: 2rem; font-weight: bold; color: #2c3e50;">$26,906</div>
-                                <div class="metric-label" style="color: #7f8c8d; font-size: 0.9rem;">Total Invested</div>
-                            </div>
-                            <div class="summary-metric" style="text-align: center; padding: 15px;">
-                                <div class="metric-icon" style="font-size: 24px; margin-bottom: 8px;">💎</div>
-                                <div class="metric-value" id="portfolioSummaryCurrentValue" style="font-size: 2rem; font-weight: bold; color: #2c3e50;">$0.00</div>
-                                <div class="metric-label" style="color: #7f8c8d; font-size: 0.9rem;">Current Value</div>
-                            </div>
-                            <div class="summary-metric" style="text-align: center; padding: 15px;">
-                                <div class="metric-icon" style="font-size: 24px; margin-bottom: 8px;">📈</div>
-                                <div class="metric-value positive" id="portfolioSummaryTotalPnL" style="font-size: 2rem; font-weight: bold;">+$0.00</div>
-                                <div class="metric-label" style="color: #7f8c8d; font-size: 0.9rem;">Total P&L</div>
-                            </div>
-                            <div class="summary-metric" style="text-align: center; padding: 15px;">
-                                <div class="metric-icon" style="font-size: 24px; margin-bottom: 8px;">📊</div>
-                                <div class="metric-value positive" id="portfolioSummaryMonthlyReturn" style="font-size: 2rem; font-weight: bold;">+2.8%</div>
-                                <div class="metric-label" style="color: #7f8c8d; font-size: 0.9rem;">Month-on-Month</div>
-                            </div>
-                        </div>
-                    </section>
                     <!-- Portfolio Header -->
                 <div class="portfolio-header">
                         <div class="portfolio-brand">
