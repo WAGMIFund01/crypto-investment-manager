@@ -4119,8 +4119,16 @@
             // Show all rows
             window.filterInvestors();
             
-            // Reset Clear All button to greyed out state
-            window.updateClearAllButton();
+            // Force Clear All button to inactive state
+            const clearAllButton = document.getElementById('clearAllButton');
+            if (clearAllButton) {
+                clearAllButton.style.borderColor = '#3d4148';
+                clearAllButton.style.color = '#7f8c8d';
+                clearAllButton.style.cursor = 'default';
+                clearAllButton.style.background = 'transparent';
+                clearAllButton.onmouseover = null;
+                clearAllButton.onmouseout = null;
+            }
             
             console.log('✅ All filters cleared');
         };
