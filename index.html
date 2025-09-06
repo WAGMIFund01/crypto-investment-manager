@@ -2502,9 +2502,8 @@
             // Restore privacy mode state and apply masking if needed
             if (window.privacyModeEnabled && window.applyPrivacyMasks) {
                 console.log('🔒 Privacy mode was ON, applying masks...');
-                setTimeout(() => {
-                    window.applyPrivacyMasks();
-                }, 200); // Delay to ensure data is loaded first
+                // Apply masking immediately to prevent flash of unmasked data
+                window.applyPrivacyMasks();
             }
         };
         
@@ -2646,6 +2645,11 @@
                 kpiTotalAUMElement.setAttribute('data-original-value', formattedAUM);
             }
             
+            // Apply masking immediately if privacy mode is enabled
+            if (window.privacyModeEnabled) {
+                kpiTotalAUMElement.textContent = '••••••';
+            }
+            
             // Format and update Cumulative Return
             const cumulativeElement = document.getElementById('kpiCumulativeReturn');
             cumulativeElement.textContent = formatPercentage(cumulativeReturn);
@@ -2684,10 +2688,8 @@
             
             // Apply privacy masks if privacy mode is enabled
             if (window.privacyModeEnabled && window.applyPrivacyMasks) {
-                // Small delay to ensure DOM is updated
-                setTimeout(() => {
-                    window.applyPrivacyMasks();
-                }, 50);
+                // Apply masking immediately to prevent flash of unmasked data
+                window.applyPrivacyMasks();
             }
         };
         
