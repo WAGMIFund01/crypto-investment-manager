@@ -107,31 +107,6 @@
         }
 
         /* Navigation */
-        .nav {
-            background: var(--bg-secondary) !important;
-            border-bottom: 1px solid var(--border-primary) !important;
-            padding: 0 2rem !important;
-        }
-
-        .nav-btn {
-            background: transparent !important;
-            color: var(--text-secondary) !important;
-            border: none !important;
-            padding: 1rem 1.5rem !important;
-            font-weight: 500 !important;
-            transition: all 0.2s ease !important;
-            border-bottom: 2px solid transparent !important;
-        }
-
-        .nav-btn:hover {
-            color: var(--text-highlight) !important;
-            background: var(--bg-tertiary) !important;
-        }
-
-        .nav-btn.active {
-            color: var(--accent-orange) !important;
-            border-bottom-color: var(--accent-orange) !important;
-        }
 
         /* Cards */
         .card {
@@ -1497,27 +1472,6 @@
 
         <!-- Manager View -->
         <div id="managerView" class="view-container" style="display: none;">
-            <!-- Header -->
-            <header class="header">
-                <div class="header-content">
-                    <div class="header-left">
-                        <h1 style="background: var(--gradient-primary); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-size: 1.5rem; font-weight: 700;">⟠ Crypto Investment Manager</h1>
-                        <span class="view-badge manager" style="background: var(--accent-orange); color: white; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;">Manager View</span>
-                    </div>
-                    <div class="header-actions">
-                        <button class="btn btn-secondary" onclick="app.exportAllDataAsCSV()">Export Data</button>
-                        <button class="btn btn-secondary" onclick="window.backToLogin()">Switch View</button>
-                    </div>
-                </div>
-            </header>
-
-            <!-- Navigation -->
-            <nav class="nav">
-                <button class="nav-btn active" data-tab="dashboard">Dashboard</button>
-                <button class="nav-btn" data-tab="investors">Investors</button>
-                <button class="nav-btn" data-tab="portfolio">Portfolio</button>
-                <button class="nav-btn" data-tab="performance">Performance</button>
-            </nav>
 
             <!-- Main Content -->
             <main class="main">
@@ -2255,12 +2209,6 @@
         // Tab navigation function
         window.switchTab = function(tabName) {
             console.log('🔄 Switching to tab:', tabName);
-            
-            // Update nav buttons
-            const navButtons = document.querySelectorAll('.nav-btn');
-            navButtons.forEach(btn => btn.classList.remove('active'));
-            const targetBtn = document.querySelector(`[data-tab="${tabName}"]`);
-            if (targetBtn) targetBtn.classList.add('active');
             
             // Update tab content
             const tabContents = document.querySelectorAll('.tab-content');
