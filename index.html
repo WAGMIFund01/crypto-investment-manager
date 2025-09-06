@@ -914,6 +914,10 @@
             background-clip: text !important;
         }
 
+        /* ========================================
+           NEW LANDING PAGE DESIGN SYSTEM
+           ======================================== */
+
         /* Login Screen */
         .login-screen {
             background: var(--bg-primary) !important;
@@ -924,6 +928,72 @@
             border: 1px solid var(--border-primary) !important;
             border-radius: 16px !important;
             box-shadow: var(--shadow-lg) !important;
+        }
+
+        /* Brand Hero */
+        .brand-name {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--accent-green);
+            margin: 0 0 0.5rem 0;
+            letter-spacing: 0.05em;
+        }
+
+        .brand-tagline {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin: 0;
+            font-weight: 400;
+        }
+
+        /* Login Cards */
+        .login-card {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-primary);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .login-card:hover {
+            border-color: var(--accent-green);
+            box-shadow: 0 4px 12px rgba(0, 212, 170, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .card-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0 0 1.5rem 0;
+        }
+
+        /* Button Hover Effects */
+        .manager-btn:hover {
+            background: var(--accent-green) !important;
+            color: var(--bg-primary) !important;
+            transform: translateY(-2px);
+        }
+
+        .investor-btn:hover {
+            background: var(--accent-orange) !important;
+            color: var(--bg-primary) !important;
+            transform: translateY(-2px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .login-options {
+                grid-template-columns: 1fr !important;
+                gap: 1.5rem !important;
+            }
+            
+            .login-container {
+                padding: 2rem 1.5rem !important;
+            }
+            
+            .brand-name {
+                font-size: 2.5rem !important;
+            }
         }
 
         .login-card {
@@ -1299,53 +1369,48 @@
 </head>
 <body>
     <div class="app">
-        <!-- Login/Selection Screen -->
-        <div id="loginScreen" class="login-screen" style="display: flex; align-items: center; justify-content: center; min-height: 100vh; background: var(--bg-primary); position: relative; overflow: hidden;">
-            <!-- Background decorative elements -->
-            <div style="position: absolute; top: 10%; right: 10%; width: 60px; height: 60px; background: var(--accent-orange); border-radius: 50%; opacity: 0.8;"></div>
-            <div style="position: absolute; bottom: 15%; left: 8%; width: 40px; height: 40px; background: var(--accent-green); border-radius: 50%; opacity: 0.6;"></div>
-            <div style="position: absolute; top: 20%; left: 15%; width: 80px; height: 80px; border: 2px solid var(--accent-green); border-radius: 50%; opacity: 0.4;"></div>
-            
-            <div class="login-container" style="max-width: 800px; width: 100%; padding: 3rem 2rem; text-align: center; position: relative; z-index: 1;">
-                <!-- Brand -->
-                <div style="margin-bottom: 1rem;">
-                    <div style="display: inline-flex; align-items: center; justify-content: center; width: 80px; height: 80px; background: var(--accent-green); border-radius: 50%; margin-bottom: 2rem; font-size: 1.5rem; font-weight: bold; color: var(--bg-primary);">WAGMI</div>
-                    </div>
+        <!-- NEW LOGIN/SELECTION SCREEN -->
+        <div id="loginScreen" class="login-screen" style="display: flex; align-items: center; justify-content: center; min-height: 100vh; background: var(--bg-primary); padding: 2rem;">
+            <div class="login-container" style="max-width: 800px; width: 100%; background: var(--bg-secondary); border: 1px solid var(--border-primary); border-radius: 16px; box-shadow: var(--shadow-lg); padding: 3rem;">
                 
-                <!-- Main heading -->
-                <h1 style="font-size: 4rem; font-weight: 700; color: var(--text-highlight); margin-bottom: 1rem; line-height: 1.1;">
-                    Crypto Portfolio<br>Management
-                </h1>
-                
-                <!-- Subtitle -->
-                <p style="font-size: 1.25rem; color: var(--text-secondary); margin-bottom: 3rem; max-width: 600px; margin-left: auto; margin-right: auto; line-height: 1.6;">
-                    Manage and track cryptocurrency investment funds
-                </p>
-                
-                <!-- Debug buttons (remove after testing) -->
-                <div style="margin-bottom: 30px; display: none;">
-                    <button onclick="window.simpleTest()" style="background: #6c757d; color: white; border: none; padding: 8px 16px; border-radius: 4px; margin: 5px; cursor: pointer;">🔧 Simple Test</button>
-                    <button onclick="window.testScript()" style="background: #007bff; color: white; border: none; padding: 8px 16px; border-radius: 4px; margin: 5px; cursor: pointer;">🧪 Test JS</button>
-                    <button onclick="window.debugApp()" style="background: #28a745; color: white; border: none; padding: 8px 16px; border-radius: 4px; margin: 5px; cursor: pointer;">🔍 Debug App</button>
-                    <button onclick="window.enterManagerView()" style="background: #dc3545; color: white; border: none; padding: 8px 16px; border-radius: 4px; margin: 5px; cursor: pointer;">🔧 Force Manager View</button>
-                    <button onclick="window.refreshLiveData()" style="background: #17a2b8; color: white; border: none; padding: 8px 16px; border-radius: 4px; margin: 5px; cursor: pointer;">🔄 Refresh Live Data</button>
-                    <button onclick="window.testApiConnection()" style="background: #ffc107; color: black; border: none; padding: 8px 16px; border-radius: 4px; margin: 5px; cursor: pointer;">🔍 Test API</button>
+                <!-- Brand Hero Area -->
+                <div class="brand-hero" style="text-align: center; margin-bottom: 3rem;">
+                    <h1 class="brand-name" style="font-size: 3rem; font-weight: 700; color: var(--accent-green); margin: 0 0 0.5rem 0; letter-spacing: 0.05em;">
+                        WAGMI
+                    </h1>
+                    <p class="brand-tagline" style="font-size: 1.1rem; color: var(--text-secondary); margin: 0; font-weight: 400;">
+                        We're All Gonna Make It
+                    </p>
+                </div>
+
+                <!-- Dual Login Options -->
+                <div class="login-options" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                    
+                    <!-- Fund Manager Login Card -->
+                    <div class="login-card" style="background: var(--bg-tertiary); border: 1px solid var(--border-primary); border-radius: 12px; padding: 2rem; text-align: center; transition: all 0.3s ease;">
+                        <h3 class="card-title" style="font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin: 0 0 1.5rem 0;">
+                            Fund Manager Login
+                        </h3>
+                        <button class="btn btn-outline manager-btn" id="managerPortalButton" style="width: 100%; padding: 1rem 1.5rem; border: 2px solid var(--accent-green); color: var(--accent-green); background: transparent; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+                            Access Manager Dashboard
+                        </button>
                     </div>
 
-                <!-- Action buttons -->
-                <div style="display: flex; gap: 1.5rem; justify-content: center; align-items: center; flex-wrap: wrap;">
-                    <button class="btn btn-primary" id="managerPortalButton" style="font-size: 1.1rem; padding: 1rem 2.5rem; border-radius: 12px; min-width: 200px;">
-                        Manager Portal
-                    </button>
-                    <button class="btn btn-secondary" id="investorPortalButton" style="font-size: 1.1rem; padding: 1rem 2.5rem; border-radius: 12px; min-width: 200px; background: transparent !important; border: 2px solid var(--accent-green) !important; color: var(--accent-green) !important;">
-                        Investor View
-                    </button>
-                </div>
-                
-                <!-- Additional info -->
-                <div style="margin-top: 2rem; font-size: 0.9rem; color: var(--text-muted);">
-                    <p>Manager Portal: Full access to fund management and analytics</p>
-                    <p>Investor View: Personal investment performance tracking</p>
+                    <!-- Investor Login Card -->
+                    <div class="login-card" style="background: var(--bg-tertiary); border: 1px solid var(--border-primary); border-radius: 12px; padding: 2rem; text-align: center; transition: all 0.3s ease;">
+                        <h3 class="card-title" style="font-size: 1.1rem; font-weight: 600; color: var(--text-primary); margin: 0 0 1.5rem 0;">
+                            Investor Login
+                        </h3>
+                        <div class="investor-form" style="margin-bottom: 1rem;">
+                            <input type="text" id="investorIdInput" placeholder="OAG" style="width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border-primary); border-radius: 8px; background: var(--bg-primary); color: var(--text-primary); font-size: 1rem; margin-bottom: 0.5rem;">
+                            <div id="investorError" class="error-message" style="color: var(--accent-orange); font-size: 0.875rem; text-align: left; display: none;">
+                                Invalid Investor ID
+                            </div>
+                        </div>
+                        <button class="btn btn-outline investor-btn" id="investorPortalButton" style="width: 100%; padding: 1rem 1.5rem; border: 2px solid var(--accent-orange); color: var(--accent-orange); background: transparent; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease;">
+                            Access Portfolio
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
