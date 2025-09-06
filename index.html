@@ -4094,7 +4094,7 @@
                 if (group === 'returns') {
                     // Positive and Negative are mutually exclusive
                     if (filterType === 'positive' && activeFilters.negative) shouldDisable = true;
-                    if (filterType === 'negative' && activeFilters.positive) shouldDisable = true;
+                    if (filterType === 'negative' && (activeFilters.positive || activeFilters.high)) shouldDisable = true;
                     // High is compatible with Positive but not with Negative
                     if (filterType === 'high' && activeFilters.negative) shouldDisable = true;
                 } else if (group === 'size') {
