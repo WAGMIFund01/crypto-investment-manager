@@ -2352,18 +2352,6 @@
                 kpiTotalAUM.textContent = '••••••';
             }
             
-            // Mask KPI ribbon Cumulative Return
-            const kpiCumulativeReturn = document.getElementById('kpiCumulativeReturn');
-            if (kpiCumulativeReturn) {
-                kpiCumulativeReturn.textContent = '••••••';
-            }
-            
-            // Mask KPI ribbon Monthly Return
-            const kpiMonthlyReturn = document.getElementById('kpiMonthlyReturn');
-            if (kpiMonthlyReturn) {
-                kpiMonthlyReturn.textContent = '••••••';
-            }
-            
             // Mask investor table data
             const investorRows = document.querySelectorAll('#investorsTable tbody tr');
             investorRows.forEach(row => {
@@ -2420,20 +2408,6 @@
             const kpiTotalAUM = document.getElementById('kpiTotalAUM');
             if (kpiTotalAUM && kpiTotalAUM.hasAttribute('data-original-value')) {
                 kpiTotalAUM.textContent = kpiTotalAUM.getAttribute('data-original-value');
-                // Don't remove the data-original-value attribute - keep it for future toggles
-            }
-            
-            // Restore KPI ribbon Cumulative Return
-            const kpiCumulativeReturn = document.getElementById('kpiCumulativeReturn');
-            if (kpiCumulativeReturn && kpiCumulativeReturn.hasAttribute('data-original-value')) {
-                kpiCumulativeReturn.textContent = kpiCumulativeReturn.getAttribute('data-original-value');
-                // Don't remove the data-original-value attribute - keep it for future toggles
-            }
-            
-            // Restore KPI ribbon Monthly Return
-            const kpiMonthlyReturn = document.getElementById('kpiMonthlyReturn');
-            if (kpiMonthlyReturn && kpiMonthlyReturn.hasAttribute('data-original-value')) {
-                kpiMonthlyReturn.textContent = kpiMonthlyReturn.getAttribute('data-original-value');
                 // Don't remove the data-original-value attribute - keep it for future toggles
             }
             
@@ -2682,25 +2656,11 @@
             cumulativeElement.textContent = formattedCumulative;
             cumulativeElement.style.color = cumulativeReturn >= 0 ? '#00ff88' : '#ff4757';
             
-            // Store original value for privacy masking
-            if (!cumulativeElement.hasAttribute('data-original-value')) {
-                cumulativeElement.setAttribute('data-original-value', formattedCumulative);
-            } else {
-                cumulativeElement.setAttribute('data-original-value', formattedCumulative);
-            }
-            
             // Format and update Monthly Return
             const monthlyElement = document.getElementById('kpiMonthlyReturn');
             const formattedMonthly = formatPercentage(monthlyReturn);
             monthlyElement.textContent = formattedMonthly;
             monthlyElement.style.color = monthlyReturn >= 0 ? '#00ff88' : '#ff4757';
-            
-            // Store original value for privacy masking
-            if (!monthlyElement.hasAttribute('data-original-value')) {
-                monthlyElement.setAttribute('data-original-value', formattedMonthly);
-            } else {
-                monthlyElement.setAttribute('data-original-value', formattedMonthly);
-            }
             
             // Fetch and update last updated time from database
             try {
