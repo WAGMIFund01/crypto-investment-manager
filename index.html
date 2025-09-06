@@ -1445,6 +1445,41 @@
             color: #5a5f6a !important;
             box-shadow: none !important;
         }
+        
+        /* Privacy Mode Toggle Styles */
+        #privacyToggleSwitch.privacy-on {
+            background: rgba(0, 212, 170, 0.9) !important;
+        }
+        
+        #privacyToggleSwitch.privacy-on #privacyToggleKnob {
+            transform: translateX(20px) !important;
+        }
+        
+        #privacyToggleSwitch.privacy-on #privacyToggleIcon {
+            color: #FFFFFF !important;
+        }
+        
+        /* Privacy Mode Masking Styles */
+        .privacy-masked {
+            color: #6B7280 !important;
+            opacity: 0.85 !important;
+            user-select: none !important;
+            -webkit-user-select: none !important;
+            -moz-user-select: none !important;
+            -ms-user-select: none !important;
+        }
+        
+        .privacy-masked::before {
+            content: "••••••" !important;
+            color: #6B7280 !important;
+            opacity: 0.85 !important;
+        }
+        
+        .privacy-masked-currency::before {
+            content: "$•••••" !important;
+            color: #6B7280 !important;
+            opacity: 0.85 !important;
+        }
     </style>
 </head>
 <body>
@@ -1549,7 +1584,7 @@
                         <a href="#" onclick="window.switchTab('portfolio')" class="nav-link" data-tab="portfolio" style="color: #e2e8f0; text-decoration: none; font-size: 14px; transition: color 0.2s; cursor: pointer;" onmouseover="if(!this.classList.contains('active')) this.style.color='#00ff88'" onmouseout="if(!this.classList.contains('active')) this.style.color='#e2e8f0'">Portfolio</a>
                         <a href="#" onclick="window.switchTab('performance')" class="nav-link" data-tab="performance" style="color: #e2e8f0; text-decoration: none; font-size: 14px; transition: color 0.2s; cursor: pointer;" onmouseover="if(!this.classList.contains('active')) this.style.color='#00ff88'" onmouseout="if(!this.classList.contains('active')) this.style.color='#e2e8f0'">Performance</a>
             </nav>
-                </div>
+                    </div>
                 
                 <!-- KPI Metrics -->
                 <div style="display: flex; align-items: center; gap: 24px;">
@@ -1557,7 +1592,7 @@
                     <div class="kpi-metric" style="text-align: center;">
                         <div style="font-size: 12px; color: #94a3b8; margin-bottom: 2px;">Active investors</div>
                         <div id="kpiActiveInvestors" style="font-size: 16px; font-weight: 600; color: #ffffff;">0</div>
-                                </div>
+                    </div>
                     
                     <!-- Separator -->
                     <div style="width: 1px; height: 24px; background: #3d4148;"></div>
@@ -1565,8 +1600,8 @@
                     <!-- Total AUM -->
                     <div class="kpi-metric" style="text-align: center;">
                         <div style="font-size: 12px; color: #94a3b8; margin-bottom: 2px;">Total AUM</div>
-                        <div id="kpiTotalAUM" style="font-size: 16px; font-weight: 600; color: #ffffff;">$0.00</div>
-                            </div>
+                        <div id="kpiTotalAUM" data-kpi="total-aum" style="font-size: 16px; font-weight: 600; color: #ffffff;">$0.00</div>
+                </div>
                     
                     <!-- Separator -->
                     <div style="width: 1px; height: 24px; background: #3d4148;"></div>
@@ -1575,7 +1610,7 @@
                     <div class="kpi-metric" style="text-align: center;">
                         <div style="font-size: 12px; color: #94a3b8; margin-bottom: 2px;">Cumulative Return</div>
                         <div id="kpiCumulativeReturn" style="font-size: 16px; font-weight: 600; color: #00ff88;">+0.0%</div>
-                            </div>
+                                </div>
                     
                     <!-- Separator -->
                     <div style="width: 1px; height: 24px; background: #3d4148;"></div>
@@ -1587,17 +1622,45 @@
                             </div>
                             </div>
                 
-                <!-- Last Updated Section -->
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <i data-lucide="clock" style="width: 16px; height: 16px; color: #94a3b8;"></i>
-                    <span id="kpiLastUpdated" style="font-size: 12px; color: #94a3b8;">Last updated: Loading...</span>
-                    <button onclick="window.refreshPortfolioData()" style="background: none; border: none; cursor: pointer; padding: 4px; border-radius: 4px; transition: all 0.2s;" onmouseover="this.style.background='#3d4148'; this.querySelector('svg').style.color='#00ff88'; this.querySelector('svg').style.transform='rotate(180deg)'" onmouseout="this.style.background='none'; this.querySelector('svg').style.color='#94a3b8'; this.querySelector('svg').style.transform='rotate(0deg)'">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: #94a3b8; transition: all 0.3s ease;">
-                            <path d="M4 12a8 8 0 0 1 8-8V2l4 4-4 4V8a6 6 0 1 0 6 6h2a8 8 0 0 1-16 0z" fill="currentColor"/>
-                            <path d="M20 12a8 8 0 0 1-8 8v2l-4-4 4-4v4a6 6 0 1 0-6-6H2a8 8 0 0 1 16 0z" fill="currentColor"/>
-                        </svg>
-                    </button>
+                <!-- Privacy Mode & Last Updated Section -->
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <!-- Privacy Mode Toggle -->
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; user-select: none;">
+                            <input type="checkbox" id="privacyModeToggle" 
+                                   style="display: none;" 
+                                   onchange="window.togglePrivacyMode()">
+                            <div id="privacyToggleSwitch" 
+                                 style="position: relative; width: 44px; height: 24px; background: #2D3139; border-radius: 12px; transition: all 0.15s ease; cursor: pointer;" 
+                                 onclick="window.togglePrivacyMode()" 
+                                 onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();window.togglePrivacyMode();}" 
+                                 tabindex="0" 
+                                 role="switch" 
+                                 aria-checked="false" 
+                                 aria-label="Privacy mode toggle">
+                                <div id="privacyToggleKnob" 
+                                     style="position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; background: #FFFFFF; border-radius: 50%; transition: all 0.15s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.2);"></div>
+                                <div id="privacyToggleIcon" 
+                                     style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #7f8c8d; font-size: 10px; transition: all 0.15s ease;">
+                                    🔒
                             </div>
+                            </div>
+                            <span style="color: #999999; font-size: 12px; font-weight: 500;">Privacy mode</span>
+                        </label>
+                            </div>
+                    
+                    <!-- Last Updated & Refresh -->
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <i data-lucide="clock" style="width: 16px; height: 16px; color: #94a3b8;"></i>
+                        <span id="kpiLastUpdated" style="font-size: 12px; color: #94a3b8;">Last updated: Loading...</span>
+                        <button onclick="window.refreshPortfolioData()" style="background: none; border: none; cursor: pointer; padding: 4px; border-radius: 4px; transition: all 0.2s;" onmouseover="this.style.background='#3d4148'; this.querySelector('svg').style.color='#00ff88'; this.querySelector('svg').style.transform='rotate(180deg)'" onmouseout="this.style.background='none'; this.querySelector('svg').style.color='#94a3b8'; this.querySelector('svg').style.transform='rotate(0deg)'">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: #94a3b8; transition: all 0.3s ease;">
+                                <path d="M4 12a8 8 0 0 1 8-8V2l4 4-4 4V8a6 6 0 1 0 6 6h2a8 8 0 0 1-16 0z" fill="currentColor"/>
+                                <path d="M20 12a8 8 0 0 1-8 8v2l-4-4 4-4v4a6 6 0 1 0-6-6H2a8 8 0 0 1 16 0z" fill="currentColor"/>
+                            </svg>
+                        </button>
+                            </div>
+                        </div>
                             </div>
             
             <!-- Dashboard Tab -->
@@ -6640,6 +6703,208 @@
         // Initialize dynamic performance metrics system when page loads
         if (window.performanceCalculator) {
             window.performanceCalculator.init();
+        }
+
+        // ========================================
+        // PRIVACY MODE SYSTEM
+        // ========================================
+        
+        // Privacy Mode State Management
+        window.privacyMode = {
+            isEnabled: false,
+            
+            // Initialize privacy mode from localStorage
+            init: function() {
+                const savedState = localStorage.getItem('wagmi_privacy_mode');
+                if (savedState === 'true') {
+                    this.enable();
+                } else {
+                    this.disable();
+                }
+                console.log('🔒 Privacy mode initialized:', this.isEnabled ? 'ON' : 'OFF');
+            },
+            
+            // Enable privacy mode
+            enable: function() {
+                this.isEnabled = true;
+                localStorage.setItem('wagmi_privacy_mode', 'true');
+                this.updateToggleUI(true);
+                this.applyMasking();
+                console.log('🔒 Privacy mode enabled');
+            },
+            
+            // Disable privacy mode
+            disable: function() {
+                this.isEnabled = false;
+                localStorage.setItem('wagmi_privacy_mode', 'false');
+                this.updateToggleUI(false);
+                this.removeMasking();
+                console.log('🔓 Privacy mode disabled');
+            },
+            
+            // Update toggle UI
+            updateToggleUI: function(isOn) {
+                const toggle = document.getElementById('privacyToggleSwitch');
+                const knob = document.getElementById('privacyToggleKnob');
+                const icon = document.getElementById('privacyToggleIcon');
+                const checkbox = document.getElementById('privacyModeToggle');
+                
+                if (toggle && knob && icon && checkbox) {
+                    if (isOn) {
+                        toggle.classList.add('privacy-on');
+                        toggle.setAttribute('aria-checked', 'true');
+                        checkbox.checked = true;
+                    } else {
+                        toggle.classList.remove('privacy-on');
+                        toggle.setAttribute('aria-checked', 'false');
+                        checkbox.checked = false;
+                    }
+                }
+            },
+            
+            // Apply masking to sensitive data
+            applyMasking: function() {
+                // Mask KPI Total AUM
+                this.maskKPITotalAUM();
+                
+                // Mask investor table data
+                this.maskInvestorTable();
+                
+                // Mask investor modal data
+                this.maskInvestorModal();
+            },
+            
+            // Remove masking from sensitive data
+            removeMasking: function() {
+                // Restore KPI Total AUM
+                this.restoreKPITotalAUM();
+                
+                // Restore investor table data
+                this.restoreInvestorTable();
+                
+                // Restore investor modal data
+                this.restoreInvestorModal();
+            },
+            
+            // Mask KPI Total AUM
+            maskKPITotalAUM: function() {
+                const aumElement = document.querySelector('[data-kpi="total-aum"]');
+                if (aumElement) {
+                    aumElement.setAttribute('data-original-value', aumElement.textContent);
+                    aumElement.textContent = '$•••••';
+                    aumElement.classList.add('privacy-masked');
+                    aumElement.setAttribute('aria-label', 'Hidden in privacy mode');
+                }
+            },
+            
+            // Restore KPI Total AUM
+            restoreKPITotalAUM: function() {
+                const aumElement = document.querySelector('[data-kpi="total-aum"]');
+                if (aumElement && aumElement.hasAttribute('data-original-value')) {
+                    aumElement.textContent = aumElement.getAttribute('data-original-value');
+                    aumElement.removeAttribute('data-original-value');
+                    aumElement.classList.remove('privacy-masked');
+                    aumElement.removeAttribute('aria-label');
+                }
+            },
+            
+            // Mask investor table data
+            maskInvestorTable: function() {
+                const table = document.getElementById('investorsTableBody');
+                if (!table) return;
+                
+                const rows = table.querySelectorAll('tr');
+                rows.forEach(row => {
+                    // Mask name (show ID only)
+                    const nameCell = row.cells[1]; // Name column
+                    if (nameCell && !nameCell.hasAttribute('data-original-value')) {
+                        nameCell.setAttribute('data-original-value', nameCell.textContent);
+                        const idCell = row.cells[0]; // ID column
+                        const investorId = idCell ? idCell.textContent : 'Unknown';
+                        nameCell.innerHTML = `${investorId} — <span class="privacy-masked">Hidden</span>`;
+                        nameCell.setAttribute('aria-label', 'Hidden in privacy mode');
+                    }
+                    
+                    // Mask investment amount
+                    const investmentCell = row.cells[3]; // Investment column
+                    if (investmentCell && !investmentCell.hasAttribute('data-original-value')) {
+                        investmentCell.setAttribute('data-original-value', investmentCell.textContent);
+                        investmentCell.textContent = '$•••••';
+                        investmentCell.classList.add('privacy-masked');
+                        investmentCell.setAttribute('aria-label', 'Hidden in privacy mode');
+                    }
+                    
+                    // Mask AUM amount
+                    const aumCell = row.cells[4]; // AUM column
+                    if (aumCell && !aumCell.hasAttribute('data-original-value')) {
+                        aumCell.setAttribute('data-original-value', aumCell.textContent);
+                        aumCell.textContent = '$•••••';
+                        aumCell.classList.add('privacy-masked');
+                        aumCell.setAttribute('aria-label', 'Hidden in privacy mode');
+                    }
+                });
+            },
+            
+            // Restore investor table data
+            restoreInvestorTable: function() {
+                const table = document.getElementById('investorsTableBody');
+                if (!table) return;
+                
+                const rows = table.querySelectorAll('tr');
+                rows.forEach(row => {
+                    // Restore name
+                    const nameCell = row.cells[1];
+                    if (nameCell && nameCell.hasAttribute('data-original-value')) {
+                        nameCell.textContent = nameCell.getAttribute('data-original-value');
+                        nameCell.removeAttribute('data-original-value');
+                        nameCell.removeAttribute('aria-label');
+                    }
+                    
+                    // Restore investment amount
+                    const investmentCell = row.cells[3];
+                    if (investmentCell && investmentCell.hasAttribute('data-original-value')) {
+                        investmentCell.textContent = investmentCell.getAttribute('data-original-value');
+                        investmentCell.removeAttribute('data-original-value');
+                        investmentCell.classList.remove('privacy-masked');
+                        investmentCell.removeAttribute('aria-label');
+                    }
+                    
+                    // Restore AUM amount
+                    const aumCell = row.cells[4];
+                    if (aumCell && aumCell.hasAttribute('data-original-value')) {
+                        aumCell.textContent = aumCell.getAttribute('data-original-value');
+                        aumCell.removeAttribute('data-original-value');
+                        aumCell.classList.remove('privacy-masked');
+                        aumCell.removeAttribute('aria-label');
+                    }
+                });
+            },
+            
+            // Mask investor modal data
+            maskInvestorModal: function() {
+                // This will be implemented when we work on the modal
+                console.log('🔒 Investor modal masking (to be implemented)');
+            },
+            
+            // Restore investor modal data
+            restoreInvestorModal: function() {
+                // This will be implemented when we work on the modal
+                console.log('🔓 Investor modal restoration (to be implemented)');
+            }
+        };
+        
+        // Toggle privacy mode function
+        window.togglePrivacyMode = function() {
+            if (window.privacyMode.isEnabled) {
+                window.privacyMode.disable();
+            } else {
+                window.privacyMode.enable();
+            }
+        };
+        
+        // Initialize privacy mode when page loads
+        if (window.privacyMode) {
+            window.privacyMode.init();
         }
 
         </script>
