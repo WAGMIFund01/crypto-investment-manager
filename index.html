@@ -2346,9 +2346,6 @@
         window.applyPrivacyMasks = function() {
             // Mask KPI ribbon Total AUM
             const kpiTotalAUM = document.getElementById('kpiTotalAUM');
-            if (kpiTotalAUM && !kpiTotalAUM.hasAttribute('data-original-value')) {
-                kpiTotalAUM.setAttribute('data-original-value', kpiTotalAUM.textContent);
-            }
             if (kpiTotalAUM) {
                 kpiTotalAUM.textContent = '••••••';
             }
@@ -2624,7 +2621,14 @@
             document.getElementById('kpiActiveInvestors').textContent = totalInvestors.toString();
             
             // Format and update Total AUM (using AUM instead of invested for display)
-            document.getElementById('kpiTotalAUM').textContent = formatCurrency(totalAUM);
+            const kpiTotalAUMElement = document.getElementById('kpiTotalAUM');
+            const formattedAUM = formatCurrency(totalAUM);
+            kpiTotalAUMElement.textContent = formattedAUM;
+            
+            // Store the original value for privacy masking if not already stored
+            if (!kpiTotalAUMElement.hasAttribute('data-original-value')) {
+                kpiTotalAUMElement.setAttribute('data-original-value', formattedAUM);
+            }
             
             // Format and update Cumulative Return
             const cumulativeElement = document.getElementById('kpiCumulativeReturn');
