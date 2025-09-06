@@ -1521,6 +1521,82 @@
 
             <!-- Main Content -->
             <main class="main">
+            
+            <!-- KPI Ribbon - Top of Every Page -->
+            <div class="kpi-ribbon" style="
+                background: #121212;
+                border-bottom: 1px solid #2d3139;
+                padding: 16px 24px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                position: sticky;
+                top: 0;
+                z-index: 100;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            ">
+                <!-- Brand Section -->
+                <div style="display: flex; align-items: center; gap: 24px;">
+                    <div style="font-size: 24px; font-weight: 700; color: #00ff88; letter-spacing: 0.05em;">WAGMI</div>
+                    
+                    <!-- Separator -->
+                    <div style="width: 1px; height: 24px; background: #3d4148;"></div>
+                    
+                    <!-- Navigation -->
+                    <nav style="display: flex; gap: 20px;">
+                        <a href="#" onclick="showTab('dashboard')" class="nav-link" style="color: #e2e8f0; text-decoration: none; font-size: 14px; transition: color 0.2s;">Dashboard</a>
+                        <a href="#" onclick="showTab('investors')" class="nav-link" style="color: #e2e8f0; text-decoration: none; font-size: 14px; transition: color 0.2s;">Investors</a>
+                        <a href="#" onclick="showTab('portfolio')" class="nav-link" style="color: #e2e8f0; text-decoration: none; font-size: 14px; transition: color 0.2s;">Portfolio</a>
+                        <a href="#" onclick="showTab('performance')" class="nav-link" style="color: #e2e8f0; text-decoration: none; font-size: 14px; transition: color 0.2s;">Performance</a>
+                    </nav>
+                </div>
+                
+                <!-- KPI Metrics -->
+                <div style="display: flex; align-items: center; gap: 24px;">
+                    <!-- Active Investors -->
+                    <div class="kpi-metric" style="text-align: center;">
+                        <div style="font-size: 12px; color: #94a3b8; margin-bottom: 2px;">Active investors</div>
+                        <div id="kpiActiveInvestors" style="font-size: 16px; font-weight: 600; color: #ffffff;">0</div>
+                    </div>
+                    
+                    <!-- Separator -->
+                    <div style="width: 1px; height: 24px; background: #3d4148;"></div>
+                    
+                    <!-- Total AUM -->
+                    <div class="kpi-metric" style="text-align: center;">
+                        <div style="font-size: 12px; color: #94a3b8; margin-bottom: 2px;">Total AUM</div>
+                        <div id="kpiTotalAUM" style="font-size: 16px; font-weight: 600; color: #ffffff;">$0.00</div>
+                    </div>
+                    
+                    <!-- Separator -->
+                    <div style="width: 1px; height: 24px; background: #3d4148;"></div>
+                    
+                    <!-- Cumulative Return -->
+                    <div class="kpi-metric" style="text-align: center;">
+                        <div style="font-size: 12px; color: #94a3b8; margin-bottom: 2px;">Cumulative Return</div>
+                        <div id="kpiCumulativeReturn" style="font-size: 16px; font-weight: 600; color: #00ff88;">+0.0%</div>
+                    </div>
+                    
+                    <!-- Separator -->
+                    <div style="width: 1px; height: 24px; background: #3d4148;"></div>
+                    
+                    <!-- Month-on-Month -->
+                    <div class="kpi-metric" style="text-align: center;">
+                        <div style="font-size: 12px; color: #94a3b8; margin-bottom: 2px;">Month-on-Month</div>
+                        <div id="kpiMonthlyReturn" style="font-size: 16px; font-weight: 600; color: #00ff88;">+0.0%</div>
+                    </div>
+                </div>
+                
+                <!-- Last Updated Section -->
+                <div style="display: flex; align-items: center; gap: 8px;">
+                    <i data-lucide="clock" style="width: 16px; height: 16px; color: #94a3b8;"></i>
+                    <span id="kpiLastUpdated" style="font-size: 12px; color: #94a3b8;">Last updated: Loading...</span>
+                    <button onclick="refreshKPIData()" style="background: none; border: none; cursor: pointer; padding: 4px; border-radius: 4px; transition: background 0.2s;" onmouseover="this.style.background='#3d4148'" onmouseout="this.style.background='none'">
+                        <i data-lucide="refresh-cw" style="width: 16px; height: 16px; color: #94a3b8;"></i>
+                    </button>
+                </div>
+            </div>
+            
             <!-- Dashboard Tab -->
             <div id="dashboard" class="tab-content active">
                     <!-- Overall Summary Dashboard -->
@@ -2257,9 +2333,114 @@
             }
         };
         
+        // Function to fetch KPI data from Google Sheets
+        window.fetchKPIData = async function() {
+            try {
+                console.log('📊 Fetching KPI data from Google Sheets...');
+                const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/KPIs!A:B?key=${API_KEY}`;
+                
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (data.values && data.values.length > 1) {
+                    console.log('✅ Successfully fetched KPI data');
+                    return data.values.slice(1); // Skip header row
+                } else {
+                    console.error('❌ No KPI data found');
+                    return null;
+                }
+            } catch (error) {
+                console.error('❌ Error fetching KPI data:', error);
+                return null;
+            }
+        };
+        
+        // Function to update KPI ribbon with formatted data
+        window.updateKPIRibbon = function(kpiData) {
+            if (!kpiData || kpiData.length === 0) {
+                console.log('⚠️ No KPI data to display');
+                return;
+            }
+            
+            console.log('📊 Updating KPI ribbon with data:', kpiData);
+            
+            // Create a map of KPI data for easy lookup
+            const kpiMap = {};
+            kpiData.forEach(row => {
+                if (row[0] && row[1]) {
+                    kpiMap[row[0].toLowerCase().trim()] = row[1];
+                }
+            });
+            
+            // Update each KPI with proper formatting
+            const totalInvestors = parseInt(kpiMap['total investors']) || 0;
+            const totalInvested = parseFloat(kpiMap['total invested']) || 0;
+            const totalAUM = parseFloat(kpiMap['total aum']) || 0;
+            const cumulativeReturn = parseFloat(kpiMap['cumulative retur']) || 0; // Note: typo in sheet
+            const monthlyReturn = parseFloat(kpiMap['monthly return']) || 0;
+            
+            // Format and update Active Investors
+            document.getElementById('kpiActiveInvestors').textContent = totalInvestors.toString();
+            
+            // Format and update Total AUM (using AUM instead of invested for display)
+            document.getElementById('kpiTotalAUM').textContent = formatCurrency(totalAUM);
+            
+            // Format and update Cumulative Return
+            const cumulativeElement = document.getElementById('kpiCumulativeReturn');
+            cumulativeElement.textContent = formatPercentage(cumulativeReturn);
+            cumulativeElement.style.color = cumulativeReturn >= 0 ? '#00ff88' : '#ff4757';
+            
+            // Format and update Monthly Return
+            const monthlyElement = document.getElementById('kpiMonthlyReturn');
+            monthlyElement.textContent = formatPercentage(monthlyReturn);
+            monthlyElement.style.color = monthlyReturn >= 0 ? '#00ff88' : '#ff4757';
+            
+            // Update last updated timestamp
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', { 
+                hour: 'numeric', 
+                minute: '2-digit',
+                hour12: true 
+            });
+            document.getElementById('kpiLastUpdated').textContent = `Last updated: ${timeString}`;
+            
+            console.log('✅ KPI ribbon updated successfully');
+        };
+        
+        // Helper function to format currency
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }).format(amount);
+        }
+        
+        // Helper function to format percentage
+        function formatPercentage(value) {
+            const sign = value >= 0 ? '+' : '';
+            return `${sign}${value.toFixed(1)}%`;
+        }
+        
+        // Function to refresh KPI data
+        window.refreshKPIData = async function() {
+            console.log('🔄 Refreshing KPI data...');
+            const kpiData = await window.fetchKPIData();
+            if (kpiData) {
+                window.updateKPIRibbon(kpiData);
+            }
+        };
+        
         // Basic data loading functions
         window.loadDashboardData = async function() {
             console.log('📊 Loading dashboard data...');
+            
+            // Load KPI data first
+            const kpiData = await window.fetchKPIData();
+            if (kpiData) {
+                window.updateKPIRibbon(kpiData);
+            }
             
             // Try to load live data first
             const liveInvestorData = await window.fetchLiveInvestorData();
@@ -2661,6 +2842,12 @@
         window.loadInvestorsData = async function() {
             console.log('👥 Loading investors data...');
             
+            // Load KPI data first
+            const kpiData = await window.fetchKPIData();
+            if (kpiData) {
+                window.updateKPIRibbon(kpiData);
+            }
+            
             // Try to load live data first
             console.log('🔍 Attempting to fetch live investor data...');
             const liveInvestorData = await window.fetchLiveInvestorData();
@@ -2838,6 +3025,12 @@
         window.loadPortfolioData = async function() {
             console.log('💼 Loading portfolio data...');
             
+            // Load KPI data first
+            const kpiData = await window.fetchKPIData();
+            if (kpiData) {
+                window.updateKPIRibbon(kpiData);
+            }
+            
             try {
                 // First, load the same summary data that Dashboard and Investor tabs use
                 const liveInvestorData = await window.fetchLiveInvestorData();
@@ -2862,6 +3055,31 @@
                 window.displayEmptyPortfolio();
                 // Still update summary with fallback data even if portfolio data fails
                 window.updateSummaryDashboard(null);
+            }
+        };
+
+        // Function to load performance data
+        window.loadPerformanceData = async function() {
+            console.log('📈 Loading performance data...');
+            
+            // Load KPI data first
+            const kpiData = await window.fetchKPIData();
+            if (kpiData) {
+                window.updateKPIRibbon(kpiData);
+            }
+            
+            // Load performance chart data
+            try {
+                // For now, we'll use the same data as portfolio for performance charts
+                const portfolioData = await window.fetchPortfolioData();
+                if (portfolioData && portfolioData.length > 0) {
+                    console.log('✅ Performance data loaded successfully');
+                    // Performance charts will be generated when the tab is shown
+                } else {
+                    console.log('⚠️ No performance data available');
+                }
+            } catch (error) {
+                console.error('❌ Error loading performance data:', error);
             }
         };
 
