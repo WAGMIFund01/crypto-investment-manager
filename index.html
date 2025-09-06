@@ -2690,14 +2690,14 @@
                     // Use return percentage from Google Sheets if available, otherwise calculate
                     const totalReturn = returnPercentage > 0 ? returnPercentage : (investmentValue > 0 ? ((currentValue - investmentValue) / investmentValue * 100) : 0);
                     
-                    // Format values according to new specifications
-                    const formattedInvestment = `$${investmentValue.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
-                    const formattedAUM = `$${currentValue.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}`;
-                    const formattedReturn = `${totalReturn >= 0 ? '+' : ''}${totalReturn.toFixed(1)}%`;
-                    const formattedShare = `${sharePercentage.toFixed(1)}%`;
+                    // Format values according to specifications - ensure consistency with KPI ribbon
+                    const formattedInvestment = formatCurrency(investmentValue);
+                    const formattedAUM = formatCurrency(currentValue);
+                    const formattedReturn = formatPercentage(totalReturn);
+                    const formattedShare = `${sharePercentage.toFixed(1)}%`; // No sign for share percentage
                     
-                    // Color for return percentage (green for positive, red for negative, white for zero)
-                    const returnColor = totalReturn > 0 ? '#22C55E' : totalReturn < 0 ? '#EF4444' : '#e2e8f0';
+                    // Color for return percentage (green for positive, red for negative, white for zero) - match KPI ribbon colors
+                    const returnColor = totalReturn > 0 ? '#00ff88' : totalReturn < 0 ? '#ff4757' : '#e2e8f0';
                     
                     tableHTML += `
                         <tr style="border-bottom: 1px solid #2d3139; transition: background-color 0.2s ease;" onmouseover="this.style.backgroundColor='#1f2329'" onmouseout="this.style.backgroundColor=''">
