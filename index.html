@@ -309,7 +309,15 @@
         }
 
         .kpi-value.negative {
-            color: var(--secondary-500) !important;
+            color: #FF4D4F !important;
+        }
+        
+        .kpi-value.neutral {
+            color: #FFFFFF !important;
+        }
+        
+        .kpi-value.error {
+            color: #FF4D4F !important;
         }
 
         /* Privacy Toggle */
@@ -1685,7 +1693,15 @@
         }
 
         .kpi-value.negative {
-            color: var(--status-error);
+            color: #FF4D4F;
+        }
+        
+        .kpi-value.neutral {
+            color: #FFFFFF;
+        }
+        
+        .kpi-value.error {
+            color: #FF4D4F;
         }
     </style>
 </head>
@@ -2436,6 +2452,7 @@
                 GET_LAST_UPDATE: 'getLastPriceUpdate',
                 REFRESH_PRICES: 'testPriceRefresh',
                 SETUP_AUTOMATION: 'setupAutomation',
+                GET_KPIS: 'getKPIs',
                 CHECK_TRIGGERS: 'checkTriggers'
             },
             
@@ -2462,6 +2479,13 @@
                 // Initialize dashboard tab and load data
                 setTimeout(() => {
                     window.switchTab('dashboard');
+                    
+                    // Initialize navbar functionality
+                    if (window.navbar) {
+                        window.navbar.init();
+                        console.log('✅ Navbar initialized in manager view');
+                    }
+                    
                     console.log('✅ Manager view loaded with dashboard data');
                 }, 100);
                 
@@ -5555,6 +5579,411 @@
             Chart.register(ChartDataLabels);
         }
 
+        // ===================================================================
+        // NAVBAR FUNCTIONALITY
+        // ===================================================================
+        
+        /**
+         * Navbar KPI Management System
+         * Handles updating the navbar KPI ribbon with real data from Google Sheets
+         */
+        window.navbar = {
+            privacyMode: false,
+            
+            init: function() {
+                this.setupPrivacyToggle();
+                this.setupRefreshButton();
+                this.updateKPIs();
+                this.updateTimestamp();
+                
+                // Ensure Lucide icons are rendered
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+            },
+            
+            /**
+             * Update navbar KPI values with real data from Google Sheets KPIs tab
+             * Fetches data directly from the dedicated KPIs sheet
+             */
+            updateKPIs: function() {
+                try {
+                    console.log('🔄 Updating navbar KPIs from Google Sheets KPIs tab...');
+                    
+                    // Fetch data from KPIs tab
+                    this.fetchKPIData().then(kpiData => {
+                        console.log('📊 KPI Data received:', kpiData);
+                        if (kpiData) {
+                            this.displayKPIData(kpiData);
+                            console.log('✅ Navbar KPIs updated from Google Sheets KPIs tab');
+                        } else {
+                            console.error('❌ No KPI data received from Google Sheets KPIs tab');
+                            this.showKPIDataError();
+                        }
+                    }).catch(error => {
+                        console.error('❌ Error fetching KPI data:', error);
+                        this.showKPIDataError();
+                    });
+                    
+                } catch (error) {
+                    console.error('❌ Error updating navbar KPIs:', error);
+                    this.showKPIDataError();
+                }
+            },
+            
+            /**
+             * Fetch KPI data directly from Google Sheets API
+             */
+            fetchKPIData: async function() {
+                try {
+                    console.log('📊 Fetching KPI data directly from Google Sheets API...');
+                    
+                    // Use the existing Google Sheets API configuration
+                    const SPREADSHEET_ID = '1h04nkcnQmxaFml8RubIGmPgffMiyoEIg350ryjXK0tM';
+                    const API_KEY = 'AIzaSyAWXECv5w1HjPmWcTnEqifMifJk-kKeEDA';
+                    
+                    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/KPIs!A:B?key=${API_KEY}`;
+                    
+                    console.log('🔍 Fetching from URL:', url);
+                    
+                    const response = await fetch(url);
+                    
+                    console.log('📡 Response status:', response.status);
+                    console.log('📡 Response ok:', response.ok);
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    
+                    const data = await response.json();
+                    console.log('📄 Raw Google Sheets response:', data);
+                    
+                    if (data.values && data.values.length > 1) {
+                        // Convert rows to key-value pairs
+                        const kpiData = {};
+                        for (let i = 1; i < data.values.length; i++) {
+                            const metricName = data.values[i][0]; // Column A: Metric Name
+                            const value = data.values[i][1]; // Column B: Value
+                            if (metricName && metricName.trim() !== '') {
+                                kpiData[metricName.trim()] = value;
+                            }
+                        }
+                        
+                        console.log('✅ KPI data processed:', kpiData);
+                        return kpiData;
+                    } else {
+                        console.error('❌ No KPI data found in response');
+                        return null;
+                    }
+                    
+                } catch (error) {
+                    console.error('❌ Error fetching KPI data from Google Sheets API:', error);
+                    console.error('❌ Error details:', error.message);
+                    return null;
+                }
+            },
+            
+            /**
+             * Display live KPI data from existing database with proper formatting
+             */
+            displayLiveKPIData: function(liveMetrics) {
+                // Update Active Investors
+                const activeInvestors = document.getElementById('navbarActiveInvestors');
+                if (activeInvestors && liveMetrics.totalInvestors) {
+                    const investorCount = parseInt(liveMetrics.totalInvestors);
+                    activeInvestors.textContent = this.privacyMode ? '•••••' : investorCount.toLocaleString();
+                    activeInvestors.className = 'kpi-value'; // Reset to default
+                }
+                
+                // Update Total AUM with proper currency formatting
+                const totalAUM = document.getElementById('navbarTotalAUM');
+                if (totalAUM && liveMetrics.totalCurrentValue) {
+                    const aumValue = parseFloat(liveMetrics.totalCurrentValue);
+                    let formattedValue;
+                    
+                    if (this.privacyMode) {
+                        formattedValue = '•••••';
+                    } else {
+                        // Format with K/M abbreviations
+                        if (Math.abs(aumValue) >= 1000000) {
+                            formattedValue = `$${(aumValue / 1000000).toFixed(2)}M`;
+                        } else if (Math.abs(aumValue) >= 1000) {
+                            formattedValue = `$${(aumValue / 1000).toFixed(2)}K`;
+                        } else {
+                            formattedValue = `$${aumValue.toFixed(2)}`;
+                        }
+                    }
+                    
+                    totalAUM.textContent = formattedValue;
+                    totalAUM.className = 'kpi-value'; // Reset to default
+                }
+                
+                // Update Cumulative Return (Performance-based: +/-, colors)
+                const cumulativeReturn = document.getElementById('navbarCumulativeReturn');
+                if (cumulativeReturn && liveMetrics.totalInvested && liveMetrics.totalCurrentValue) {
+                    const returnValue = liveMetrics.totalInvested > 0 ? 
+                        ((liveMetrics.totalCurrentValue - liveMetrics.totalInvested) / liveMetrics.totalInvested * 100) : 0;
+                    let formattedReturn;
+                    
+                    if (this.privacyMode) {
+                        formattedReturn = '•••••';
+                        cumulativeReturn.className = 'kpi-value';
+                    } else {
+                        const sign = returnValue > 0 ? '+' : (returnValue < 0 ? '-' : '');
+                        formattedReturn = `${sign}${Math.abs(returnValue).toFixed(1)}%`;
+                        
+                        // Apply color classes for performance metrics
+                        if (returnValue > 0) {
+                            cumulativeReturn.className = 'kpi-value positive';
+                        } else if (returnValue < 0) {
+                            cumulativeReturn.className = 'kpi-value negative';
+                        } else {
+                            cumulativeReturn.className = 'kpi-value neutral';
+                        }
+                    }
+                    
+                    cumulativeReturn.textContent = formattedReturn;
+                }
+                
+                // Update MoM Return (using existing monthly return calculation)
+                const momReturn = document.getElementById('navbarMoM');
+                if (momReturn && liveMetrics.monthlyReturn !== undefined) {
+                    const monthlyReturn = parseFloat(liveMetrics.monthlyReturn);
+                    let formattedMoM;
+                    
+                    if (this.privacyMode) {
+                        formattedMoM = '•••••';
+                        momReturn.className = 'kpi-value';
+                    } else {
+                        const sign = monthlyReturn > 0 ? '+' : (monthlyReturn < 0 ? '-' : '');
+                        formattedMoM = `${sign}${Math.abs(monthlyReturn).toFixed(1)}%`;
+                        
+                        // Apply color classes for performance metrics
+                        if (monthlyReturn > 0) {
+                            momReturn.className = 'kpi-value positive';
+                        } else if (monthlyReturn < 0) {
+                            momReturn.className = 'kpi-value negative';
+                        } else {
+                            momReturn.className = 'kpi-value neutral';
+                        }
+                    }
+                    
+                    momReturn.textContent = formattedMoM;
+                }
+            },
+
+            /**
+             * Display KPI data in the navbar with proper formatting (legacy function)
+             */
+            displayKPIData: function(kpiData) {
+                // Update Active Investors
+                const activeInvestors = document.getElementById('navbarActiveInvestors');
+                if (activeInvestors && kpiData['Total investors']) {
+                    const investorCount = parseInt(kpiData['Total investors']);
+                    activeInvestors.textContent = this.privacyMode ? '•••••' : investorCount.toLocaleString();
+                    activeInvestors.className = 'kpi-value'; // Reset to default
+                }
+                
+                // Update Total AUM with proper currency formatting
+                const totalAUM = document.getElementById('navbarTotalAUM');
+                if (totalAUM && kpiData['Total AUM']) {
+                    const aumValue = parseFloat(kpiData['Total AUM']);
+                    let formattedValue;
+                    
+                    if (this.privacyMode) {
+                        formattedValue = '•••••';
+                    } else {
+                        // Format with K/M abbreviations
+                        if (Math.abs(aumValue) >= 1000000) {
+                            formattedValue = `$${(aumValue / 1000000).toFixed(2)}M`;
+                        } else if (Math.abs(aumValue) >= 1000) {
+                            formattedValue = `$${(aumValue / 1000).toFixed(2)}K`;
+                        } else {
+                            formattedValue = `$${aumValue.toFixed(2)}`;
+                        }
+                    }
+                    
+                    totalAUM.textContent = formattedValue;
+                    totalAUM.className = 'kpi-value'; // Reset to default
+                }
+                
+                // Update Cumulative Return (Performance-based: +/-, colors)
+                const cumulativeReturn = document.getElementById('navbarCumulativeReturn');
+                if (cumulativeReturn && kpiData['Cumulative retur']) {
+                    const returnValue = parseFloat(kpiData['Cumulative retur']);
+                    let formattedReturn;
+                    
+                    if (this.privacyMode) {
+                        formattedReturn = '•••••';
+                        cumulativeReturn.className = 'kpi-value';
+                    } else {
+                        const sign = returnValue > 0 ? '+' : (returnValue < 0 ? '-' : '');
+                        formattedReturn = `${sign}${Math.abs(returnValue).toFixed(1)}%`;
+                        
+                        // Apply color classes for performance metrics
+                        if (returnValue > 0) {
+                            cumulativeReturn.className = 'kpi-value positive';
+                        } else if (returnValue < 0) {
+                            cumulativeReturn.className = 'kpi-value negative';
+                        } else {
+                            cumulativeReturn.className = 'kpi-value neutral';
+                        }
+                    }
+                    
+                    cumulativeReturn.textContent = formattedReturn;
+                }
+                
+                // Update MoM Return (Performance-based: +/-, colors)
+                const momReturn = document.getElementById('navbarMoM');
+                if (momReturn && kpiData['Monthly return']) {
+                    const monthlyReturn = parseFloat(kpiData['Monthly return']);
+                    let formattedMoM;
+                    
+                    if (this.privacyMode) {
+                        formattedMoM = '•••••';
+                        momReturn.className = 'kpi-value';
+                    } else {
+                        const sign = monthlyReturn > 0 ? '+' : (monthlyReturn < 0 ? '-' : '');
+                        formattedMoM = `${sign}${Math.abs(monthlyReturn).toFixed(1)}%`;
+                        
+                        // Apply color classes for performance metrics
+                        if (monthlyReturn > 0) {
+                            momReturn.className = 'kpi-value positive';
+                        } else if (monthlyReturn < 0) {
+                            momReturn.className = 'kpi-value negative';
+                        } else {
+                            momReturn.className = 'kpi-value neutral';
+                        }
+                    }
+                    
+                    momReturn.textContent = formattedMoM;
+                }
+            },
+            
+            /**
+             * Show error state when KPI data cannot be fetched
+             * Follows "no fallback" policy - shows clear error instead of fake data
+             */
+            showKPIDataError: function() {
+                console.error('🚨 KPI Data Error: Google Apps Script getKPIs action not implemented');
+                
+                // Update Active Investors
+                const activeInvestors = document.getElementById('navbarActiveInvestors');
+                if (activeInvestors) {
+                    activeInvestors.textContent = 'ERROR';
+                    activeInvestors.className = 'kpi-value error';
+                }
+                
+                // Update Total AUM
+                const totalAUM = document.getElementById('navbarTotalAUM');
+                if (totalAUM) {
+                    totalAUM.textContent = 'ERROR';
+                    totalAUM.className = 'kpi-value error';
+                }
+                
+                // Update Cumulative Return
+                const cumulativeReturn = document.getElementById('navbarCumulativeReturn');
+                if (cumulativeReturn) {
+                    cumulativeReturn.textContent = 'ERROR';
+                    cumulativeReturn.className = 'kpi-value error';
+                }
+                
+                // Update MoM Return
+                const momReturn = document.getElementById('navbarMoM');
+                if (momReturn) {
+                    momReturn.textContent = 'ERROR';
+                    momReturn.className = 'kpi-value error';
+                }
+            },
+            
+            setupPrivacyToggle: function() {
+                const toggle = document.getElementById('privacyToggle');
+                if (toggle) {
+                    toggle.addEventListener('click', () => {
+                        this.privacyMode = !this.privacyMode;
+                        this.updatePrivacyDisplay();
+                        this.updateKPIs();
+                    });
+                }
+            },
+            
+            setupRefreshButton: function() {
+                const refreshBtn = document.getElementById('navbarRefresh');
+                if (refreshBtn) {
+                    refreshBtn.addEventListener('click', () => {
+                        this.refreshData();
+                    });
+                }
+            },
+            
+            updatePrivacyDisplay: function() {
+                const toggle = document.getElementById('privacyToggle');
+                if (toggle) {
+                    const icon = toggle.querySelector('i');
+                    if (this.privacyMode) {
+                        icon.setAttribute('data-lucide', 'eye-off');
+                    } else {
+                        icon.setAttribute('data-lucide', 'eye');
+                    }
+                    // Re-initialize Lucide icons
+                    if (window.lucide) {
+                        lucide.createIcons();
+                    }
+                }
+            },
+            
+            refreshData: function() {
+                const refreshBtn = document.getElementById('navbarRefresh');
+                if (refreshBtn) {
+                    refreshBtn.classList.add('spinning');
+                    
+                    // Simulate data refresh
+                    setTimeout(() => {
+                        refreshBtn.classList.remove('spinning');
+                        this.updateKPIs();
+                        this.updateTimestamp();
+                        
+                        // Trigger main app refresh if available
+                        if (window.app && window.app.refreshAllData) {
+                            window.app.refreshAllData();
+                        }
+                    }, 1500);
+                }
+            },
+            
+            updateTimestamp: function() {
+                const timestamp = document.getElementById('navbarTimestamp');
+                if (timestamp) {
+                    const now = new Date();
+                    const time = now.toLocaleTimeString('en-US', { 
+                        hour: 'numeric', 
+                        minute: '2-digit',
+                        hour12: true 
+                    });
+                    
+                    // Format date based on your specifications
+                    const today = new Date();
+                    const yesterday = new Date(today);
+                    yesterday.setDate(yesterday.getDate() - 1);
+                    
+                    let dateString;
+                    if (now.toDateString() === today.toDateString()) {
+                        dateString = 'Today';
+                    } else if (now.toDateString() === yesterday.toDateString()) {
+                        dateString = 'Yesterday';
+                    } else {
+                        dateString = now.toLocaleDateString('en-US', { 
+                            month: 'short', 
+                            day: 'numeric',
+                            year: 'numeric'
+                        });
+                    }
+                    
+                    timestamp.textContent = `${time} • ${dateString}`;
+                }
+            }
+        };
+
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🎯 Setting up inline event listeners...');
             
@@ -5586,6 +6015,12 @@
                 });
             });
             console.log('✅ New navbar navigation listeners added');
+            
+            // Initialize navbar functionality
+            if (window.navbar) {
+                window.navbar.init();
+                console.log('✅ Navbar functionality initialized');
+            }
             
             // Investor portal button - Direct login functionality
             const investorButton = document.getElementById('investorPortalButton');

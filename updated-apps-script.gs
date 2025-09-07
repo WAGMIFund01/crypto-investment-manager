@@ -373,6 +373,51 @@ function doGet(e) {
       }
     }
 
+    // Check if this is a get KPIs request
+    if (e.parameter && e.parameter.action === 'getKPIs') {
+      console.log('📊 Handling GET KPIs request via GET');
+      try {
+        const spreadsheet = SpreadsheetApp.getActiveSpreadsheet();
+        const kpiSheet = spreadsheet.getSheetByName('KPIs');
+        
+        if (!kpiSheet) {
+          console.error('❌ KPIs sheet not found');
+          return createCorsResponse({success: false, error: 'KPIs sheet not found'});
+        }
+        
+        // Get KPI data from the sheet
+        const dataRange = kpiSheet.getDataRange();
+        const values = dataRange.getValues();
+        
+        if (values.length <= 1) {
+          console.log('📊 No KPI data found (only headers)');
+          return createCorsResponse({success: false, error: 'No KPI data found'});
+        }
+        
+        // Convert rows to key-value pairs
+        const kpiData = {};
+        for (let i = 1; i < values.length; i++) {
+          const metricName = values[i][0]; // Column A: Metric Name
+          const value = values[i][1]; // Column B: Value
+          if (metricName && metricName.trim() !== '') {
+            kpiData[metricName.trim()] = value;
+          }
+        }
+        
+        console.log('📊 KPI data retrieved:', kpiData);
+        
+        return createCorsResponse({
+          success: true, 
+          message: 'KPI data retrieved successfully',
+          data: kpiData
+        });
+        
+      } catch (error) {
+        console.error('❌ Error retrieving KPI data:', error);
+        return createCorsResponse({success: false, error: error.toString()});
+      }
+    }
+
     // Default GET response
     return createCorsResponse({
       success: true, 
