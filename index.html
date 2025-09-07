@@ -14,15 +14,29 @@
         /* Modern Fintech × Crypto-Native Design System */
         
         /* Enhanced Button Styles for Login Page */
+        .btn-primary {
+            background: #00d4aa !important;
+            color: white !important;
+            box-shadow: 0 0 20px rgba(0, 212, 170, 0.3) !important;
+        }
+        
         .btn-primary:hover:not(:disabled) {
-            background: #54ffc7 !important;
-            box-shadow: 0 0 30px rgba(0, 255, 156, 0.5) !important;
+            background: #00e6b8 !important;
+            box-shadow: 0 0 30px rgba(0, 212, 170, 0.5) !important;
             transform: translateY(-2px);
         }
         
         .btn-primary:disabled {
             opacity: 0.55 !important;
             cursor: not-allowed !important;
+            transform: none !important;
+            background: #00d4aa !important;
+            box-shadow: 0 0 20px rgba(0, 212, 170, 0.3) !important;
+        }
+        
+        .btn-primary:disabled:hover {
+            background: #00d4aa !important;
+            box-shadow: 0 0 20px rgba(0, 212, 170, 0.3) !important;
             transform: none !important;
         }
         
@@ -35,8 +49,8 @@
         /* Enhanced Input Focus States */
         input:focus {
             outline: none !important;
-            border-color: var(--accent-green) !important;
-            box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.2) !important;
+            border-color: transparent !important;
+            box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.3) !important;
         }
         
         /* Error State Styling */
@@ -1494,7 +1508,7 @@
                             Invalid Investor ID
                         </div>
                     </div>
-                    <button class="btn btn-primary investor-btn" id="investorPortalButton" style="width: 100%; padding: 1.25rem 2rem; background: #00ff9c; color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 0 20px rgba(0, 255, 156, 0.3);" disabled>
+                    <button class="btn btn-primary investor-btn" id="investorPortalButton" style="width: 100%; padding: 1.25rem 2rem; background: #00d4aa; color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 0 20px rgba(0, 212, 170, 0.3);" disabled>
                         Access Portfolio
                     </button>
                 </div>
