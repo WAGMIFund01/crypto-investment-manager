@@ -203,6 +203,170 @@
             font-weight: 600 !important;
         }
 
+        /* New Professional Navbar */
+        .navbar {
+            background: var(--bg-primary) !important;
+            border-bottom: 1px solid var(--border-primary) !important;
+            height: 64px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: space-between !important;
+            padding: 0 2rem !important;
+            position: relative !important;
+        }
+
+        /* Branding Section (Left) */
+        .navbar-brand {
+            display: flex !important;
+            align-items: center !important;
+            gap: 1rem !important;
+        }
+
+        .navbar-brand h1 {
+            color: var(--accent-green) !important;
+            font-size: 1.5rem !important;
+            font-weight: 700 !important;
+            margin: 0 !important;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+        }
+
+        /* Navigation Links (Center) */
+        .navbar-nav {
+            display: flex !important;
+            align-items: center !important;
+            gap: 3rem !important;
+            position: absolute !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
+        }
+
+        .nav-link {
+            background: none !important;
+            border: none !important;
+            color: #ffffff !important;
+            font-size: 0.9rem !important;
+            font-weight: 500 !important;
+            padding: 0.75rem 1rem !important;
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+            position: relative !important;
+            text-decoration: none !important;
+            white-space: nowrap !important;
+        }
+
+        .nav-link:hover {
+            color: #cccccc !important;
+        }
+
+        .nav-link.active {
+            color: var(--accent-green) !important;
+            font-weight: 600 !important;
+        }
+
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--accent-green);
+            border-radius: 1px;
+        }
+
+        /* KPI Ribbon (Right Side) */
+        .navbar-kpi {
+            display: flex !important;
+            align-items: center !important;
+            gap: 2rem !important;
+        }
+
+        .kpi-item {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            text-align: center !important;
+            min-width: 80px !important;
+        }
+
+        .kpi-label {
+            font-size: 0.7rem !important;
+            color: var(--text-secondary) !important;
+            font-weight: 500 !important;
+            margin-bottom: 0.25rem !important;
+            text-transform: uppercase !important;
+            letter-spacing: 0.5px !important;
+        }
+
+        .kpi-value {
+            font-size: 0.9rem !important;
+            color: #ffffff !important;
+            font-weight: 600 !important;
+        }
+
+        .kpi-value.positive {
+            color: var(--accent-green) !important;
+        }
+
+        .kpi-value.negative {
+            color: var(--secondary-500) !important;
+        }
+
+        /* Privacy Toggle */
+        .privacy-toggle {
+            background: none !important;
+            border: none !important;
+            color: var(--accent-green) !important;
+            cursor: pointer !important;
+            padding: 0.5rem !important;
+            border-radius: 4px !important;
+            transition: all 0.2s ease !important;
+            margin-left: 1rem !important;
+        }
+
+        .privacy-toggle:hover {
+            background: var(--bg-tertiary) !important;
+            transform: scale(1.1) !important;
+        }
+
+        /* Refresh Button */
+        .refresh-btn {
+            background: none !important;
+            border: 1px solid #ffffff !important;
+            color: #ffffff !important;
+            width: 32px !important;
+            height: 32px !important;
+            border-radius: 50% !important;
+            cursor: pointer !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            transition: all 0.2s ease !important;
+        }
+
+        .refresh-btn:hover {
+            background: var(--accent-green) !important;
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 10px rgba(0, 212, 170, 0.3) !important;
+        }
+
+        .refresh-btn.spinning {
+            animation: spin 1s linear infinite !important;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Timestamp */
+        .timestamp {
+            font-size: 0.8rem !important;
+            color: var(--text-secondary) !important;
+            font-weight: 500 !important;
+            margin-right: 1rem !important;
+        }
+
         /* Navigation */
         .nav {
             background: var(--bg-secondary) !important;
@@ -1595,6 +1759,49 @@
 
         <!-- Manager View -->
         <div id="managerView" class="view-container" style="display: none;">
+            <!-- New Professional Navbar -->
+            <nav class="navbar">
+                <!-- Branding (Left) -->
+                <div class="navbar-brand">
+                    <h1>WAGMI</h1>
+                </div>
+
+
+                <!-- KPI Ribbon + Actions (Right) -->
+                <div class="navbar-kpi">
+                    <!-- KPI Metrics -->
+                    <div class="kpi-item">
+                        <div class="kpi-label">Active Investors</div>
+                        <div class="kpi-value" id="navbarActiveInvestors">--</div>
+                    </div>
+                    <div class="kpi-item">
+                        <div class="kpi-label">Total AUM</div>
+                        <div class="kpi-value" id="navbarTotalAUM">--</div>
+                    </div>
+                    <div class="kpi-item">
+                        <div class="kpi-label">Cumulative Return</div>
+                        <div class="kpi-value" id="navbarCumulativeReturn">--</div>
+                    </div>
+                    <div class="kpi-item">
+                        <div class="kpi-label">MOM RETURN</div>
+                        <div class="kpi-value" id="navbarMoM">--</div>
+                    </div>
+
+                    <!-- Privacy Toggle -->
+                    <button class="privacy-toggle" id="privacyToggle" title="Toggle Privacy Mode">
+                        <i data-lucide="eye"></i>
+                    </button>
+
+                    <!-- Timestamp -->
+                    <div class="timestamp" id="navbarTimestamp">--:-- • --</div>
+
+                    <!-- Refresh Button -->
+                    <button class="refresh-btn" id="navbarRefresh" title="Refresh Data">
+                        <i data-lucide="refresh-cw"></i>
+                    </button>
+                </div>
+            </nav>
+
             <!-- Header -->
             <header class="header">
                 <div class="header-content">
@@ -2278,11 +2485,11 @@
         window.switchTab = function(tabName) {
             console.log('🔄 Switching to tab:', tabName);
             
-            // Update nav buttons
-            const navButtons = document.querySelectorAll('.nav-btn');
+            // Update nav buttons (both old and new navbar)
+            const navButtons = document.querySelectorAll('.nav-btn, .nav-link');
             navButtons.forEach(btn => btn.classList.remove('active'));
-            const targetBtn = document.querySelector(`[data-tab="${tabName}"]`);
-            if (targetBtn) targetBtn.classList.add('active');
+            const targetBtns = document.querySelectorAll(`[data-tab="${tabName}"]`);
+            targetBtns.forEach(btn => btn.classList.add('active'));
             
             // Update tab content
             const tabContents = document.querySelectorAll('.tab-content');
@@ -5367,6 +5574,18 @@
                 });
                 console.log('✅ Manager button listener added');
             }
+            
+            // New navbar navigation links
+            const navbarLinks = document.querySelectorAll('.navbar-nav .nav-link');
+            navbarLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const tabName = this.getAttribute('data-tab');
+                    console.log('🔄 New navbar navigation:', tabName);
+                    window.switchTab(tabName);
+                });
+            });
+            console.log('✅ New navbar navigation listeners added');
             
             // Investor portal button - Direct login functionality
             const investorButton = document.getElementById('investorPortalButton');
