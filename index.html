@@ -14,7 +14,9 @@
         /* Modern Fintech × Crypto-Native Design System */
         
         /* Enhanced Button Styles for Login Page */
-        .btn-primary {
+        .btn-primary,
+        .btn-primary:not(:disabled),
+        .btn-primary:enabled {
             background: #00d4aa !important;
             color: white !important;
             box-shadow: 0 0 20px rgba(0, 212, 170, 0.3) !important;
@@ -38,6 +40,27 @@
             background: #00d4aa !important;
             box-shadow: 0 0 20px rgba(0, 212, 170, 0.3) !important;
             transform: none !important;
+        }
+        
+        /* Specific override for login page button */
+        #investorPortalButton {
+            background: #00d4aa !important;
+            color: white !important;
+            box-shadow: 0 0 20px rgba(0, 212, 170, 0.3) !important;
+        }
+        
+        #investorPortalButton:hover:not(:disabled) {
+            background: #00e6b8 !important;
+            box-shadow: 0 0 30px rgba(0, 212, 170, 0.5) !important;
+            transform: translateY(-2px);
+        }
+        
+        #investorPortalButton:disabled {
+            opacity: 0.55 !important;
+            cursor: not-allowed !important;
+            transform: none !important;
+            background: #00d4aa !important;
+            box-shadow: 0 0 20px rgba(0, 212, 170, 0.3) !important;
         }
         
         .btn-secondary:hover {
