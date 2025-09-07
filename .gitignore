@@ -5,9 +5,11 @@
 *.sh
 *.gs
 
-# Documentation files (keep only README.md)
+# Documentation files (keep only README.md and handover docs)
 *.md
 !README.md
+!DEVELOPER-HANDOVER-NOTES.md
+!QUICK-START-GUIDE.md
 
 # Test files
 test-*
