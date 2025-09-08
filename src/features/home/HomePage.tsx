@@ -1,60 +1,63 @@
 'use client';
 
 import { useState } from 'react';
-import { LoginCard } from './components/LoginCard';
-import { ManagerAccessButton } from './components/ManagerAccessButton';
-import { SettingsIcon } from './components/SettingsIcon';
+import { useRouter } from 'next/navigation';
+import { LoginCard, ManagerAccessButton, SettingsIcon } from './components';
 
-export function HomePage() {
+export default function HomePage() {
   const [investorId, setInvestorId] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const handleInvestorLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!investorId.trim()) return;
+    
+    if (!investorId.trim()) {
+      return;
+    }
     
     setIsLoading(true);
-    // Simulate login process
-    setTimeout(() => {
+    
+    try {
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // Redirect to investor dashboard
+      router.push('/investor');
+    } catch (error) {
+      console.error('Investor login error:', error);
+    } finally {
       setIsLoading(false);
-      alert('Login successful! (This is a demo)');
-    }, 1000);
+    }
   };
 
   const handleManagerAccess = () => {
-    alert('Manager access clicked! (This is a demo)');
+    console.log('🔧 Manager access requested');
+    // Redirect to manager dashboard
+    router.push('/dashboard');
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden" style={{
+    <div className="min-h-screen relative overflow-hidden flex items-center justify-center px-4" style={{
       background: 'radial-gradient(ellipse at center, #1a1a1a 0%, #0a0a0a 100%)'
     }}>
-      {/* Settings Icon - Top Right */}
       <SettingsIcon />
-
-      {/* Main Content - Centered */}
-      <div className="flex-1 flex flex-col items-center justify-center px-6 py-12 min-h-screen">
+      
+      <div className="flex flex-col items-center justify-center w-full max-w-md">
         {/* WAGMI Branding */}
-        <div className="text-center mb-16">
-          <h1 
-            className="text-6xl md:text-7xl font-bold mb-4"
-            style={{
-              background: 'linear-gradient(135deg, #00d4aa 0%, #00e6b8 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-              textShadow: '0 0 30px rgba(0, 212, 170, 0.3)'
-            }}
-          >
+        <div className="text-center mb-12">
+          <h1 className="text-5xl font-bold mb-2" style={{
+            color: '#00D4AA',
+            textShadow: '0 0 20px rgba(0, 212, 170, 0.3)'
+          }}>
             WAGMI
           </h1>
-          <p className="text-xl text-[#a0a0a0] font-medium">
+          <p className="text-[#a0a0a0] text-sm">
             We&apos;re All Gonna Make It
           </p>
         </div>
 
-        {/* Login Card */}
-        <LoginCard 
+        <LoginCard
           investorId={investorId}
           setInvestorId={setInvestorId}
           isLoading={isLoading}
@@ -62,8 +65,7 @@ export function HomePage() {
         />
       </div>
 
-      {/* Manager Access Button - Bottom Right */}
-      <ManagerAccessButton onClick={handleManagerAccess} />
+      <ManagerAccessButton handleManagerAccess={handleManagerAccess} />
     </div>
   );
 }
