@@ -1,32 +1,25 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 
 export default function Home() {
   const [investorId, setInvestorId] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-  const router = useRouter();
 
   const handleInvestorLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!investorId.trim()) return;
     
     setIsLoading(true);
-    setError('');
-    
     // Simulate login process
     setTimeout(() => {
       setIsLoading(false);
-      // Redirect to investor dashboard
-      router.push('/investor');
+      alert('Login successful! (This is a demo)');
     }, 1000);
   };
 
   const handleManagerAccess = () => {
-    // Direct access to manager dashboard (skip login for now)
-    router.push('/dashboard');
+    alert('Manager access clicked! (This is a demo)');
   };
 
   return (
@@ -77,9 +70,6 @@ export default function Home() {
                   className="w-full px-3 py-2 bg-[#22252c] border border-[#444] rounded-lg text-white placeholder-[#888] focus:outline-none focus:ring-2 focus:ring-[#00d4aa] focus:border-transparent transition-all text-sm"
                   required
                 />
-                {error && (
-                  <p className="text-red-400 text-sm mt-1">{error}</p>
-                )}
               </div>
               
               <button
