@@ -53,7 +53,7 @@ export default function Home() {
               WAGMI
             </h1>
             <p className="text-[#a0a0a0] text-sm">
-              We're All Gonna Make It
+              We&apos;re All Gonna Make It
             </p>
           </div>
 
@@ -94,7 +94,7 @@ export default function Home() {
 
           {/* Helper Text */}
           <p className="text-center text-[#888] text-xs">
-            Don't have your Investor ID? Contact your fund manager for access credentials.
+            Don&apos;t have your Investor ID? Contact your fund manager for access credentials.
           </p>
 
           {/* Manager Access Link */}

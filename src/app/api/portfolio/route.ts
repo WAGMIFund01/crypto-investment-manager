@@ -5,7 +5,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
-import { authOptions } from '../auth/[...nextauth]/route';
+import { authOptions } from '@/lib/auth';
 import { sheetsAdapter } from '@/lib/sheetsAdapter';
 import { ApiResponse } from '@/shared/types';
 
@@ -25,248 +25,227 @@ export async function DELETE(req: NextRequest) {
   return handleDeleteAsset(req);
 }
 
+// Get portfolio data
 async function handleGetPortfolio(req: NextRequest) {
   try {
-    // Check authentication
     const session = await getServerSession(authOptions);
     
-    if (!session) {
-      return NextResponse.json({
-        success: false,
-        error: 'Unauthorized - Please sign in',
-      }, { status: 401 });
+    if (!session?.user?.email) {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized' } as ApiResponse,
+        { status: 401 }
+      );
     }
 
-    let result;
+    let portfolioData;
     
     if (session.user.role === 'manager') {
-      // Manager gets all portfolio data
-      result = await sheetsAdapter.getPortfolioData();
-    } else {
+      // Manager gets all investor data
+      portfolioData = await sheetsAdapter.getInvestorsData();
+    } else if (session.user.investorId) {
       // Investor gets only their data
-      if (session.user.investorId) {
-        result = await sheetsAdapter.getInvestorData(session.user.investorId);
-      } else {
-        return NextResponse.json({
-          success: false,
-          error: 'Investor ID not found',
-        }, { status: 400 });
-      }
+      portfolioData = await sheetsAdapter.getInvestorData(session.user.investorId);
+    } else {
+      return NextResponse.json(
+        { success: false, error: 'Invalid user role' } as ApiResponse,
+        { status: 403 }
+      );
     }
 
-    if (result.success) {
-      return NextResponse.json({
-        success: true,
-        data: result.data,
-      });
-    } else {
-      return NextResponse.json({
-        success: false,
-        error: result.error || 'Failed to fetch portfolio data',
-      }, { status: 500 });
+    if (!portfolioData) {
+      return NextResponse.json(
+        { success: false, error: 'Failed to fetch portfolio data' } as ApiResponse,
+        { status: 500 }
+      );
     }
-  } catch (error) {
-    console.error('Get portfolio error:', error);
+
     return NextResponse.json({
-      success: false,
-      error: 'Failed to fetch portfolio data',
-    }, { status: 500 });
+      success: true,
+      data: portfolioData
+    } as ApiResponse);
+
+  } catch (error) {
+    console.error('Portfolio GET error:', error);
+    return NextResponse.json(
+      { success: false, error: 'Internal server error' } as ApiResponse,
+      { status: 500 }
+    );
   }
 }
 
+// Add new asset
 async function handleAddAsset(req: NextRequest) {
   try {
-    // Check authentication
     const session = await getServerSession(authOptions);
     
-    if (!session) {
-      return NextResponse.json({
-        success: false,
-        error: 'Unauthorized - Please sign in',
-      }, { status: 401 });
+    if (!session?.user?.email || session.user.role !== 'manager') {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized - Manager access required' } as ApiResponse,
+        { status: 401 }
+      );
     }
 
-    // Only managers can add assets
-    if (session.user.role !== 'manager') {
-      return NextResponse.json({
-        success: false,
-        error: 'Forbidden - Only managers can add assets',
-      }, { status: 403 });
+    const body = await req.json();
+    const { investorId, asset, quantity, price } = body;
+
+    if (!investorId || !asset || !quantity || !price) {
+      return NextResponse.json(
+        { success: false, error: 'Missing required fields' } as ApiResponse,
+        { status: 400 }
+      );
     }
 
-    const { asset } = await req.json();
-    
-    if (!asset) {
-      return NextResponse.json({
-        success: false,
-        error: 'Asset data is required',
-      }, { status: 400 });
-    }
+    const assetData = {
+      investorId,
+      asset,
+      quantity: parseFloat(quantity),
+      price: parseFloat(price)
+    };
 
-    const result = await sheetsAdapter.addAsset(asset);
-    
+    const result = await sheetsAdapter.addAsset(assetData);
+
     if (result.success) {
       // Log the action
-      if (session.user.email) {
-        await sheetsAdapter.logAction(
-          session.user.email,
-          'create',
-          'asset',
-          null,
-          asset
-        );
-      }
-      
+      await sheetsAdapter.logAction(
+        session.user.email,
+        'create',
+        'asset',
+        null,
+        assetData
+      );
+
       return NextResponse.json({
         success: true,
-        data: result.data,
-        message: 'Asset added successfully',
-      }, { status: 201 });
+        data: result.data
+      } as ApiResponse);
     } else {
-      return NextResponse.json({
-        success: false,
-        error: result.error || 'Failed to add asset',
-      }, { status: 500 });
+      return NextResponse.json(
+        { success: false, error: result.error } as ApiResponse,
+        { status: 500 }
+      );
     }
+
   } catch (error) {
-    console.error('Add asset error:', error);
-    return NextResponse.json({
-      success: false,
-      error: 'Failed to add asset',
-    }, { status: 500 });
+    console.error('Portfolio POST error:', error);
+    return NextResponse.json(
+      { success: false, error: 'Internal server error' } as ApiResponse,
+      { status: 500 }
+    );
   }
 }
 
+// Update existing asset
 async function handleUpdateAsset(req: NextRequest) {
   try {
-    // Check authentication
     const session = await getServerSession(authOptions);
     
-    if (!session) {
-      return NextResponse.json({
-        success: false,
-        error: 'Unauthorized - Please sign in',
-      }, { status: 401 });
+    if (!session?.user?.email || session.user.role !== 'manager') {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized - Manager access required' } as ApiResponse,
+        { status: 401 }
+      );
     }
 
-    // Only managers can update assets
-    if (session.user.role !== 'manager') {
-      return NextResponse.json({
-        success: false,
-        error: 'Forbidden - Only managers can update assets',
-      }, { status: 403 });
+    const body = await req.json();
+    const { id, investorId, asset, quantity, price } = body;
+
+    if (!id || !investorId || !asset || !quantity || !price) {
+      return NextResponse.json(
+        { success: false, error: 'Missing required fields' } as ApiResponse,
+        { status: 400 }
+      );
     }
 
-    const { id, asset } = await req.json();
-    
-    if (!id || !asset) {
-      return NextResponse.json({
-        success: false,
-        error: 'Asset ID and data are required',
-      }, { status: 400 });
-    }
+    const assetData = {
+      investorId,
+      asset,
+      quantity: parseFloat(quantity),
+      price: parseFloat(price)
+    };
 
-    // Get current asset data for audit log
-    const currentResult = await sheetsAdapter.getPortfolioData();
-    const currentAsset = currentResult.data?.find((a: unknown) => (a as { id: string }).id === id);
+    const result = await sheetsAdapter.updateAsset(id, assetData);
 
-    const result = await sheetsAdapter.updateAsset(id, asset);
-    
     if (result.success) {
       // Log the action
-      if (session.user.email) {
-        await sheetsAdapter.logAction(
-          session.user.email,
-          'update',
-          'asset',
-          currentAsset,
-          asset
-        );
-      }
-      
+      await sheetsAdapter.logAction(
+        session.user.email,
+        'update',
+        'asset',
+        null, // We don't have the before state
+        assetData
+      );
+
       return NextResponse.json({
         success: true,
-        data: result.data,
-        message: 'Asset updated successfully',
-      });
+        data: result.data
+      } as ApiResponse);
     } else {
-      return NextResponse.json({
-        success: false,
-        error: result.error || 'Failed to update asset',
-      }, { status: 500 });
+      return NextResponse.json(
+        { success: false, error: result.error } as ApiResponse,
+        { status: 500 }
+      );
     }
+
   } catch (error) {
-    console.error('Update asset error:', error);
-    return NextResponse.json({
-      success: false,
-      error: 'Failed to update asset',
-    }, { status: 500 });
+    console.error('Portfolio PUT error:', error);
+    return NextResponse.json(
+      { success: false, error: 'Internal server error' } as ApiResponse,
+      { status: 500 }
+    );
   }
 }
 
+// Delete asset
 async function handleDeleteAsset(req: NextRequest) {
   try {
-    // Check authentication
     const session = await getServerSession(authOptions);
     
-    if (!session) {
-      return NextResponse.json({
-        success: false,
-        error: 'Unauthorized - Please sign in',
-      }, { status: 401 });
-    }
-
-    // Only managers can delete assets
-    if (session.user.role !== 'manager') {
-      return NextResponse.json({
-        success: false,
-        error: 'Forbidden - Only managers can delete assets',
-      }, { status: 403 });
+    if (!session?.user?.email || session.user.role !== 'manager') {
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized - Manager access required' } as ApiResponse,
+        { status: 401 }
+      );
     }
 
     const { searchParams } = new URL(req.url);
     const id = searchParams.get('id');
-    
-    if (!id) {
-      return NextResponse.json({
-        success: false,
-        error: 'Asset ID is required',
-      }, { status: 400 });
-    }
+    const investorId = searchParams.get('investorId');
 
-    // Get current asset data for audit log
-    const currentResult = await sheetsAdapter.getPortfolioData();
-    const currentAsset = currentResult.data?.find((a: unknown) => (a as { id: string }).id === id);
+    if (!id || !investorId) {
+      return NextResponse.json(
+        { success: false, error: 'Missing required parameters' } as ApiResponse,
+        { status: 400 }
+      );
+    }
 
     const result = await sheetsAdapter.deleteAsset(id);
-    
+
     if (result.success) {
       // Log the action
-      if (session.user.email) {
-        await sheetsAdapter.logAction(
-          session.user.email,
-          'delete',
-          'asset',
-          currentAsset,
-          null
-        );
-      }
-      
+      await sheetsAdapter.logAction(
+        session.user.email,
+        'delete',
+        'asset',
+        { id, investorId },
+        null
+      );
+
       return NextResponse.json({
         success: true,
-        message: 'Asset deleted successfully',
-      });
+        data: result.data
+      } as ApiResponse);
     } else {
-      return NextResponse.json({
-        success: false,
-        error: result.error || 'Failed to delete asset',
-      }, { status: 500 });
+      return NextResponse.json(
+        { success: false, error: result.error } as ApiResponse,
+        { status: 500 }
+      );
     }
+
   } catch (error) {
-    console.error('Delete asset error:', error);
-    return NextResponse.json({
-      success: false,
-      error: 'Failed to delete asset',
-    }, { status: 500 });
+    console.error('Portfolio DELETE error:', error);
+    return NextResponse.json(
+      { success: false, error: 'Internal server error' } as ApiResponse,
+      { status: 500 }
+    );
   }
 }
