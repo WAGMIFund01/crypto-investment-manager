@@ -1,0 +1,8 @@
+{
+  "/api/get-transactions/route": "/api/get-transactions",
+  "/api/validate-investor/route": "/api/validate-investor",
+  "/_not-found/page": "/_not-found",
+  "/login/page": "/login",
+  "/page": "/",
+  "/investor/page": "/investor"
+}

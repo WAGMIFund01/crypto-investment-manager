@@ -1,6 +1,5 @@
 import { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
-import '@/shared/types/auth';
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -41,11 +40,9 @@ export const authOptions: NextAuthOptions = {
         investorId = investorMap[userEmail || ''];
       }
       
-      session.user = {
-        ...session.user,
-        role,
-        investorId,
-      };
+      // Add custom properties to session
+      (session.user as any).role = role;
+      (session.user as any).investorId = investorId;
       
       return session;
     },
