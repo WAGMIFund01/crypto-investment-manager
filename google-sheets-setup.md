@@ -1,58 +1,127 @@
-# Google Sheets Master Database Setup
+# Google Sheets API Setup Guide
 
-## 📊 Required Google Sheets Structure
+This guide will help you set up the Google Sheets API integration for your WAGMI Crypto Investment Manager.
 
-Create a new Google Sheet with these 3 tabs:
+## 📋 Prerequisites
 
-### 1. **Investors** Tab
+- A Google account
+- Access to your existing Google Sheet with investor data
+- The Google Sheet ID (found in the URL)
+
+## 🚀 Step-by-Step Setup
+
+### Step 1: Get Your Google Sheet ID
+
+1. Open your Google Sheet in a web browser
+2. Look at the URL: `https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID_HERE/edit`
+3. Copy the `YOUR_SHEET_ID_HERE` part - this is your Sheet ID
+
+### Step 2: Create Google Apps Script
+
+1. Go to [Google Apps Script](https://script.google.com/)
+2. Click "New Project"
+3. Delete the default code and paste the contents of `google-sheets-api.gs`
+4. Update the configuration at the top of the script:
+   ```javascript
+   const SHEET_ID = 'YOUR_ACTUAL_SHEET_ID_HERE'; // Replace with your sheet ID
+   const SHEET_NAME = 'Investors'; // Replace with your actual sheet name
+   ```
+
+### Step 3: Deploy the Script
+
+1. Click "Deploy" → "New deployment"
+2. Choose "Web app" as the type
+3. Set the following:
+   - **Execute as**: Me
+   - **Who has access**: Anyone
+4. Click "Deploy"
+5. Copy the web app URL (this will be your `GOOGLE_SHEETS_ENDPOINT`)
+
+### Step 4: Test the Setup
+
+1. In the Apps Script editor, run the `testSetup()` function
+2. Check the logs to ensure it can read your sheet data
+3. Test the API endpoint by visiting: `YOUR_WEB_APP_URL?sheet=Investors`
+
+### Step 5: Configure Environment Variables
+
+1. Go to your Vercel dashboard
+2. Navigate to your project settings
+3. Go to "Environment Variables"
+4. Add a new variable:
+   - **Name**: `GOOGLE_SHEETS_ENDPOINT`
+   - **Value**: Your web app URL from Step 3
+5. Redeploy your Vercel app
+
+## 🔧 Configuration Details
+
+### Sheet Structure Expected
+
+The script expects your sheet to have this structure:
+
 | Column A | Column B | Column C | Column D | Column E | Column F |
 |----------|----------|----------|----------|----------|----------|
-| investor_id | name | email | join_date | current_value | share_percentage |
-| LK1 | Leke Karunwi | leke@example.com | 2023-10-08 | 2000.00 | 7.95 |
-| MO2 | Mariam Oyawoye | mummy@example.com | 2023-10-10 | 1050.06 | 4.18 |
-| FO3 | Fifehanmi Oyawoye | fifehanmi@example.com | 2023-10-14 | 1823.91 | 7.26 |
-| RA4 | Rinsola Aminu | rinsola@example.com | 2023-11-19 | 828.30 | 3.30 |
-| OK5 | Oyinkan Karunwi | oyinkan@example.com | 2023-11-19 | 991.57 | 3.94 |
-| OA6 | Omair Ansari | omair@example.com | 2023-11-26 | 20212.46 | 80.37 |
+| Investor ID | Name | Email | Investment Value | Current Value | Return % |
+| LK1 | Leke Karunwi | leke@example.com | 2000 | 3199.60 | 60 |
+| MO2 | Mariam Oyawoye | mummy@example.com | 1050.06 | 1676.71 | 60 |
 
-### 2. **Transactions** Tab  
-| Column A | Column B | Column C | Column D | Column E |
-|----------|----------|----------|----------|----------|
-| transaction_id | investor_id | type | amount | date |
-| 1 | LK1 | Investment | 2000.00 | 2023-10-08 |
-| 2 | MO2 | Investment | 1050.06 | 2023-10-10 |
-| 3 | FO3 | Investment | 1823.91 | 2023-10-14 |
-| 4 | RA4 | Investment | 142.97 | 2023-11-19 |
-| 5 | OK5 | Investment | 991.57 | 2023-11-19 |
-| 6 | OA6 | Investment | 1418.82 | 2023-11-26 |
-| 7 | OA6 | Investment | 8774.88 | 2023-11-28 |
-| 8 | RA4 | Investment | 685.33 | 2024-02-10 |
-| 9 | OA6 | Investment | 10018.76 | 2024-06-15 |
+### API Endpoints
 
-### 3. **Wallets** Tab
-| Column A | Column B | Column C | Column D |
-|----------|----------|----------|----------|
-| wallet_name | address | chain | active |
-| Main Solana Wallet | AHpp7u8rV8LyX9gGEYH1ivnx1qHe2wAiGfVod9uTaXUd | solana | TRUE |
-| Ethereum Wallet 1 | 0x39f8602c7DeA377506D1872968FE8857fb78370f | ethereum | TRUE |
-| Ethereum Wallet 2 | 0xd07947276c65bc5035797c986f97456702400793 | ethereum | TRUE |
+The script provides these endpoints:
 
-## 🔧 Setup Steps
+- **GET** `?sheet=Investors` - Read all investor data
+- **POST** with `{"action": "validateInvestor", "investorId": "LK1"}` - Validate specific investor
 
-1. **Create the Google Sheet** with the above structure
-2. **Make it publicly readable** (Share → Anyone with link can view)
-3. **Get the Sheet ID** from the URL
-4. **Update the app** to use Google Sheets API
+## 🧪 Testing
 
-## 🔗 Google Sheets API Integration
+### Test 1: Basic Sheet Access
+```bash
+curl "YOUR_WEB_APP_URL?sheet=Investors"
+```
 
-The app will use the Google Sheets API to:
-- **Read data** on app load
-- **Write new investors** when added
-- **Write new transactions** when investments are made
-- **Sync across devices** (phone + laptop)
+### Test 2: Investor Validation
+```bash
+curl -X POST "YOUR_WEB_APP_URL" \
+  -H "Content-Type: application/json" \
+  -d '{"action": "validateInvestor", "investorId": "LK1"}'
+```
 
-Would you like me to:
-1. Create a template Google Sheet for you?
-2. Implement the Google Sheets API integration?
-3. Show you how to set up the API credentials?
+## 🚨 Troubleshooting
+
+### Common Issues
+
+1. **"Sheet not found" error**
+   - Check that `SHEET_NAME` matches your actual sheet name
+   - Ensure the sheet exists in your spreadsheet
+
+2. **"Permission denied" error**
+   - Make sure the web app is deployed with "Anyone" access
+   - Check that the script has permission to access your sheet
+
+3. **"Invalid sheet ID" error**
+   - Verify the `SHEET_ID` is correct
+   - Ensure the sheet is accessible with your Google account
+
+### Debug Steps
+
+1. Run `testSetup()` function in Apps Script editor
+2. Check the execution logs for detailed error messages
+3. Verify your sheet structure matches the expected format
+4. Test the API endpoints manually before integrating with your app
+
+## 🔄 Next Steps
+
+Once this is set up:
+
+1. Update your Vercel environment variables
+2. Redeploy your app
+3. Test investor login with real data
+4. Set up Google OAuth for manager access
+
+## 📞 Support
+
+If you encounter issues:
+1. Check the Apps Script execution logs
+2. Verify your sheet structure
+3. Test the API endpoints manually
+4. Contact support with specific error messages
